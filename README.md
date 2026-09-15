@@ -1,6 +1,11 @@
 # Homebase
-
+Core is the main project (homebase)
 
 # Apps 
-# All apps go in /Apps
-# Core is the main project (homebase)
+All apps go here for modularity
+## Future apps
+- Posts
+- Dashboard
+- Transactions (for rent)
+- Homebase
+- Etc...
