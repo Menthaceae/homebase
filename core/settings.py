@@ -27,6 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 
 # Application definition
 
@@ -37,9 +43,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_cotton",
+    "django_cotton_ui",
+    "django_tailwind_cli",
+
+    "apps.public",
 
     # Custom apps go here (type as: "apps.custom-app-name")
 ]
+
+TAILWIND_CLI_SRC_CSS = "tailwind.input.css"
+TAILWIND_CLI_DIST_CSS = "css/tailwind.css"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,7 +70,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
