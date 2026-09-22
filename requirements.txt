@@ -1,15 +1,6 @@
 asgiref==3.12.1
 click==8.5.0
-Django==6.1.1
-django-click==2.5.0
-django-cotton==2.7.2
-django-cotton-ui==0.3.3
-django-tailwind-cli==4.8.1
-semver==3.1.0
-sqlparse==0.6.0
-tzdata==2026.4
-asgiref==3.12.1
-click==8.5.0
+cotton-icons==0.2.0
 Django==6.1.1
 django-click==2.5.0
 django-cotton==2.7.2

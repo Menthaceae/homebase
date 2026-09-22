@@ -10,7 +10,7 @@
          Shipped inside the installed package, served by Django's staticfiles app. -->
 </head>
 <body>
-    <c-appbar />
+    <c-appbar :is-logged-in="" username="" avatar-url="" />
     <div class="p-4">
         {{ slot }}
     </div>

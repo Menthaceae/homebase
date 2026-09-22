@@ -682,6 +682,10 @@
   .table {
     display: table;
   }
+  .size-1 {
+    width: var(--spacing);
+    height: var(--spacing);
+  }
   .size-2\.5 {
     width: calc(var(--spacing) * 2.5);
     height: calc(var(--spacing) * 2.5);
@@ -1111,6 +1115,9 @@
   .flex-col-reverse {
     flex-direction: column-reverse;
   }
+  .flex-row {
+    flex-direction: row;
+  }
   .flex-wrap {
     flex-wrap: wrap;
   }
@@ -1312,6 +1319,9 @@
   }
   .border-blue-300 {
     border-color: var(--color-blue-300);
+  }
+  .border-gray-300 {
+    border-color: var(--color-gray-300);
   }
   .border-green-200 {
     border-color: var(--color-green-200);
@@ -3753,6 +3763,7 @@
 :root {
   --color-primary: #0F766E;
   --color-primary-content: #FFFFFF;
+  --color-primary-text: #F8FAFC;
   --color-accent: #14B8A6;
   --color-accent-content: #0F766E;
   --color-background: #F8FAFC;
