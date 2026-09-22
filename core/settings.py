@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django_cotton",
     "django_cotton_ui",
     "django_tailwind_cli",
+    'cotton_icons',
 
     "apps.public",
 
