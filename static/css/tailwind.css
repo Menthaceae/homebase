@@ -283,6 +283,7 @@
     --tracking-tight: -0.025em;
     --tracking-wider: 0.05em;
     --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
     --ease-in: cubic-bezier(0.4, 0, 1, 1);
     --ease-out: cubic-bezier(0, 0, 0.2, 1);
     --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
@@ -616,6 +617,9 @@
   .mt-4 {
     margin-top: calc(var(--spacing) * 4);
   }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
   .-mr-1 {
     margin-right: calc(var(--spacing) * -1);
   }
@@ -642,6 +646,9 @@
   }
   .mb-4 {
     margin-bottom: calc(var(--spacing) * 4);
+  }
+  .mb-6 {
+    margin-bottom: calc(var(--spacing) * 6);
   }
   .-ml-1 {
     margin-left: calc(var(--spacing) * -1);
@@ -681,10 +688,6 @@
   }
   .table {
     display: table;
-  }
-  .size-1 {
-    width: var(--spacing);
-    height: var(--spacing);
   }
   .size-2\.5 {
     width: calc(var(--spacing) * 2.5);
@@ -854,6 +857,9 @@
   }
   .min-h-\[42px\] {
     min-height: 42px;
+  }
+  .min-h-\[calc\(100vh-4rem\)\] {
+    min-height: calc(100vh - 4rem);
   }
   .w-2 {
     width: calc(var(--spacing) * 2);
@@ -1251,6 +1257,9 @@
   }
   .rounded-full {
     border-radius: calc(infinity * 1px);
+  }
+  .rounded-lg {
+    border-radius: var(--radius-lg);
   }
   .rounded-t-md {
     border-top-left-radius: var(--radius-md);
@@ -2327,6 +2336,12 @@
   .text-fuchsia-700 {
     color: var(--color-fuchsia-700);
   }
+  .text-gray-500 {
+    color: var(--color-gray-500);
+  }
+  .text-gray-900 {
+    color: var(--color-gray-900);
+  }
   .text-green-700 {
     color: var(--color-green-700);
   }
@@ -3054,6 +3069,12 @@
       background-color: color-mix(in oklab, var(--color-red-950) 40%, transparent);
     }
   }
+  .dark\:bg-red-950\/50:where(.dark, .dark *) {
+    background-color: color-mix(in srgb, oklch(25.8% 0.092 26.042) 50%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-red-950) 50%, transparent);
+    }
+  }
   .dark\:bg-red-950\/90:where(.dark, .dark *) {
     background-color: color-mix(in srgb, oklch(25.8% 0.092 26.042) 90%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -3155,6 +3176,9 @@
   }
   .dark\:text-fuchsia-400:where(.dark, .dark *) {
     color: var(--color-fuchsia-400);
+  }
+  .dark\:text-gray-400:where(.dark, .dark *) {
+    color: var(--color-gray-400);
   }
   .dark\:text-green-200:where(.dark, .dark *) {
     color: var(--color-green-200);
@@ -3763,7 +3787,6 @@
 :root {
   --color-primary: #0F766E;
   --color-primary-content: #FFFFFF;
-  --color-primary-text: #F8FAFC;
   --color-accent: #14B8A6;
   --color-accent-content: #0F766E;
   --color-background: #F8FAFC;

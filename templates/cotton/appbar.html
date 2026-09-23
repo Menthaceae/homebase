@@ -18,12 +18,12 @@
             <c-ui.navbar.item href="#">Settings</c-ui.navbar.item>
     <c-slot name="actions">
         <c-ui.avatar size="sm" src="{{ avatar_url }}">{{ username }}</c-ui.avatar>
-        <c-ui.button size="sm" variant="primary">Sign out</c-ui.button>
+        <c-ui.button href="/logout" size="sm" variant="primary">Sign out</c-ui.button>
     </c-slot>
     {% else %}
         <c-slot name="actions">
-        <c-ui.button size="sm">Sign in</c-ui.button>
-        <c-ui.button size="sm" variant="primary">Sign up</c-ui.button>
+        <c-ui.button href="/login" size="sm">Sign in</c-ui.button>
+        <c-ui.button href="/register" size="sm" variant="primary">Sign up</c-ui.button>
     </c-slot>
     {% endif %}
     
