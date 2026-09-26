@@ -4,10 +4,20 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
 dotenv = "*"
 psycopg = "*"
 psycopg-binary = "*"
+asgiref = "*"
+click = "*"
+cotton-icons = "*"
+django = "*"
+django-click = "*"
+django-cotton = "*"
+django-cotton-ui = "*"
+django-tailwind-cli = "*"
+semver = "*"
+sqlparse = "*"
+tzdata = "*"
 
 [dev-packages]
 
