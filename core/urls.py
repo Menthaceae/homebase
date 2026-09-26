@@ -19,8 +19,7 @@ from django.urls import path, include
 from users import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    # path('login/<str:username>/<str:password>', views.login_page, name="login_button")
-    path('login/', views.login_page, name="login_button"),
     path('', include('apps.public.urls')),
+    path('admin/', admin.site.urls),
+    path('auth/', include('users.urls')),
 ]
