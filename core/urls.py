@@ -21,4 +21,5 @@ from users import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('login/<str:username>/<str:password>', views.login_page, name="login_button")
+    path('login/', views.login_page, name="login_button")
 ]
