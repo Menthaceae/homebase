@@ -52,11 +52,9 @@ INSTALLED_APPS = [
     "django_cotton_ui",
     "django_tailwind_cli",
     'cotton_icons',
-
     "apps.public",
-
+    "apps.users",
     # Custom apps go here (type as: "apps.custom-app-name")
-    'users',
 ]
 
 TAILWIND_CLI_SRC_CSS = "tailwind.input.css"
