@@ -1,0 +1,26 @@
+{% load static %}
+{% load tailwind_cli %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% tailwind_css %}
+    <!-- Cotton UI: precompiled components + design tokens.
+         Shipped inside the installed package, served by Django's staticfiles app. -->
+</head>
+<body>
+    <c-appbar :is-logged-in="False" username="" avatar-url="" />
+    <div class="p-4">
+        {{ slot }}
+    </div>
+
+    <!-- Cotton UI bundle first: it registers components on Alpine's alpine:init event -->
+    <script defer src="{% static 'django_cotton_ui/cotton-ui.min.js' %}"></script>
+
+    <!-- Alpine.js plugins, then Alpine core (deferred scripts run in order) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+</html>

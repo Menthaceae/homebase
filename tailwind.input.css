@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@import "./cotton-ui.sources.css";
+
+@source "./templates/**/*.html";
+@source "./apps/**/templates/*.html";
+
+:root {
+    /* Primary brand */
+    --color-primary: #0F766E;
+    --color-primary-content: #FFFFFF;
+
+    /* Accent */
+    --color-accent: #14B8A6;
+    --color-accent-content: #0F766E;
+
+    /* Background */
+    --color-background: #F8FAFC;
+    --color-surface: #FFFFFF;
+
+    /* Text */
+    --color-text: #0F172A;
+    --color-text-muted: #64748B;
+
+    /* Borders */
+    --color-border: #E2E8F0;
+
+    /* Status colors */
+    --color-success: #16A34A;
+    --color-warning: #D97706;
+    --color-danger: #DC2626;
+    --color-info: #2563EB;
+}
+
+/* Dark mode */
+
+.dark {
+    /* Primary brand */
+    --color-primary: #2DD4BF;
+    --color-primary-content: #042F2E;
+
+    /* Accent */
+    --color-accent: #14B8A6;
+    --color-accent-content: #99F6E4;
+
+    /* Background */
+    --color-background: #0F172A;
+    --color-surface: #1E293B;
+
+    /* Text */
+    --color-text: #F8FAFC;
+    --color-text-muted: #94A3B8;
+
+    /* Borders */
+    --color-border: #334155;
+
+    /* Status colors */
+    --color-success: #4ADE80;
+    --color-warning: #FBBF24;
+    --color-danger: #F87171;
+    --color-info: #60A5FA;
+}

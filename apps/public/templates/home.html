@@ -1,0 +1,30 @@
+<c-layout>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+        <div class="col-span-1 flex flex-row items-center justify-center gap-4">
+            <c-ui.card class="p-4" style="width: 100%; background-color: var(--color-primary); color: var(--color-primary-content);">
+                <p class="text-lg font-semibold mb-2">Create a New Post</p>
+                <hr class="border-gray-300 mb-4">
+                <p class="text-sm mb-4">Start sharing your thoughts and ideas with the community by creating a new post.</p>
+                <c-ui.button label="Create Post" href="/create-post" class="w-full" >Create Post</c-ui.button>   
+            </c-ui.card>
+        </div>
+    <div class="col-span-2">
+        <div class="flex flex-row gap-4">
+            <c-ui.card class="p-4 flex-1">
+                <p class="text-lg font-semibold mb-2">Something I want to share..</p>
+                <p class="text-sm">I have been living in this community for a while now and I wanted to share my experiences.</p>
+                <c-ui.button label="Read More" href="/read-more" class="w-full" ></c-ui.button>
+            </c-ui.card>
+        </div>
+    </div>
+    <div class="col-span-1">
+        <c-ui.card class="p-4" style="width: 100%; background-color: var(--color-primary); color: var(--color-primary-content);">
+                <p class="text-lg font-semibold mb-2">Join the Community</p>
+                <hr class="border-gray-300 mb-4">
+                <p class="text-sm mb-4">Become a part of our growing community and connect with like-minded individuals.</p>
+                <c-ui.button label="Join Now" href="/join" class="w-full" >Join Now</c-ui.button>   
+            </c-ui.card>
+        </div>
+    </div>
+</div>
+</c-layout>
