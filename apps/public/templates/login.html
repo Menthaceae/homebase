@@ -13,7 +13,7 @@
                 </c-ui.Alert>
             {% endif %}
 
-            <form method="post" action="{% url 'login' %}" class="space-y-4">
+            <form method="post" action="/auth/login/" class="space-y-4">
                 {% csrf_token %}
 
                 <div>
@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="pt-2">
-                    <c-ui.button url="{% url 'login' %}" variant="primary" type="submit" class="w-full">
+                    <c-ui.button url="/auth/login/" variant="primary" type="submit" class="w-full">
                         Sign In
                     </c-ui.button>
                 </div>
