@@ -12,6 +12,9 @@ def login_button(request):
 
     if user is not None:
         login(request, user)
-        return redirect("/admin")
+
+        # Send to success page
+        return HttpResponse("Good login")
     else:
+        # Send to failure page
         return HttpResponse("Bad login")
