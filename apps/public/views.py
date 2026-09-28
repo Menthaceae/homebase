@@ -9,6 +9,10 @@ from django.contrib import messages
 def home(request):
     return render(request, 'home.html')
 
+def layout(request):
+    user = request.user
+    return render(request, 'layout.html', {'user': user})
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
