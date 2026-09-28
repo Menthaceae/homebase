@@ -2,12 +2,12 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.contrib.auth.models import User
 
-# Create your views here.
-
+# POST /auth/login
 def login_button(request):
-    username = request.POST["username"]
-    password = request.POST["password"]
+    username = request.POST['username']
+    password = request.POST['password']
     user = authenticate(request, username=username, password=password)
 
     if user is not None:

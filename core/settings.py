@@ -48,13 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "django_cotton",
-    "django_cotton_ui",
-    "django_tailwind_cli",
+    'django_cotton',
+    'django_cotton_ui',
+    'django_tailwind_cli',
     'cotton_icons',
-    "apps.public",
-    "apps.users",
-    # Custom apps go here (type as: "apps.custom-app-name")
+    'apps.public',
+    'apps.users',
 ]
 
 TAILWIND_CLI_SRC_CSS = "tailwind.input.css"
