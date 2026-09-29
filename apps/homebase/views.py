@@ -27,6 +27,4 @@ def create(request):
                 bio = bio)
 
     homebase.save()
-    return HttpResponse("Homebase creation success. Homebase ID: " + str(homebase.id))
-
-def        
+    return HttpResponse("Homebase creation success. Homebase ID: " + str(homebase.id))       
