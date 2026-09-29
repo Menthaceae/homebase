@@ -6,7 +6,10 @@ from django.contrib.auth.models import User
 from .forms import CustomUserCreationForm
 from django.contrib import messages
 
-# POST /auth/login
+# Login authentication logic
+# POST auth/login/
+# Input user login fields (from apps/public/templates/login.html)
+# Returns homepage on valid login credentials, "bad login" on failure 
 def login_button(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -18,6 +21,10 @@ def login_button(request):
     else:
         return HttpResponse("Bad login")
 
+# Register logic
+# POST auth/register/
+# Input user registration fields (from apps/public/templates/register.html)
+# Returns homepage on registration success, "bad registration" on failure
 def register_button (request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -27,4 +34,4 @@ def register_button (request):
             login(request, user)
             messages.success(request, 'Registration successful.')
             return redirect('home')
-    return HttpResponse("Bad Register")        
+    return HttpResponse("Bad registration")        
