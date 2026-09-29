@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
+from .forms import CustomUserCreationForm
+from django.contrib import messages
 
 # POST /auth/login
 def login_button(request):
@@ -12,9 +14,17 @@ def login_button(request):
 
     if user is not None:
         login(request, user)
-
-        # Send to success page
-        return HttpResponse("Good login")
+        return redirect('home')
     else:
-        # Send to failure page
         return HttpResponse("Bad login")
+
+def register_button (request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.save()
+            login(request, user)
+            messages.success(request, 'Registration successful.')
+            return redirect('home')
+    return HttpResponse("Bad Register")        
