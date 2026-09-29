@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'cotton_icons',
     'apps.public',
     'apps.users',
+    'apps.homebase',
 ]
 
 TAILWIND_CLI_SRC_CSS = "tailwind.input.css"
