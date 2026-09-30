@@ -1,0 +1,12 @@
+/* ===================================
+    CSS CUSTOM PROPERTIES (VARIABLES)
+    =================================== */
+
+:root {
+    --card-background-color: #194c47;
+}
+
+.appbar {
+    display: flex;
+    justify-content: space-between;
+}
