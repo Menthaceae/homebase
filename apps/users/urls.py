@@ -4,4 +4,5 @@ from apps.users import views
 
 urlpatterns = [
     path('login/', views.login_button, name="login_button"),
+    path('register/', views.register_button, name="registerbutton"),
 ]
