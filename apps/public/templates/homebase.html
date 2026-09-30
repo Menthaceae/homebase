@@ -20,4 +20,28 @@
         </div>
     </div>
   </c-slot>
+  <div class="flex gap-2">
+    <div x-data="{ activeTab: 'feed' }">
+      <div class="flex gap-2" >
+        <c-ui.button :style="activeTab === 'feed' ? 'background-color:var(--content-primary-color)' : 'background-color:var(--content-secondary-color)'" class="cursor-pointer" @click="activeTab = 'feed'" size="md">Feed</c-ui.button>
+        <c-ui.button :style="activeTab === 'events' ? 'background-color:var(--content-primary-color)' : 'background-color:var(--content-secondary-color)'" class="cursor-pointer" @click="activeTab = 'events'" size="md">Events</c-ui.button>
+        <c-ui.button :style="activeTab === 'announcements' ? 'background-color:var(--content-primary-color)' : 'background-color:var(--content-secondary-color)'" class="cursor-pointer" @click="activeTab = 'announcements'" size="md">Announcements</c-ui.button>
+      </div>
+      <br>
+      <div>
+        <div x-show="activeTab === 'feed'" class="w-full">
+          <c-ui.card>
+            <h2 class="text-xl font-bold mb-4">Feed</h2>
+            <p>Here is the feed content...</p>
+          </c-ui.card>
+      </div>
+        <div x-show="activeTab === 'events'" class="w-full">
+          <c-ui.card>
+            <h2 class="text-xl font-bold mb-4">Events</h2>
+            <p>Here is the events content...</p>
+          </c-ui.card>
+        </div>
+      </div>
+    </div>
+  </div>
 </c-layout>
