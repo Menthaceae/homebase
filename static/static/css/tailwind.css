@@ -879,23 +879,14 @@
   .min-h-16 {
     min-height: calc(var(--spacing) * 16);
   }
-  .min-h-313 {
-    min-height: calc(var(--spacing) * 313);
+  .min-h-75 {
+    min-height: calc(var(--spacing) * 75);
   }
   .min-h-\[3\.5rem\] {
     min-height: 3.5rem;
   }
   .min-h-\[42px\] {
     min-height: 42px;
-  }
-  .min-h-\[313px\] {
-    min-height: 313px;
-  }
-  .min-h-\[400px\] {
-    min-height: 400px;
-  }
-  .min-h-\[500px\] {
-    min-height: 500px;
   }
   .min-h-\[calc\(100vh-4rem\)\] {
     min-height: calc(100vh - 4rem);
@@ -1428,6 +1419,9 @@
   }
   .\!bg-transparent {
     background-color: transparent !important;
+  }
+  .bg-\[\#0F766E\] {
+    background-color: #0F766E;
   }
   .bg-\[color-mix\(in_oklab\,var\(--color-accent-muted\,currentColor\)_5\%\,transparent\)\] {
     background-color: color-mix(in srgb,oklch(21% 0.006 285.885) 5%,transparent);
@@ -2382,6 +2376,21 @@
   }
   .whitespace-nowrap {
     white-space: nowrap;
+  }
+  .text-\(--color-primary\) {
+    color: var(--color-primary);
+  }
+  .text-\[\#0F766E\] {
+    color: #0F766E;
+  }
+  .text-\[\#F0FDF4\] {
+    color: #F0FDF4;
+  }
+  .text-\[--color-primary\] {
+    color: --color-primary;
+  }
+  .text-\[primary\] {
+    color: primary;
   }
   .text-accent {
     color: var(--color-accent);

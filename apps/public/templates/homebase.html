@@ -1,0 +1,23 @@
+{% load static %}
+<c-layout>
+  <c-slot name="banner">
+    <div class="background-image w-full bg-cover bg-center min-h-75 flex flex-col p-8 items-start justify-end text-white" style="background-image: url('{% static "images/homebase-bg.png" %}');">
+      <h1 class="text-4xl font-bold mb-4">Welcome to HomeBase</h1>
+      <p class="text-lg mb-6">Your one-stop platform for community engagement and collaboration.</p>
+    </div>
+    <div class="flex justify-between align-center p-4 bg-gray-100">
+        <div class="flex gap-2 items-center">
+            <h1 class="text-[#0F766E] text-2xl font-bold">88</h1>
+            <p class="text-lg">Active Users</p>
+        </div>
+        <div class=" flex gap-2 items-center">
+            <h1 class="text-[#0F766E] text-2xl font-bold">80</h1>
+            <p class="text-lg">Accupied Units</p>
+        </div>
+        <div class="flex gap-2 items-center">
+            <h1 class="text-[#0F766E] text-2xl font-bold">3</h1>
+            <p class="text-lg">Upcoming Events</p>
+        </div>
+    </div>
+  </c-slot>
+</c-layout>

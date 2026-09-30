@@ -9,6 +9,9 @@ from django.contrib import messages
 def home(request):
     return render(request, 'home.html')
 
+def homebase(request):
+    return render(request, 'homebase.html')
+
 def layout(request):
     user = request.user
     return render(request, 'layout.html', {'user': user})

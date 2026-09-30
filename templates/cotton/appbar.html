@@ -14,12 +14,14 @@
     <c-slot name="actions">
         <c-ui.dropdown position="bottom" size="sm">
             <c-slot name="trigger">
-                <c-ui.avatar size="sm" ></c-ui.avatar>
-                <span class="text-sm font-medium">{{ username }}</span>
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <c-ui.avatar size="sm" ></c-ui.avatar>
+                    <span class="text-sm font-medium">{{ username }}</span>
+                </div>
             </c-slot>
-            <c-ui.dropdown.item href="/logout" size="sm">Sign out</c-ui.dropdown.item>
             <c-ui.dropdown.item href="/profile" size="sm">Profile</c-ui.dropdown.item>
             <c-ui.dropdown.item href="/settings" size="sm">Settings</c-ui.dropdown.item>
+            <c-ui.dropdown.item href="/logout" size="sm">Sign out</c-ui.dropdown.item>
         </c-ui.dropdown>
     </c-slot>
     {% else %}

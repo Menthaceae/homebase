@@ -57,7 +57,7 @@ INSTALLED_APPS = [
 ]
 
 TAILWIND_CLI_SRC_CSS = "tailwind.input.css"
-TAILWIND_CLI_DIST_CSS = "css/tailwind.css"
+TAILWIND_CLI_DIST_CSS = "static/css/tailwind.css"
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
