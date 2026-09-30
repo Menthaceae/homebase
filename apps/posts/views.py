@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .models import Post
-# from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 
 # Create your views here.
 
@@ -11,6 +12,8 @@ from django.http import HttpResponse
 # Input post creation fields from form
 # Returns the post id
 def create(request):
+    user = request.user
+    author = user.id
     title = request.POST['title']
     body = request.POST['body']
     status = request.POST['status']
@@ -19,6 +22,7 @@ def create(request):
     image = request.POST['image']
 
     post = Post(
+        author = author,
         title = title,
         body = body,
         status = status,
