@@ -3,6 +3,8 @@ from django.shortcuts import render
 from .models import Homebase
 from django.http import HttpResponse
 
+def homebase(request):
+    return render(request, 'homebase.html')
 # GET homebase/create/
 # Renders homebase creation page
 
