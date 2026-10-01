@@ -6,10 +6,19 @@
 @source "./templates/**/*.html";
 @source "./apps/**/templates/*.html";
 
+@theme {
+    --color-primary: var(--color-primary);
+    --color-primary-content: var(--color-primary-content);
+    /* Add any other custom properties you want utilities for */
+}
+
 :root {
     /* Primary brand */
     --color-primary: #0F766E;
     --color-primary-content: #FFFFFF;
+
+    --color-secondary: #F8FAFC;
+    --color-secondary-content: #0F172A;
 
     /* Accent */
     --color-accent: #14B8A6;
@@ -39,6 +48,9 @@
     /* Primary brand */
     --color-primary: #2DD4BF;
     --color-primary-content: #042F2E;
+
+    --color-secondary: #1E293B;
+    --color-secondary-content: #F8FAFC;
 
     /* Accent */
     --color-accent: #14B8A6;

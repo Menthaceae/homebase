@@ -20,20 +20,17 @@
         </div>
     </div>
   </c-slot>
-  <div class="flex gap-2">
-    <div x-data="{ activeTab: 'feed' }">
+  <div class="flex flex-col-reverse gap-2 md:flex-row-reverse">
+    <div class="w-full" x-data="{ activeTab: 'feed' }">
       <div class="flex gap-2" >
-        <c-ui.button :style="activeTab === 'feed' ? 'background-color:var(--content-primary-color)' : 'background-color:var(--content-secondary-color)'" class="cursor-pointer" @click="activeTab = 'feed'" size="md">Feed</c-ui.button>
-        <c-ui.button :style="activeTab === 'events' ? 'background-color:var(--content-primary-color)' : 'background-color:var(--content-secondary-color)'" class="cursor-pointer" @click="activeTab = 'events'" size="md">Events</c-ui.button>
-        <c-ui.button :style="activeTab === 'announcements' ? 'background-color:var(--content-primary-color)' : 'background-color:var(--content-secondary-color)'" class="cursor-pointer" @click="activeTab = 'announcements'" size="md">Announcements</c-ui.button>
+        <c-ui.button x-bind:class="activeTab === 'feed' ? 'bg-accent-content! text-accent-foreground!' : 'bg-accent-content'" @click="activeTab = 'feed'" size="md">Feed</c-ui.button>
+        <c-ui.button x-bind:class="activeTab === 'events' ? 'bg-accent-content! text-accent-foreground!' : 'bg-accent-content'" class="cursor-pointer" @click="activeTab = 'events'" size="md">Events</c-ui.button>
+        <c-ui.button x-bind:class="activeTab === 'announcements' ? 'bg-accent-content! text-accent-foreground!' : 'bg-accent-content'" class="cursor-pointer" @click="activeTab = 'announcements'" size="md">Announcements</c-ui.button>
       </div>
       <br>
       <div>
         <div x-show="activeTab === 'feed'" class="w-full">
-          <c-ui.card>
-            <h2 class="text-xl font-bold mb-4">Feed</h2>
-            <p>Here is the feed content...</p>
-          </c-ui.card>
+            <c-post title="Something I want to share.." img-url="" content="I have been living in this community for a while now and I wanted to share my experiences." author="Guest" />
       </div>
         <div x-show="activeTab === 'events'" class="w-full">
           <c-ui.card>
@@ -42,6 +39,12 @@
           </c-ui.card>
         </div>
       </div>
+    </div>
+    <div class="w-1/3">
+      <c-ui.card>
+        <h2 class="text-xl font-bold mb-4">Sidebar</h2>
+        <p>Here is the sidebar content...</p>
+      </c-ui.card>
     </div>
   </div>
 </c-layout>

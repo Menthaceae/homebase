@@ -319,6 +319,8 @@
     --color-ink-800: var(--color-zinc-800);
     --color-ink-900: var(--color-zinc-900);
     --color-ink-950: var(--color-zinc-950);
+    --color-primary: var(--color-primary);
+    --color-primary-content: var(--color-primary-content);
   }
 }
 @layer base {
@@ -879,8 +881,8 @@
   .min-h-16 {
     min-height: calc(var(--spacing) * 16);
   }
-  .min-h-313 {
-    min-height: calc(var(--spacing) * 313);
+  .min-h-75 {
+    min-height: calc(var(--spacing) * 75);
   }
   .min-h-\[3\.5rem\] {
     min-height: 3.5rem;
@@ -888,17 +890,14 @@
   .min-h-\[42px\] {
     min-height: 42px;
   }
-  .min-h-\[313px\] {
-    min-height: 313px;
-  }
-  .min-h-\[400px\] {
-    min-height: 400px;
-  }
-  .min-h-\[500px\] {
-    min-height: 500px;
-  }
   .min-h-\[calc\(100vh-4rem\)\] {
     min-height: calc(100vh - 4rem);
+  }
+  .w-1 {
+    width: var(--spacing);
+  }
+  .w-1\/3 {
+    width: calc(1 / 3 * 100%);
   }
   .w-2 {
     width: calc(var(--spacing) * 2);
@@ -1447,6 +1446,21 @@
   .bg-accent {
     background-color: var(--color-accent);
   }
+  .bg-accent\! {
+    background-color: var(--color-accent) !important;
+  }
+  .bg-accent-content {
+    background-color: var(--color-accent-content);
+  }
+  .bg-accent-content\! {
+    background-color: var(--color-accent-content) !important;
+  }
+  .bg-accent-foreground {
+    background-color: var(--color-accent-foreground);
+  }
+  .bg-accent-foreground\! {
+    background-color: var(--color-accent-foreground) !important;
+  }
   .bg-accent\/5 {
     background-color: color-mix(in srgb, oklch(21% 0.006 285.885) 5%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -1860,6 +1874,9 @@
   }
   .bg-pink-950 {
     background-color: var(--color-pink-950);
+  }
+  .bg-primary {
+    background-color: var(--color-primary);
   }
   .bg-purple-100 {
     background-color: var(--color-purple-100);
@@ -2383,11 +2400,20 @@
   .whitespace-nowrap {
     white-space: nowrap;
   }
+  .text-\[\#0F766E\] {
+    color: #0F766E;
+  }
   .text-accent {
     color: var(--color-accent);
   }
+  .text-accent-content {
+    color: var(--color-accent-content);
+  }
   .text-accent-foreground {
     color: var(--color-accent-foreground);
+  }
+  .text-accent-foreground\! {
+    color: var(--color-accent-foreground) !important;
   }
   .text-amber-700 {
     color: var(--color-amber-700);
@@ -2881,6 +2907,9 @@
     .sm\:flex-row {
       flex-direction: row;
     }
+    .sm\:flex-row-reverse {
+      flex-direction: row-reverse;
+    }
     .sm\:justify-end {
       justify-content: flex-end;
     }
@@ -2914,6 +2943,12 @@
     }
     .md\:grid-cols-4 {
       grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .md\:flex-row {
+      flex-direction: row;
+    }
+    .md\:flex-row-reverse {
+      flex-direction: row-reverse;
     }
   }
   :where(.dark\:divide-ink-700:where(.dark, .dark *) > :not(:last-child)) {
@@ -3865,6 +3900,8 @@
 :root {
   --color-primary: #0F766E;
   --color-primary-content: #FFFFFF;
+  --color-secondary: #F8FAFC;
+  --color-secondary-content: #0F172A;
   --color-accent: #14B8A6;
   --color-accent-content: #0F766E;
   --color-background: #F8FAFC;
@@ -3880,6 +3917,8 @@
 .dark {
   --color-primary: #2DD4BF;
   --color-primary-content: #042F2E;
+  --color-secondary: #1E293B;
+  --color-secondary-content: #F8FAFC;
   --color-accent: #14B8A6;
   --color-accent-content: #99F6E4;
   --color-background: #0F172A;
