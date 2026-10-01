@@ -33,3 +33,5 @@ def create(request):
 
     post.save()
     return HttpResponse("Post creation success. Post ID: " + str(post.id))
+
+    

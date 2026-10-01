@@ -1,30 +1,23 @@
 from django.shortcuts import render
-# from django.views.decorators.csrf import csrf_exempt
 from .models import Homebase
+from .forms import HomebaseCreationForm
 from django.http import HttpResponse
 
-# GET homebase/create/
-# Renders homebase creation page
+# GET homebase/
+def home(request):
+    return render(request, 'homebase.html')
 
 # POST homebase/create/
 # Homebase creation logic
-# Input homebase creation fields from form
-# Returns the homebase id 
 def create(request):
-    street_address = request.POST['street_address']
-    city = request.POST['city']
-    state = request.POST['state']
-    zipcode = request.POST['zipcode']
-    country = request.POST['country']
-    bio = request.POST['bio']
+    if request.method == 'POST':
+        form = HomebaseCreationForm(request.POST)
+        if form.is_valid():
+            form = form.save()
+            form.save()
+            return HttpResponse("Homebase creation success.")
 
-    homebase = Homebase(
-                street_address = street_address,
-                city = city,
-                state = state,
-                zipcode = zipcode,
-                country = country,
-                bio = bio)
+    else:
+        form = HomebaseCreationForm()           
 
-    homebase.save()
-    return HttpResponse("Homebase creation success. Homebase ID: " + str(homebase.id))       
+    return render(request, 'create_homebase.html', {"form": form})

@@ -11,4 +11,4 @@ class Post(models.Model):
     post_to = models.CharField(blank=False) # post to options (public, homebase)
     image = models.CharField()
     created_at = models.DateField(auto_now=True)
-    updated_at = models.DateField() 
+    # updated_at = models.DateField() 
