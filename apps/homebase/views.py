@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Homebase
 from .forms import HomebaseCreationForm
 from django.http import HttpResponse
+from django.contrib import messages
 
 # GET homebase/
 def home(request):
@@ -13,10 +14,9 @@ def create(request):
     if request.method == 'POST':
         form = HomebaseCreationForm(request.POST)
         if form.is_valid():
-            form = form.save()
-            form.save()
-            return HttpResponse("Homebase creation success.")
-
+            homebase = form.save()
+            homebase.save()
+            messages.success(request, "Homebase creation successful")
     else:
         form = HomebaseCreationForm()           
 
