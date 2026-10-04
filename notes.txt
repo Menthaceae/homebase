@@ -1,0 +1,22 @@
+To-do:
+• Attach posts to homebase
+    - Homebase:Posts,Many:Many
+• Authorization
+• Like posts
+• Comment on posts
+
+Done:
+• Posts
+    - Get, create, update, delete
+    - Meeting endpoints:
+        - posts/create/
+        - posts/<post_id>/
+        - posts/update/
+        - posts/
+
+• Homebase
+    - Create, join
+    - Meeting endpoints:
+        homebase/<id>/
+        homebase/create/
+        homebase/join/<homebase_id>/<code>/
