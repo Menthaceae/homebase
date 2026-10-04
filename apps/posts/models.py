@@ -22,4 +22,5 @@ class Post(models.Model):
     post_to = models.CharField(choices=post_to_choices,blank=False) 
     image = models.CharField(blank=True)
     created_at = models.DateField(auto_now=True)
-    updated_at = models.DateField(null=True, blank=True) 
+    updated_at = models.DateField(null=True, blank=True)
+    deleted = models.BooleanField(default=False, null=False) 
