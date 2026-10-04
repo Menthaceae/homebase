@@ -21,3 +21,20 @@ def create(request):
         form = HomebaseCreationForm()           
 
     return render(request, 'testcreatehomebase.html', {"form": form})
+
+# GET homebase/join/<homebase_id>/<code>/
+# User gets link from property manager.
+# User clicks on link.
+# If the user is logged in and the code is valid, then they join the homebase.
+def join(request, homebase_id, code):
+    if (validate_code(code)):
+        user = request.user
+        user_profile = user.profile
+        homebase = Homebase.objects.get(id=homebase_id)
+        user_profile.homebases.add(homebase)
+        user_profile.save()
+        return home(request)
+
+def validate_code(code):
+    if (code == code):
+        return True
