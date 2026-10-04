@@ -4,6 +4,7 @@ To-do:
 • Authorization
 • Like posts
 • Comment on posts
+• Change login view to 
 
 Done:
 • Posts
@@ -20,3 +21,4 @@ Done:
         homebase/<id>/
         homebase/create/
         homebase/join/<homebase_id>/<code>/
+

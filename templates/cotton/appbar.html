@@ -33,7 +33,7 @@
             <c-ui.dropdown.item href="/profile" size="sm">Profile</c-ui.dropdown.item>
             <c-ui.dropdown.item href="/settings" size="sm">Settings</c-ui.dropdown.item>
         </c-ui.dropdown>
-        <form method="POST" action="/auth/logout/">
+        <form method="POST" action="/logout/">
             {% csrf_token %}
             <c-ui.button type="submit" size="sm" variant="primary">Logout</c-ui.button>
         </form>

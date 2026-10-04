@@ -11,7 +11,7 @@ def home(request, homebase_id):
     homebase = Homebase.objects.get(id=homebase_id)
     if (authorize_user(request.user, homebase)):
         context = {"homebase": homebase}
-        return render(request, 'testhomebase.html', context)
+        return render(request, 'homebase.html', context)
 
 def authorize_user(user, homebase):
     return True
@@ -40,7 +40,7 @@ def join(request, homebase_id, code):
         homebase = Homebase.objects.get(id=homebase_id)
         homebase.users.add(user)
         homebase.save()
-        return home(request)
+        return home(request, homebase_id)
 
 def validate_code(code):
     if (code == code):

@@ -33,7 +33,7 @@ def register(request):
             return redirect('home')
     else:
         form = CustomUserCreationForm()
-    return render(request, "register.html", {
+    return render(request, "public/register.html", {
         "page": "register",
         "form": form
         }) 
@@ -51,4 +51,4 @@ def login(request):
             messages.success(request, "Login successful.")
             return redirect('home')
             
-    return render(request, 'home.html')
+    return render(request, 'public/login.html', {"page": "login"})
