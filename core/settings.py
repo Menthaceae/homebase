@@ -52,18 +52,10 @@ INSTALLED_APPS = [
     'django_cotton_ui',
     'django_tailwind_cli',
     'cotton_icons',
-<<<<<<< HEAD
-
-    # Custom apps
-    "apps.public",
-    "apps.posts",
-
-=======
     'apps.public',
     'apps.users',
     'apps.homebase',
     'apps.posts',
->>>>>>> main
 ]
 
 TAILWIND_CLI_SRC_CSS = "tailwind.input.css"
@@ -104,10 +96,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-<<<<<<< HEAD
-=======
-# Make sure you put the url in a .env file
->>>>>>> main
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 
 DATABASES = {
