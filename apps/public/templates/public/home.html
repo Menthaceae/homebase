@@ -1,0 +1,94 @@
+{% load static %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<c-layout>
+    <div class="grid grid-cols-3 md:grid-cols-4 gap-2">
+
+        <!-- Left Panel -->
+        <div class="left-panel col-span-1">
+            <!-- Create Post-->
+            <c-ui.card class="p-4" style="width: 100%; background-color: var(--color-primary); color: var(--color-primary-content);">
+                <p class="text-lg font-semibold mb-2">Create a New Post</p>
+                <p class="text-sm mb-4">Start sharing your thoughts and ideas with the community by creating a new post.</p>
+                <c-ui.button label="Create Post" href="/create-post" class="w-full" >Create Post</c-ui.button>   
+            </c-ui.card>
+            <!-- Quick Resources-->
+            <c-ui.card class="p-4" style="width: 100%; background-color: var(--color-primary); color: var(--color-primary-content);">
+                <p class="text-lg font-semibold mb-2">Quick Resources</i></span></p>
+                <div class="resource">
+                    <p><i class="ti ti-book-2"></i> Building Rules & Bylaws </p>
+                </div>
+                <p><i class="ti ti-credit-card"></i> Pay Dues</p>
+                <p><i class="ti ti-phone"></i> Contact Management</p>
+            </c-ui.card>
+            <!-- Your Community -->
+            <c-ui.card class="p-4" style="width: 100%; background-color: var(--color-primary); color: var(--color-primary-content);">
+                <p class="text-lg font-semibold mb-2">Your Community</p>
+
+                <div class="your-community">
+                    <c-ui.card class="p-3">
+                        <h2 class="community-metric text-sm font-semibold">Active Homebases</h2>
+                        <p class="text-xs text-ink-600 mt-1">Number of active homebases nearby</p>
+                    </c-ui.card>
+                    <c-ui.card class="p-3">
+                        <h2 class="community-metric text-sm font-semibold">Neighbors online</h2>
+                        <p class="text-xs text-ink-600 mt-1"># of nearby online neighbors</p>
+                    </c-ui.card>
+                    <c-ui.card class="p-3">
+                        <h2 class="community-metric text-sm font-semibold">Local Events Scheduled </h2>
+                        <p class="text-xs text-ink-600 mt-1"># of local events</p>
+                    </c-ui.card>
+                    <c-ui.card class="p-3">
+                        <h2 class="community-metric text-sm font-semibold">Resolving Maintenance</h2>
+                        <p class="text-xs text-ink-600 mt-1">Homebase Maintenance metrics</p>
+                    </c-ui.card>
+                </div>
+            </c-ui.card>
+        </div>
+
+        <!-- Posts -->
+         
+        <div class="center-panel col-span-2 gap-15">
+            <div class="posts">
+                <div class="filters">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-post-filter="all">All</button>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-post-filter="homebase">Homebase</button>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-post-filter="announcements">Announcements</button>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-post-filter="events">Events</button>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-post-filter="trending">Trending</button>
+                </div>
+            </div>
+          
+            <div class="flex flex-row gap-4">
+                <c-post title="Something I want to share.." img-url="" content="I have been living in this community for a while now and I wanted to share my experiences." author="Guest" />
+            </div>
+            <!-- Generate posts here -->
+
+        </div>
+
+        <!-- Right Panel-->
+        <div class="right-panel col-span-1">
+            <c-ui.card class="p-4" style="width: 100%; background-color: var(--color-primary); color: var(--color-primary-content);">
+                    <p class="text-lg font-semibold mb-2">Join a homebase</p>
+                    <hr class="border-gray-300 mb-4">
+                    <p class="text-sm mb-4">Become a part of our growing community and connect with like-minded individuals.</p>
+                    <c-ui.button label="Join Now" href="/join" class="w-full" >Join Now</c-ui.button>   
+            </c-ui.card>
+            <c-ui.card class="p-4" style="width: 100%; background-color: var(--color-primary); color: var(--color-primary-content);">
+                    <div class="event-card">
+                        <p class="text-lg font-semibold mb-2">Upcoming events</p>
+                        <p>See all</p>
+                    </div>    
+                    <hr class="border-gray-300 mb-4">
+                    <p class="text-sm mb-4">Become a part of our growing community and connect with like-minded individuals.</p>
+                    <c-ui.button label="Join Now" href="/join" class="w-full" >Join Now</c-ui.button>   
+            </c-ui.card>
+        </div>
+    </div>
+</div>
+</c-layout>
+{% endblock %}

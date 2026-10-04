@@ -1,24 +1,36 @@
 {% load static %}
 {% load tailwind_cli %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% tailwind_css %}
     <!-- Cotton UI: precompiled components + design tokens.
          Shipped inside the installed package, served by Django's staticfiles app. -->
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+
+    <!--Custom CSS -->
+    {% block custom_css %}
+    {% endblock %}
 </head>
 <body>
-    <c-appbar :is-logged-in="user.is_authenticated" username="user.username" avatar-url="user.avatar_url" />
-    {% if banner%}
-        <div class="w-full">
-            {{ banner }}
-        </div>
-    {% endif %}
+
+    <!--Reusable Cotton components -->
+    <c-appbar :is-logged-in="False" username="" avatar-url="" />
     <div class="p-4">
         {{ slot }}
     </div>
+
+
+    <!-- Webpage content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
 
     <!-- Cotton UI bundle first: it registers components on Alpine's alpine:init event -->
     <script defer src="{% static 'django_cotton_ui/cotton-ui.min.js' %}"></script>
@@ -27,5 +39,10 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Custom js -->
+    {% block custom_js %}
+    {% endblock %}
+
 </body>
 </html>

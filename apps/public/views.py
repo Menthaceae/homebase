@@ -6,10 +6,16 @@ from django.contrib import messages
 from apps.public.forms import CustomUserCreationForm
 from django.contrib.auth.models import User
 
-# Homepage
-# GET /
+# Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    """
+    View for the home page.
+    
+    Renders the home.html template.
+    """
+    return render(request, 'public/home.html', {
+        'page': 'page',
+    })
 
 def layout(request):
     return render(request, 'layout.html')
@@ -27,7 +33,10 @@ def register(request):
             return redirect('home')
     else:
         form = CustomUserCreationForm()
-    return render(request, "register.html", {"form": form}) 
+    return render(request, "register.html", {
+        "page": "register",
+        "form": form
+        }) 
     
 # Login
 # GET and POST login/

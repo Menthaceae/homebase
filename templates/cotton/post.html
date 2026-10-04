@@ -19,10 +19,10 @@
     <p class="text-sm">{{ content }}</p>
     <div class="mt-4 flex flex-row gap-2">
         <div x-data="{ liked: false }" class="flex flex-row gap-2">
-            <span x-show="liked"
+            <span x-show="liked">
             <c-ui.button @click="liked = !liked" label="Like" class="rounded-full" ><c-tablericon.heart variant="filled" class="size-5" /></c-ui.button>
             </span>
-            <span x-show="!liked"
+            <span x-show="!liked">
             <c-ui.button @click="liked = !liked" class="rounded-full" ><c-tablericon.heart  class="size-5" /></c-ui.button>
             </span>
         </div>
