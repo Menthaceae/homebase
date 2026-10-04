@@ -10,7 +10,12 @@
          Shipped inside the installed package, served by Django's staticfiles app. -->
 </head>
 <body>
-    <c-appbar :is-logged-in="False" username="" avatar-url="" />
+    <c-appbar :is-logged-in="user.is_authenticated" username="user.username" avatar-url="user.avatar_url" />
+    {% if banner%}
+        <div class="w-full">
+            {{ banner }}
+        </div>
+    {% endif %}
     <div class="p-4">
         {{ slot }}
     </div>

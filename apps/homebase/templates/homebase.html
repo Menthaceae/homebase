@@ -1,0 +1,71 @@
+{% load static %}
+<c-layout>
+  <c-slot name="banner">
+    <div class="background-image w-full bg-cover bg-center min-h-75 flex flex-col p-8 items-start justify-end text-white" style="background-image: url('{% static "images/homebase-bg.png" %}');">
+      <h1 class="text-4xl font-bold mb-4">Welcome to HomeBase</h1>
+      <p class="text-lg mb-6">Your one-stop platform for community engagement and collaboration.</p>
+    </div>
+    <div class="flex flex-col justify-between items-center align-center md:flex-row p-4 bg-gray-100">
+        <div class="flex gap-2 items-center">
+            <h1 class="text-accent-content text-2xl font-bold">88</h1>
+            <p class="text-lg">Active Users</p>
+        </div>
+        <div class=" flex gap-2 items-center">
+            <h1 class="text-accent-content text-2xl font-bold">80</h1>
+            <p class="text-lg">Accupied Units</p>
+        </div>
+        <div class="flex gap-2 items-center">
+            <h1 class="text-accent-content text-2xl font-bold">3</h1>
+            <p class="text-lg">Upcoming Events</p>
+        </div>
+    </div>
+  </c-slot>
+  <div class="flex flex-col-reverse gap-2 md:flex-row">
+    <div class="w-full" x-data="{ activeTab: 'feed' }">
+      <div class="flex gap-2 items-center" >
+        <c-ui.button x-bind:class="activeTab === 'feed' ? 'bg-accent-content! text-accent-foreground!' : 'bg-accent-content'" @click="activeTab = 'feed'" size="md">Feed</c-ui.button>
+        <c-ui.button x-bind:class="activeTab === 'events' ? 'bg-accent-content! text-accent-foreground!' : 'bg-accent-content'" class="cursor-pointer" @click="activeTab = 'events'" size="md">Events</c-ui.button>
+        <c-ui.button x-bind:class="activeTab === 'announcements' ? 'bg-accent-content! text-accent-foreground!' : 'bg-accent-content'" class="cursor-pointer" @click="activeTab = 'announcements'" size="md">Announcements</c-ui.button>
+      </div>
+      <br>
+      <div>
+        <div x-show="activeTab === 'feed'" class="w-full">
+            <c-post title="Something I want to share.." img-url="{% static 'images/post.jpeg' %}" content="I have been living in this community for a while now and I wanted to share my experiences." author="Guest" />
+      </div>
+        <div x-show="activeTab === 'events'" class="w-full">
+            <c-event title="Community BBQ" image="{% static 'images/bbq.jpeg' %}" description="Join us for a fun-filled community BBQ event! Enjoy delicious food, games, and great company." date="June 15th, 2024" location="Community Park" />
+        </div>
+      </div>
+      <div x-show="activeTab === 'announcements'" class="w-full">
+          <c-announcement title="Community Meeting" description="We will be holding a community meeting to discuss upcoming projects and initiatives." date="June 20th, 2024" />
+      </div>
+    </div>
+    <div class="w-full flex flex-col gap-4 md:w-1/3">
+      <c-ui.card>
+        <h2 class="text-xl font-bold mb-4">Community Leaders</h2>
+        <div class="flex flex-row justify-start items-center gap-4">
+          <c-ui.avatar name="John Doe" size="md" />
+          <div class="flex flex-col">
+            <p class="text-lg">John Doe</p>
+            <p class="text-sm text-gray-500">Community Manager</p>
+          </div>
+        </div>
+        <div class="flex flex-row justify-start items-center gap-4">
+          <c-ui.avatar name="Alina Smith" size="md" />
+          <div class="flex flex-col">
+            <p class="text-lg">Alina Smith</p>
+            <p class="text-sm text-gray-500">Community Leader</p>
+          </div>
+        </div>
+      </c-ui.card>
+      <c-ui.card>
+        <h2 class="text-xl font-bold mb-4">Upcoming Events</h2>
+        <ul class="list-disc pl-5">
+          <li>Community BBQ - June 15th</li>
+          <li>Neighborhood Cleanup - July 10th</li>
+          <li>Annual Block Party - August 20th</li>
+        </ul>
+      </c-ui.card>
+    </div>
+  </div>
+</c-layout>

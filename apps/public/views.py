@@ -1,5 +1,7 @@
+from django.shortcuts import render
+
 from django.shortcuts import redirect, render
-from django.contrib.auth import login as django_login
+from django.contrib.auth import authenticate, login as django_login
 from django.contrib import messages
 from apps.public.forms import CustomUserCreationForm
 from django.contrib.auth.models import User
@@ -8,6 +10,9 @@ from django.contrib.auth.models import User
 # GET /
 def home(request):
     return render(request, 'home.html')
+
+def layout(request):
+    return render(request, 'layout.html')
 
 # Register
 # GET and POST register/
