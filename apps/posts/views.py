@@ -44,14 +44,20 @@ def update(request):
     if form.is_valid():
         post_id = form.id
         post = Post.objects.get(post_id)
-        post = form.save()
-        post.save()
-        messages.success(request, "Post update successful")
-        return redirect('/posts/' + post_id + '/')
+
+        if (post.author == request.user):
+            post = form.save()
+            post.save()
+            messages.success(request, "Post update successful")
+            return redirect('/posts/' + post_id + '/')
 
 # Delete a post
 # POST posts/delete/
 def delete(request):
     post_id = request.id
-    post = Post.objects.get(id=id)
-    post.deleted = True
+    post = Post.objects.get(id=post_id)
+
+    if (post.author == request.user):
+        post.deleted = True
+        post.save()
+        return get_all()        
