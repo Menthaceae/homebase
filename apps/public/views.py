@@ -3,11 +3,16 @@ from django.contrib.auth import login
 from .forms import CustomUserCreationForm
 from django.contrib import messages
 
-
-
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    """
+    View for the home page.
+    
+    Renders the home.html template.
+    """
+    return render(request, 'public/home.html', {
+        'page': 'page',
+    })
 
 def register(request):
     if request.method == 'POST':
@@ -19,4 +24,7 @@ def register(request):
             return redirect('home')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'public/register.html', {
+        'page': 'register',
+        'form': form,
+        })

@@ -7,25 +7,31 @@
 
 <c-ui.navbar>
 
+    <!-- Brand -->
     <c-slot name="brand">
         <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 12v2a2 2 0 0 1-2 2H9a1 1 0 0 0-1 1v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h0"/><path d="M4 16a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3a1 1 0 0 1-1 1h-5a2 2 0 0 0-2 2v2"/></svg>
         <span class="font-bold">Homebase</span>
     </c-slot>
 
-    <c-search-bar />
+    <!-- Search bar -->
+    {%if page != 'register' and page != 'login' %}
+    <div class="appbar-search">
+        <c-search-bar />
+    </div>
+    {% endif %}
     
-    {% if is_logged_in %}
-            <c-ui.navbar.item href="#">Profile</c-ui.navbar.item>
-            <c-ui.navbar.item href="#">Settings</c-ui.navbar.item>
+    <!-- Actions -->
+    {% if user.is_authenticated %}
     <c-slot name="actions">
         <c-ui.avatar size="sm" src="{{ avatar_url }}">{{ username }}</c-ui.avatar>
         <c-ui.button href="/logout" size="sm" variant="primary">Sign out</c-ui.button>
     </c-slot>
     {% else %}
-        <c-slot name="actions">
+    <c-slot name="actions">
         <c-ui.button href="/login" size="sm">Sign in</c-ui.button>
         <c-ui.button href="/register" size="sm" variant="primary">Sign up</c-ui.button>
     </c-slot>
     {% endif %}
+
 
 </c-ui.navbar>
