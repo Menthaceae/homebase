@@ -6,19 +6,7 @@
 @source "./templates/**/*.html";
 @source "./apps/**/templates/*.html";
 
-@theme {
-    --color-primary: var(--color-primary);
-    --color-primary-content: var(--color-primary-content);
-    /* Add any other custom properties you want utilities for */
-}
-
 :root {
-    /* Primary brand */
-    --color-primary: #0F766E;
-    --color-primary-content: #FFFFFF;
-
-    --color-secondary: #F8FAFC;
-    --color-secondary-content: #0F172A;
 
     /* Accent */
     --color-accent: #14B8A6;
