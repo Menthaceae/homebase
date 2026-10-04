@@ -48,15 +48,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "django_cotton",
-    "django_cotton_ui",
-    "django_tailwind_cli",
+    'django_cotton',
+    'django_cotton_ui',
+    'django_tailwind_cli',
     'cotton_icons',
+<<<<<<< HEAD
 
     # Custom apps
     "apps.public",
     "apps.posts",
 
+=======
+    'apps.public',
+    'apps.users',
+    'apps.homebase',
+    'apps.posts',
+>>>>>>> main
 ]
 
 TAILWIND_CLI_SRC_CSS = "tailwind.input.css"
@@ -79,7 +86,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': [BASE_DIR / "templates" / "cotton"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,6 +104,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+<<<<<<< HEAD
+=======
+# Make sure you put the url in a .env file
+>>>>>>> main
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 
 DATABASES = {
@@ -142,11 +153,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.1/howto/static-files/
-
-STATIC_URL = 'static/'
 
 
 # Email

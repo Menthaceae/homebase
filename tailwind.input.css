@@ -2,13 +2,11 @@
 
 @import "./cotton-ui.sources.css";
 
+
 @source "./templates/**/*.html";
 @source "./apps/**/templates/*.html";
 
 :root {
-    /* Primary brand */
-    --color-primary: #0F766E;
-    --color-primary-content: #FFFFFF;
 
     /* Accent */
     --color-accent: #14B8A6;
@@ -38,6 +36,9 @@
     /* Primary brand */
     --color-primary: #2DD4BF;
     --color-primary-content: #042F2E;
+
+    --color-secondary: #1E293B;
+    --color-secondary-content: #F8FAFC;
 
     /* Accent */
     --color-accent: #14B8A6;

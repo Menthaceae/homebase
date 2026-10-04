@@ -1,0 +1,13 @@
+<c-vars
+    title="Announcement"
+    description="Important information for the community"
+    date="June 15th, 2024"
+/>
+
+<c-ui.card class="flex flex-col gap-4">
+    <div class="flex flex-col justify-between md:flex-row">
+        <h2 class="text-xl font-bold mb-2">{{ title }}</h2>
+        <p class="text-sm text-gray-500 mb-2">{{ date }}</p>
+    </div>
+    <p class="text-base">{{ description }}</p>
+</c-ui.card>

@@ -1,0 +1,16 @@
+<c-vars 
+    label="Dashboard"
+    value="Welcome to your dashboard"
+    description="This is a simple dashboard card."
+    filled=True
+/>
+
+<c-ui.card class="w-full {{ filled |yesno:'bg-accent-content text-accent-foreground,' }}">
+    <div class="flex flex-col justify-between">
+        <p class=" font-semibold mb-2">{{ label }}</p>
+        <h2 class="text-3xl font-bold mb-2 {{ filled |yesno:',text-accent-content' }}">
+            {{ value }}
+        </h2>
+    </div>
+    <p class="text-base">{{ description }}</p>  
+</c-ui.card>

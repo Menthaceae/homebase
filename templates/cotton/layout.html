@@ -19,18 +19,18 @@
 </head>
 <body>
 
-        <!--Reusable Cotton components -->
-        <c-appbar :is-logged-in="False" username="" avatar-url="" />
-        <div class="p-4">
-            {{ slot }}
-        </div>
+    <!--Reusable Cotton components -->
+    <c-appbar :is-logged-in="False" username="" avatar-url="" />
+    <div class="p-4">
+        {{ slot }}
+    </div>
 
 
-        <!-- Webpage content -->
-        <main>
-            {% block content %}
-            {% endblock %}
-        </main>
+    <!-- Webpage content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
 
     <!-- Cotton UI bundle first: it registers components on Alpine's alpine:init event -->
     <script defer src="{% static 'django_cotton_ui/cotton-ui.min.js' %}"></script>

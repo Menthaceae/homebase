@@ -1,8 +1,8 @@
 <c-vars 
-    brand="Homebase" 
-    is-logged-in=None 
-    username="Guest" 
-    avatar-url="" 
+    brand="HomeBase" 
+    is-logged-in=user.is_authenticated 
+    username="user.username" 
+    avatar-url="user.avatar_url" 
 />
 
 <c-ui.navbar>
@@ -23,8 +23,20 @@
     <!-- Actions -->
     {% if user.is_authenticated %}
     <c-slot name="actions">
-        <c-ui.avatar size="sm" src="{{ avatar_url }}">{{ username }}</c-ui.avatar>
-        <c-ui.button href="/logout" size="sm" variant="primary">Sign out</c-ui.button>
+        <c-ui.dropdown position="bottom" size="sm">
+            <c-slot name="trigger">
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <c-ui.avatar size="sm" ></c-ui.avatar>
+                    <span class="text-sm font-medium">{{ username }}</span>
+                </div>
+            </c-slot>
+            <c-ui.dropdown.item href="/profile" size="sm">Profile</c-ui.dropdown.item>
+            <c-ui.dropdown.item href="/settings" size="sm">Settings</c-ui.dropdown.item>
+        </c-ui.dropdown>
+        <form method="POST" action="/auth/logout/">
+            {% csrf_token %}
+            <c-ui.button type="submit" size="sm" variant="primary">Logout</c-ui.button>
+        </form>
     </c-slot>
     {% else %}
     <c-slot name="actions">
