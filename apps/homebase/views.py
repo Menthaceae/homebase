@@ -13,6 +13,9 @@ def home(request, homebase_id):
         context = {"homebase": homebase}
         return render(request, 'testhomebase.html', context)
 
+def hombaseHome(request):
+    return render(request, 'homebase.html')
+
 def authorize_user(user, homebase):
     return True
 
