@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Homebase(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -10,3 +11,4 @@ class Homebase(models.Model):
     country = models.CharField()
     name = models.CharField()
     banner = models.CharField()
+    users = models.ManyToManyField(User)

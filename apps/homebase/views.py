@@ -29,10 +29,9 @@ def create(request):
 def join(request, homebase_id, code):
     if (validate_code(code)):
         user = request.user
-        user_profile = user.profile
         homebase = Homebase.objects.get(id=homebase_id)
-        user_profile.homebases.add(homebase)
-        user_profile.save()
+        homebase.users.add(user)
+        homebase.save()
         return home(request)
 
 def validate_code(code):
