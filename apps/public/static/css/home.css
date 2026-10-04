@@ -1,0 +1,59 @@
+.event-card {
+    display: flex;
+    flex-direction: row;
+}
+
+/* ===================================
+    GRID
+    =================================== */
+
+/* ── Right Grid ── */
+
+.right-panel {
+    display: grid;
+    grid-template-columns: auto;
+    gap: 15px;
+}
+
+.your-community {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 5px;
+}
+
+.community-metric {
+    color: green;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+
+/* ── Right Grid ── */
+
+
+.left-panel {
+    display: grid;
+    grid-template-rows: auto;
+    gap: 15px;
+}
+
+
+/* ── Center Grid ── */
+
+.center-panel {
+    gap: 15px;
+}
+
+.posts {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.post-filers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
