@@ -1,12 +1,20 @@
 from django.shortcuts import render
 from .models import Homebase
+from django.contrib.auth.models import User
 from .forms import HomebaseCreationForm
 from django.http import HttpResponse
 from django.contrib import messages
 
+
 # GET homebase/
-def home(request):
-    return render(request, 'homebase.html')
+def home(request, homebase_id):
+    homebase = Homebase.objects.get(id=homebase_id)
+    if (authorize_user(request.user, homebase)):
+        context = {"homebase": homebase}
+        return render(request, 'testhomebase.html', context)
+
+def authorize_user(user, homebase):
+    return True
 
 # POST homebase/create/
 # Homebase creation logic

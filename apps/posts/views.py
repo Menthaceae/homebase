@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Post
-from .forms import PostCreationForm
+from .forms import *
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
@@ -19,7 +19,7 @@ def get_all(request):
 def get(request, id):
     post = Post.objects.get(id=id)
     context = {"post": post}
-    return render(request, 'getonepost.html', context)
+    return render(request, 'testgetonepost.html', context)
 
 # Create post
 # POST posts/create/
@@ -40,16 +40,21 @@ def create(request):
 # Update a post
 # POST posts/update/
 def update(request):
-    form = PostUpdateForm(request.POST)
-    if form.is_valid():
-        post_id = form.id
-        post = Post.objects.get(post_id)
+    if request.method == 'POST':
+        form = PostUpdateForm(request.POST)
+        if form.is_valid():
+            post_id = form.id
+            post = Post.objects.get(post_id)
 
-        if (post.author == request.user):
-            post = form.save()
-            post.save()
-            messages.success(request, "Post update successful")
-            return redirect('/posts/' + post_id + '/')
+            if (post.author == request.user):
+                post = form.save()
+                post.save()
+                messages.success(request, "Post update successful")
+                return redirect('/posts/' + post_id + '/')
+    else:
+        form = PostUpdateForm()           
+
+    return render(request, 'testupdatepost.html', {"form": form})
 
 # Delete a post
 # POST posts/delete/
