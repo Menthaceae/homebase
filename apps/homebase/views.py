@@ -1,36 +1,47 @@
 from django.shortcuts import render
-# from django.views.decorators.csrf import csrf_exempt
 from .models import Homebase
+from django.contrib.auth.models import User
+from .forms import HomebaseCreationForm
 from django.http import HttpResponse
+from django.contrib import messages
 
-def homebase(request):
-    return render(request, 'homebase.html')
 
-def dashboard(request):
-    return render(request, 'dashboard.html')
+# GET homebase/
+def home(request, homebase_id):
+    homebase = Homebase.objects.get(id=homebase_id)
+    if (authorize_user(request.user, homebase)):
+        context = {"homebase": homebase}
+        return render(request, 'testhomebase.html', context)
 
-# GET homebase/create/
-# Renders homebase creation page
+def authorize_user(user, homebase):
+    return True
 
 # POST homebase/create/
 # Homebase creation logic
-# Input homebase creation fields from form
-# Returns the homebase id 
 def create(request):
-    street_address = request.POST['street_address']
-    city = request.POST['city']
-    state = request.POST['state']
-    zipcode = request.POST['zipcode']
-    country = request.POST['country']
-    bio = request.POST['bio']
+    if request.method == 'POST':
+        form = HomebaseCreationForm(request.POST)
+        if form.is_valid():
+            homebase = form.save()
+            homebase.save()
+            messages.success(request, "Homebase creation successful")
+    else:
+        form = HomebaseCreationForm()           
 
-    homebase = Homebase(
-                street_address = street_address,
-                city = city,
-                state = state,
-                zipcode = zipcode,
-                country = country,
-                bio = bio)
+    return render(request, 'testcreatehomebase.html', {"form": form})
 
-    homebase.save()
-    return HttpResponse("Homebase creation success. Homebase ID: " + str(homebase.id))       
+# GET homebase/join/<homebase_id>/<code>/
+# User gets link from property manager.
+# User clicks on link.
+# If the user is logged in and the code is valid, then they join the homebase.
+def join(request, homebase_id, code):
+    if (validate_code(code)):
+        user = request.user
+        homebase = Homebase.objects.get(id=homebase_id)
+        homebase.users.add(user)
+        homebase.save()
+        return home(request)
+
+def validate_code(code):
+    if (code == code):
+        return True
