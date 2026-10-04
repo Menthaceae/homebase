@@ -5,6 +5,10 @@ from django.http import HttpResponse
 
 def homebase(request):
     return render(request, 'homebase.html')
+
+def dashboard(request):
+    return render(request, 'dashboard.html')
+
 # GET homebase/create/
 # Renders homebase creation page
 

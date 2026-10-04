@@ -1,0 +1,12 @@
+<c-vars 
+    userName = "John Doe"
+    userRole = "Community Member"
+/>
+
+<h1 class="text-2xl font-bold mb-4">Welcome, {{ userName }}!</h1>
+<div class="w-full flex flex-col justify-around md:flex-row gap-4">
+    <c-dbcard label="Tenants" value="88" description="Active tenants" filled=True />
+    <c-dbcard label="Properties" value="12" description="Total properties" filled=False />
+    <c-dbcard label="Maintenance Requests" value="5" description="Pending requests" filled=False />
+    <c-dbcard label="Announcements" value="3" description="New announcements" filled=False />
+</div>
