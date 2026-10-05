@@ -8,4 +8,5 @@ urlpatterns = [
   path('join/<int:homebase_id>/<int:code>/', views.join, name='join'),
   path('', views.hombaseHome, name='hombaseHome'),
   path('join/', views.join_page, name='join_page')
+  path('dashboard/', views.dashboard, name='dashboard'),
 ]

@@ -57,3 +57,5 @@ def validate_code(code):
 
 def join_page(request):
     return render(request, 'joinhomebase.html')        
+def dashboard(request):
+    return render(request, 'dashboard.html')
