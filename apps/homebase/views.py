@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from apps.posts import views as Posts
 from .models import Homebase
 from django.contrib.auth.models import User
 from .forms import HomebaseCreationForm
@@ -8,8 +9,13 @@ from django.shortcuts import redirect
 # GET homebase/
 def home(request, homebase_id):
     homebase = Homebase.objects.get(id=homebase_id)
+    homebase_posts = Posts.get_homebase_posts(homebase_id)
+
     if (authorize_user(request.user, homebase)):
-        context = {"homebase": homebase}
+        context = {
+            "homebase_posts": homebase_posts,
+            "homebase": homebase
+        }
         return render(request, 'testhomebase.html', context)
 
 def hombaseHome(request):
@@ -43,11 +49,13 @@ def join(request, homebase_id, code):
         homebase = Homebase.objects.get(id=homebase_id)
         homebase.users.add(user)
         homebase.save()
-        return home(request)
+        return home(request, homebase_id)
 
 def validate_code(code):
     if (code == code):
         return True
 
+def join_page(request):
+    return render(request, 'joinhomebase.html')        
 def dashboard(request):
     return render(request, 'dashboard.html')

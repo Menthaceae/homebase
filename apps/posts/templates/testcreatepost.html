@@ -1,7 +1,47 @@
 <c-layout>
     <form action="" method="post">
         {% csrf_token %}
-        {{ form }}
-        <input type="submit" value="Submit">
+        <div>
+            <c-ui.input label="Post Title" name="title" placeholder="Enter post title" required />
+        </div>
+        <div>
+            <c-ui.textarea label="Post Content" name="body" placeholder="Enter post content" required />
+        </div>
+        <div>
+            <c-ui.select label="Post Category" name="category" required>
+                <option value="announcements">Announcements</option>
+                <option value="marketplace">Marketplace</option>
+            </c-ui.select>
+        </div>
+        <div>
+            <c-ui.input label="Status" name="status" placeholder="Enter tags (comma-separated)" />
+        </div>
+        <div>
+            <c-ui.select label="Post To" name="post_to" placeholder="Select where to post" required>
+                <option value="homebase">Homebase</option>
+                <option value="public">Public</option>
+            </c-ui.select>
+        </div>
+        <div>
+            <c-ui.input label="Image URL" name="image" placeholder="Enter image URL (optional)" />
+        </div>
+        <br>
+        {% if form.errors %}
+            <div class="text-red-500">
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <div>
+            <c-ui.button type="submit" variant="primary" label="Create Post" >Create</c-ui.button>
+        </div>
     </form>
 </c-layout>

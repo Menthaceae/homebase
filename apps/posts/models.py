@@ -17,7 +17,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(blank=False)
     body = models.TextField(blank=False)
-    status = models.CharField()
+    status = models.CharField(blank=True)
     catagory = models.CharField(choices=catagory_choices,blank=True)
     post_to = models.CharField(choices=post_to_choices,blank=False) 
     image = models.CharField(blank=True)

@@ -14,7 +14,7 @@
             <c-ui.card class="p-4 bg-accent-content text-accent-foreground w-full">
                 <p class="text-lg font-semibold mb-2">Create a New Post</p>
                 <p class="text-sm mb-4">Start sharing your thoughts and ideas with the community by creating a new post.</p>
-                <c-ui.button label="Create Post" href="/create-post" class="w-full" >Create Post</c-ui.button>   
+                <c-ui.button label="Create Post" href="posts/create/" class="w-full" >Create Post</c-ui.button>   
             </c-ui.card>
             <!-- Quick Resources-->
             <c-ui.card class="p-4 w-full bg-accent-content text-accent-foreground">
@@ -63,9 +63,11 @@
                 </div>
             </div>
           
+            {%for post in public_posts %}
             <div class="flex flex-row gap-4">
-                <c-post title="Something I want to share.." img-url="" content="I have been living in this community for a while now and I wanted to share my experiences." author="Guest" />
+                <c-post title={{post.title}} img-url={{post.image}} content={{post.body}} author={{post.author}} />
             </div>
+            {%endfor%}
             <!-- Generate posts here -->
 
         </div>
@@ -76,16 +78,15 @@
                     <p class="text-lg font-semibold mb-2">Join a homebase</p>
                     <hr class="border-gray-300 mb-4">
                     <p class="text-sm mb-4">Become a part of our growing community and connect with like-minded individuals.</p>
-                    <c-ui.button label="Join Now" href="/join" class="w-full" >Join Now</c-ui.button>   
+                    <c-ui.button label="Join Now" href="homebase/join/" class="w-full" >Join Now</c-ui.button>   
             </c-ui.card>
             <c-ui.card class="p-4 w-full bg-accent-content text-accent-foreground">
                     <div class="event-card">
                         <p class="text-lg font-semibold mb-2">Upcoming events</p>
-                        <p>See all</p>
                     </div>    
                     <hr class="border-gray-300 mb-4">
                     <p class="text-sm mb-4">Become a part of our growing community and connect with like-minded individuals.</p>
-                    <c-ui.button label="Join Now" href="/join" class="w-full" >Join Now</c-ui.button>   
+                    <c-ui.button label="Join Now" href="" class="w-full" >See All</c-ui.button>   
             </c-ui.card>
         </div>
     </div>
