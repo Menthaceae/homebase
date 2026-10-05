@@ -2,8 +2,7 @@ from django.shortcuts import render
 from .models import Homebase
 from django.contrib.auth.models import User
 from .forms import HomebaseCreationForm
-from django.http import HttpResponse
-from django.contrib import messages
+from django.shortcuts import redirect
 
 
 # GET homebase/
@@ -22,16 +21,17 @@ def authorize_user(user, homebase):
 # POST homebase/create/
 # Homebase creation logic
 def create(request):
+    error_message = None
     if request.method == 'POST':
         form = HomebaseCreationForm(request.POST)
         if form.is_valid():
             homebase = form.save()
             homebase.save()
-            messages.success(request, "Homebase creation successful")
+            return redirect('/homebase')
+        error_message = form.errors.as_text()
     else:
         form = HomebaseCreationForm()           
-
-    return render(request, 'testcreatehomebase.html', {"form": form})
+    return render(request, 'createhomebase.html', {"form": form, "error_message": error_message })
 
 # GET homebase/join/<homebase_id>/<code>/
 # User gets link from property manager.
