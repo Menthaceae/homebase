@@ -14,7 +14,7 @@ def home(request):
     Renders the home.html template.
     """
     return render(request, 'public/home.html', {
-        'page': 'page',
+        'page': 'home',
     })
 
 def layout(request):
