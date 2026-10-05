@@ -48,3 +48,6 @@ def join(request, homebase_id, code):
 def validate_code(code):
     if (code == code):
         return True
+
+def dashboard(request):
+    return render(request, 'dashboard.html')
