@@ -8,14 +8,7 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 def home(request):
-    """
-    View for the home page.
-    
-    Renders the home.html template.
-    """
-    return render(request, 'public/home.html', {
-        'page': 'page',
-    })
+   return render(request, 'home.html')
 
 def layout(request):
     return render(request, 'layout.html')
