@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 def home(request):
-   return render(request, 'home.html')
+    return render(request, 'home.html')
 
 def layout(request):
     return render(request, 'layout.html')
@@ -26,7 +26,7 @@ def register(request):
             return redirect('home')
     else:
         form = CustomUserCreationForm()
-    return render(request, "public/register.html", {
+    return render(request, "register.html", {
         "page": "register",
         "form": form
         }) 
@@ -44,4 +44,4 @@ def login(request):
             messages.success(request, "Login successful.")
             return redirect('home')
             
-    return render(request, 'public/login.html', {"page": "login"})
+    return render(request, 'login.html', {"page": "login"})
