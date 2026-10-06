@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Post(models.Model):
-
     #("Key", "Value")
     catagory_choices = (
         ("announcement", "Announcement"),
@@ -14,7 +13,7 @@ class Post(models.Model):
         ("homebase", "Homebase")
     )
 
-    id = models.BigAutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     author = models.OneToOneField(User, on_delete=models.CASCADE)
     title = models.CharField(blank=False)
     body = models.TextField(blank=False)
