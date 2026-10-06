@@ -23,14 +23,14 @@ class Post(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True, blank=True)
     deleted = models.BooleanField(default=False, null=False)
-    likes = models.IntegerField()
+    likes = models.IntegerField(blank=True, null=True)
 
 class Comment(models.Model):
-    id = models.AutoField(primary_key=True
+    id = models.AutoField(primary_key=True)
     parent_post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    parent_comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE)
     author = models.OneToOneField(User, on_delete=models.CASCADE)
     body = models.TextField(blank=False)
     created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True, blank = True)
-    likes = modes.IntegerField()
+    updated_at = models.DateField(auto_now=True, blank=True)
+    likes = models.IntegerField(blank=True, null=True)

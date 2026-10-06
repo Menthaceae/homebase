@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='homebase',
             name='managed_by',
-            field=models.OneToOneField(default=-1, on_delete=django.db.models.deletion.CASCADE, to='homebase.propertymanager'),
+            field=models.OneToOneField(default=1, on_delete=django.db.models.deletion.CASCADE, to='homebase.propertymanager'),
             preserve_default=False,
         ),
         migrations.AddField(
