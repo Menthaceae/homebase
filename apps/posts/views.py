@@ -11,8 +11,16 @@ from django.contrib import messages
 def get_all(request):
     posts = Post.objects.all().filter(deleted=False)
     context = {"all_posts": posts}
-    # return context
-    return render(request, 'testgetallposts.html', context)
+    return context
+    # return render(request, 'testgetallposts.html', context)
+
+def get_homebase_posts(homebase_id): 
+    homebase_posts = Post.objects.all().filter(deleted=False, post_to="homebase")
+    return homebase_posts
+
+def get_public_posts():  
+    public_posts = Post.objects.all().filter(deleted=False, post_to="public")
+    return public_posts
 
 # Get one post by id
 # GET posts/{id}/
@@ -31,7 +39,7 @@ def create(request):
             post.author = request.user
             post.save()
             messages.success(request, "Post creation successful")
-            return redirect('/posts/')
+            return redirect('home')
     else:
         form = PostCreationForm()           
 

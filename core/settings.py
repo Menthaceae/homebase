@@ -96,6 +96,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
+# Make sure you put the url in a .env file
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 
 DATABASES = {

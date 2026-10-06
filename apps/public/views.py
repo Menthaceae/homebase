@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from apps.posts import views as Posts
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as django_login
 from django.contrib import messages
@@ -8,14 +8,13 @@ from django.contrib.auth.models import User
 
 # Create your views here.
 def home(request):
-    """
-    View for the home page.
-    
-    Renders the home.html template.
-    """
-    return render(request, 'public/home.html', {
-        'page': 'home',
-    })
+    public_posts = Posts.get_public_posts()
+
+    context = {
+        "public_posts": public_posts
+    }
+
+    return render(request, 'public/home.html', context)
 
 def layout(request):
     return render(request, 'layout.html')
@@ -33,7 +32,7 @@ def register(request):
             return redirect('home')
     else:
         form = CustomUserCreationForm()
-    return render(request, "register.html", {
+    return render(request, "public/register.html", {
         "page": "register",
         "form": form
         }) 
@@ -51,4 +50,4 @@ def login(request):
             messages.success(request, "Login successful.")
             return redirect('home')
             
-    return render(request, 'home.html')
+    return render(request, 'public/login.html', {"page": "login"})

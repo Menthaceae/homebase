@@ -9,6 +9,8 @@
     <!-- Cotton UI: precompiled components + design tokens.
          Shipped inside the installed package, served by Django's staticfiles app. -->
 
+    
+         
     <!-- Global CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
@@ -21,6 +23,9 @@
 
     <!--Reusable Cotton components -->
     <c-appbar :is-logged-in="False" username="" avatar-url="" />
+    <div>
+        {{banner}}
+    </div>
     <div class="p-4">
         {{ slot }}
     </div>

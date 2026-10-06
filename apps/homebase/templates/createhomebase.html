@@ -1,0 +1,92 @@
+<c-layout>
+    <div>
+        <h1 class="text-2xl font-bold mb-4">Create a New Homebase</h1>
+        <p class="mb-6">Fill out the form below to create a new homebase. Please provide accurate information to ensure a smooth setup process.</p>
+    </div>
+    
+    <c-ui.card class="w-full p-8 shadow-sm">
+        <form action="/homebase/create/" method="POST" class="space-y-4">
+            {% csrf_token %}
+                <div class="mb-4">
+                    <c-ui.input 
+                        label="Homebase Name" 
+                        name="name" 
+                        type="text" 
+                        value="{{ form.name.value|default_if_none:'' }}" 
+                        required 
+                    />
+                </div>
+                <div class="mb-4">
+                    <c-ui.input 
+                        label="Street Address" 
+                        name="street_address" 
+                        type="text" 
+                        value="{{ form.street_address.value|default_if_none:'' }}"
+                        required 
+                    />
+                </div>
+                <div class="mb-4">
+                    <c-ui.input 
+                        label="City Name" 
+                        name="city" 
+                        type="text"
+                        value="{{ form.city.value|default_if_none:'' }}"
+                        required 
+                    />
+                </div>
+                <div class="mb-4">
+                    <c-ui.input 
+                        label="State" 
+                        name="state" 
+                        type="text" 
+                        value="{{ form.state.value|default_if_none:'' }}"
+                        required
+                    />
+                </div>
+                <div class="mb-4">
+                    <c-ui.input 
+                        label="Zip Code" 
+                        name="zipcode" 
+                        type="text" 
+                        value="{{ form.zipcode.value|default_if_none:'' }}"
+                        required
+                    />
+                </div>
+                <div class="mb-4">
+                    <c-ui.input 
+                        label="Country" 
+                        name="country" 
+                        type="text"
+                        value="{{ form.country.value|default_if_none:'' }}"
+                        required 
+                    />
+                </div>
+                <div class="mb-4">
+                    <c-ui.input 
+                        label="Bio" 
+                        name="bio" 
+                        type="text" 
+                        value="{{ form.bio.value|default_if_none:'' }}"
+                        required
+                    />
+                </div>
+                <div class="mb-4">
+                    <c-ui.input 
+                        label="Banner Image url" 
+                        name="banner" 
+                        type="text" 
+                        value="{{ form.banner.value|default_if_none:'' }}"
+                        required
+                    />
+                </div>
+                {% if error_message %}
+                    <div>
+                        <c-ui.alert type="info" class="mb-4">
+                            {{ error_message }}
+                        </c-ui.alert>
+                    </div>
+                {% endif %}
+                <c-ui.button type="submit" variant="primary">Create Homebase</c-ui.button>
+        </form>
+    </c-ui.card>
+</c-layout>
