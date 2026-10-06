@@ -19,7 +19,6 @@ def home(request):
 def layout(request):
     return render(request, 'layout.html')
 
-# Register
 # GET and POST register/
 def register(request):
     if request.method == 'POST':
@@ -37,7 +36,6 @@ def register(request):
         "form": form
         }) 
     
-# Login
 # GET and POST login/
 def login(request):
     if request.method == 'POST':

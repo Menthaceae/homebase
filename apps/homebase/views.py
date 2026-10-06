@@ -16,18 +16,20 @@ def home(request, homebase_id):
             "homebase_posts": homebase_posts,
             "homebase": homebase
         }
+
         return render(request, 'testhomebase.html', context)
+
+# If user in homebase
+def is_user_in_homebase(user, homebase):
+    return True        
 
 def hombaseHome(request):
     return render(request, 'homebase.html')
 
-def authorize_user(user, homebase):
-    return True
-
 # POST homebase/create/
-# Homebase creation logic
 def create(request):
     error_message = None
+
     if request.method == 'POST':
         form = HomebaseCreationForm(request.POST)
         if form.is_valid():
@@ -36,13 +38,16 @@ def create(request):
             return redirect('/homebase')
         error_message = form.errors.as_text()
     else:
-        form = HomebaseCreationForm()           
-    return render(request, 'createhomebase.html', {"form": form, "error_message": error_message })
+        form = HomebaseCreationForm()
+
+    context = {
+        "form": form,
+        "error_message": error_message
+    }               
+
+    return render(request, 'createhomebase.html', context)
 
 # GET homebase/join/<homebase_id>/<code>/
-# User gets link from property manager.
-# User clicks on link.
-# If the user is logged in and the code is valid, then they join the homebase.
 def join(request, homebase_id, code):
     if (validate_code(code)):
         user = request.user
@@ -51,11 +56,14 @@ def join(request, homebase_id, code):
         homebase.save()
         return home(request, homebase_id)
 
-def validate_code(code):
+def is_code_valid(code):
     if (code == code):
         return True
 
+# GET homebase/join/
 def join_page(request):
-    return render(request, 'joinhomebase.html')        
+    return render(request, 'joinhomebase.html')
+
+# GET homebase/dashboard/
 def dashboard(request):
     return render(request, 'dashboard.html')
