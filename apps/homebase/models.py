@@ -1,12 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class PropertyManager(models.Model):
-    user_id = models.IntegerField(primary_key=True)
+class Manager(models.Model):
+    id = models.AutoField(primary_key=True)
+    manager = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # This is an IS-A relationship
+
+# This is an IS-A relationship
+class Owner(models.Model):
+    id = models.AutoField(primary_key=True)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # This is an IS-A relationship
 
 class Homebase(models.Model):
     id = models.AutoField(primary_key=True)
-    managed_by = models.OneToOneField(PropertyManager, on_delete=models.CASCADE)
+    managers = models.ManyToManyField(Manager)
     users = models.ManyToManyField(User)
     bio = models.TextField(blank=True)
     street_address = models.CharField()
@@ -15,36 +21,31 @@ class Homebase(models.Model):
     zipcode = models.CharField()
     country = models.CharField()
     name = models.CharField()
-    banner = models.CharField()
-
+    banner = models.CharField(blank=True)
+    
 class SubProperty(models.Model):
     id = models.AutoField(primary_key=True)
     managed_by = models.ManyToManyField(User)
-    homebase_id = models.ForeignKey(Homebase, on_delete=models.CASCADE)
-    number = models.IntegerField()
-    rent = models.FloatField()    
+    homebase = models.ForeignKey(Homebase, on_delete=models.CASCADE)
+    room_number = models.IntegerField()
 
 class OwnedProperty(models.Model):    
     id = models.AutoField(primary_key=True)
-    subproperty_id = models.OneToOneField(SubProperty, on_delete=models.CASCADE)
+    subproperty = models.OneToOneField(SubProperty, on_delete=models.CASCADE)
+    owners = models.ManyToManyField(Owner) 
     start_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField()
     status = models.CharField()
 
-class PropertyOwner(models.Model):
-    user_id = models.IntegerField(primary_key=True) 
-    owns = models.ManyToManyField(OwnedProperty)  
-
+# Think of it like a rental agreement
 class Rental(models.Model):
     id = models.AutoField(primary_key=True)
-    subproperty_id = models.ForeignKey(SubProperty, on_delete=models.CASCADE)
+    subproperty = models.ForeignKey(SubProperty, on_delete=models.CASCADE)    
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField()
     status = models.CharField()
+    rent = models.FloatField()
 
 class Tenant(models.Model):
-    user_id = models.IntegerField(primary_key=True)
-    rents = models.ForeignKey(Rental, on_delete=models.SET_NULL, null=True)         
-
-
-  
+    id = models.AutoField(primary_key=True)
+    tenant = models.OneToOneField(User, on_delete=models.CASCADE) # This is an IS-A relationship
+    rental = models.ForeignKey(Rental, on_delete=models.SET_NULL, null=True, blank=True)     

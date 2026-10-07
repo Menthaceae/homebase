@@ -2,12 +2,13 @@ from django.contrib import admin
 from .models import *
 
 models = (
-    PropertyManager,
+    Manager,
     Homebase,
     SubProperty,
-    PropertyOwner,
+    OwnedProperty,
+    Owner,
     Rental,
-    Tenant
+    Tenant,
 )
 
 admin.site.register(models)
