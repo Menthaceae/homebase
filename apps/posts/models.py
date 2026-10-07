@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from apps.homebase.models import Homebase
 
 class Post(models.Model):
     #("Key", "Value")
@@ -15,22 +16,23 @@ class Post(models.Model):
 
     id = models.AutoField(primary_key=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(blank=False)
-    body = models.TextField(blank=False)
+    homebase = models.ForeignKey(Homebase, null=True, blank=True, on_delete=models.CASCADE) # Only set if post to homebase
+    title = models.CharField()
+    body = models.TextField()
     catagory = models.CharField(choices=catagory_choices, blank=True)
-    post_to = models.CharField(choices=post_to_choices, blank=False) 
+    post_to = models.CharField(choices=post_to_choices) 
     image = models.CharField(blank=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True, blank=True)
-    deleted = models.BooleanField(default=False, null=False)
-    likes = models.IntegerField(blank=True, null=True)
+    deleted = models.BooleanField(default=False, blank=True)
+    likes = models.IntegerField(default=0, blank=True)
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     parent_post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     author = models.OneToOneField(User, on_delete=models.CASCADE)
-    body = models.TextField(blank=False)
+    body = models.TextField()
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True, blank=True)
-    likes = models.IntegerField(blank=True, null=True)
+    likes = models.IntegerField(default=0, blank=True)
