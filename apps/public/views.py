@@ -31,21 +31,10 @@ def register(request):
             return redirect('home')
     else:
         form = CustomUserCreationForm()
-    return render(request, "register.html", {
+
+    context = {
         "page": "register",
         "form": form
-        }) 
-    
-# GET and POST login/
-def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+    }        
 
-        if user is not None:
-            django_login(request, user)
-            messages.success(request, "Login successful.")
-            return redirect('home')
-            
-    return render(request, 'login.html', {"page": "login"})
+    return render(request, "register.html", context) 
