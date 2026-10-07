@@ -1,14 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
-class Manager(models.Model):
-    id = models.AutoField(primary_key=True)
-    manager = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # This is an IS-A relationship
-
-# This is an IS-A relationship
-class Owner(models.Model):
-    id = models.AutoField(primary_key=True)
-    owner = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # This is an IS-A relationship
+from apps.users.models import Manager, Owner, Tenant
 
 class Homebase(models.Model):
     id = models.AutoField(primary_key=True)
@@ -44,8 +36,4 @@ class Rental(models.Model):
     end_date = models.DateField()
     status = models.CharField()
     rent = models.FloatField()
-
-class Tenant(models.Model):
-    id = models.AutoField(primary_key=True)
-    tenant = models.OneToOneField(User, on_delete=models.CASCADE) # This is an IS-A relationship
-    rental = models.ForeignKey(Rental, on_delete=models.SET_NULL, null=True, blank=True)     
+    tenant = models.ForeignKey(Tenant, on_delete=models.SET_NULL, null=True, blank=True)
