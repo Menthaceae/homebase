@@ -14,7 +14,7 @@ class Post(models.Model):
     )
 
     id = models.AutoField(primary_key=True)
-    author = models.OneToOneField(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(blank=False)
     body = models.TextField(blank=False)
     catagory = models.CharField(choices=catagory_choices, blank=True)
