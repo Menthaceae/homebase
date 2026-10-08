@@ -9,11 +9,9 @@ from django.contrib.auth.models import User
 # Create your views here.
 def home(request):
     public_posts = Posts.get_public_posts()
-
     context = {
         "public_posts": public_posts
     }
-
     return render(request, 'home.html', context)
 
 def layout(request):

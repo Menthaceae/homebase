@@ -62,14 +62,8 @@
                     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-post-filter="trending">Trending</button>
                 </div>
             </div>
-          
-            {%for post in public_posts %}
-            <div class="flex flex-row gap-4">
-                <c-post title={{post.title}} img-url={{post.image}} content={{post.body}} author={{post.author}} />
-            </div>
-            {%endfor%}
-            <!-- Generate posts here -->
-
+             
+                <c-post :posts="public_posts" />
         </div>
 
         <!-- Right Panel-->

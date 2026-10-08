@@ -24,7 +24,11 @@ def is_user_in_homebase(user, homebase):
     return True        
 
 def hombaseHome(request):
-    return render(request, 'homebase.html')
+    posts = Posts.get_homebase_posts(homebase_id=2)
+    context = {
+        "posts": posts
+    }
+    return render(request, 'homebase.html', context)
 
 # POST homebase/create/
 def create(request):
