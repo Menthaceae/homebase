@@ -37,3 +37,4 @@ class Rental(models.Model):
     status = models.CharField()
     rent = models.FloatField()
     tenant = models.ForeignKey(Tenant, on_delete=models.SET_NULL, null=True, blank=True)
+    occupied = models.BooleanField(default=False, blank=True)
