@@ -12,11 +12,10 @@ class Manager(models.Model):
     id = models.AutoField(primary_key=True)
     manager = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # This is an IS-A relationship
 
-# This is an IS-A relationship
 class Owner(models.Model):
     id = models.AutoField(primary_key=True)
     owner = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # This is an IS-A relationship
 
 class Tenant(models.Model):
     id = models.AutoField(primary_key=True)
-    tenant = models.OneToOneField(User, on_delete=models.CASCADE) # This is an IS-A relationship   
+    tenant = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # This is an IS-A relationship   
