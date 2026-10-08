@@ -28,3 +28,12 @@ def remove_owner(user):
 def remove_tenant(user):
     tenant = Tenant.objects.get(tenant=user)
     tenant.delete()
+
+def is_manager(user):
+    return hasattr(user, 'manager')
+    
+def is_owner(user):
+    return hasattr(user, 'owner')
+
+def is_tenant(user):
+    return hasattr(user, 'tenant')
