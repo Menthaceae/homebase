@@ -19,7 +19,7 @@ class Post(models.Model):
     homebase = models.ForeignKey(Homebase, null=True, blank=True, on_delete=models.CASCADE) # Only set if post to homebase
     title = models.CharField()
     body = models.TextField()
-    category = models.CharField(choices=catagory_choices, blank=True)
+    category = models.CharField(choices=category_choices, blank=True)
     post_to = models.CharField(choices=post_to_choices) 
     image = models.CharField(blank=True)
     created_at = models.DateField(auto_now_add=True)
