@@ -2,7 +2,7 @@ from django.shortcuts import render
 from apps.posts import views as Posts
 from .models import Homebase
 from django.contrib.auth.models import User
-from .forms import HomebaseCreationForm
+from .forms import HomebaseCreationForm, SubPropertyCreationForm
 from django.shortcuts import redirect
 
 
@@ -29,6 +29,26 @@ def hombaseHome(request):
         "posts": posts
     }
     return render(request, 'homebase.html', context)
+
+def manage_homebase(request, homebase_id):
+    homebase = Homebase.objects.get(id=homebase_id)
+    subproperties = homebase.subproperty_set.all()
+    if request.method == 'POST':
+        form = SubPropertyCreationForm(request.POST)
+        if form.is_valid():
+            subproperty = form.save(commit=False)
+            subproperty.homebase = homebase
+            subproperty.save()
+            subproperty.managed_by.add(request.user)
+            return redirect('manage_homebase', homebase_id=homebase.id)
+    else:
+        form = SubPropertyCreationForm()
+    context = {
+        "form": form,
+        "homebase": homebase,
+        "subproperties": subproperties
+    }
+    return render(request, 'manage.html', context)
 
 # POST homebase/create/
 def create(request):

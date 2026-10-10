@@ -1,0 +1,94 @@
+
+<c-layout>
+    <c-slot name="banner">
+        <div class="w-full bg-cover bg-center p-4 h-20" style="background-image:url('/static/images/homebase-bg.png');">
+            
+                <h1 class="text-2xl font-bold text-white">Manage Your Homebase</h1>
+                <p class="text-sm text-gray-300">Manage your homebase settings and members.</p>
+        </div>
+    </c-slot>
+    <div class="flex flex-row justify-between">
+        <div>
+            <h1 class="text-2xl font-bold mb-4">{{ homebase.name }}</h1>
+            <p class="mb-4">{{ homebase.street_address }} {{ homebase.city }}, {{ homebase.state }} {{ homebase.zip }}</p>
+        </div>
+        <div>
+            <c-ui.dialog size="lg">
+                <c-slot name="trigger">
+                    <c-ui.button variant="primary"><span class="inline-flex gap-2"><c-heroicon.plus class="size-5 text-accent-foreground"/>Add Subproperty</span></c-ui.button>
+                </c-slot>
+                    <c-subpropertyform :form="form" />
+            </c-ui.dialog>
+        </div>
+    </div>
+    <br />
+    <div class="w-full flex flex-col justify-around md:flex-row gap-4">
+    <c-dbcard 
+        label="Total Units"
+        value="10"
+        description=""
+        filled=False
+    />
+    <c-dbcard 
+        label="Total Members"
+        value="25"
+        description=""
+        filled=False
+    />
+    <c-dbcard 
+        label="Active Leases"
+        value="8"
+        description=""
+        filled=False
+    />
+    <c-dbcard
+        label="Pending Applications"
+        value="3"
+        description=""
+        filled=False
+    />
+    </div>
+
+    <br />
+
+    <c-ui.table class="w-full rounded">
+        <theader>
+                <tr>
+                    <th><b>Room Number</b></th>
+                    <th><b>Classification</b></th>
+                    <th><b>Status</b></th>
+                    <th></th>
+                </tr>
+        </theader>
+        <tbody>
+            {% for subproperty in subproperties %}
+                <tr>
+                    <td><b>{{ subproperty.room_number }}</b></td>
+                    <td>{{ subproperty.classification }}</td>
+                    <td>{{ subproperty.status }}</td>
+                    <td>
+                        <div class="flex flex-row gap-2 justify-end">
+                        <c-ui.dialog size="md">
+                            <c-slot name="trigger">
+                                <c-ui.button variant="primary"><span class="inline-flex gap-2"><c-heroicon.pencil-square class="size-3 text-accent-foreground"/></span></c-ui.button>
+                            </c-slot>
+                            <c-subpropertyform :form="form" />
+                        </c-ui.dialog>
+                        <c-ui.dialog size="md">
+                            <c-slot name="trigger">
+                                <c-ui.button variant="danger"><span class="inline-flex gap-2"><c-heroicon.trash class="size-3 text-accent-foreground"/></span></c-ui.button>
+                            </c-slot>
+                            <p>Are you sure you want to delete this subproperty?</p>
+                            <br />
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <c-ui.button type="submit" variant="danger">Delete</c-ui.button>
+                            </form>
+                        </c-ui.dialog>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </c-ui.table>
+        
+</c-layout>
