@@ -19,10 +19,11 @@ class SubProperty(models.Model):
     id = models.AutoField(primary_key=True)
     managed_by = models.ManyToManyField(User)
     homebase = models.ForeignKey(Homebase, on_delete=models.CASCADE)
-    room_number = models.IntegerField()
+    room_number = models.CharField(max_length=10)
 
 class OwnedProperty(models.Model):    
     id = models.AutoField(primary_key=True)
+    classification = models.CharField()
     subproperty = models.OneToOneField(SubProperty, on_delete=models.CASCADE)
     owners = models.ManyToManyField(Owner) 
     start_date = models.DateField(auto_now_add=True)
@@ -31,7 +32,8 @@ class OwnedProperty(models.Model):
 # Think of it like a rental agreement
 class Rental(models.Model):
     id = models.AutoField(primary_key=True)
-    subproperty = models.ForeignKey(SubProperty, on_delete=models.CASCADE)    
+    subproperty = models.ForeignKey(SubProperty, on_delete=models.CASCADE)  
+    owned_property = models.ForeignKey(OwnedProperty, on_delete=models.CASCADE, null=True, blank=True) 
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField()
     status = models.CharField()
