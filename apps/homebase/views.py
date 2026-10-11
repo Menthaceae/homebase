@@ -1,18 +1,20 @@
 from django.db import transaction
-from django.shortcuts import render
-from apps.posts import views as Posts
-from apps.public.views import invite_user
-from apps.users.models import Owner, Tenant
-from .models import Homebase, OwnedProperty, Rental
 from django.contrib.auth.models import User
-from .forms import HomebaseCreationForm, RentalCreationForm, SubPropertyCreationForm
 from django.shortcuts import redirect
+from django.shortcuts import render
+
+from apps.posts import views as Posts
+from apps.public.views import *
+from apps.users.models import *
+from apps.users.views import *
+from .models import *
+from .forms import *
 
 
 # GET homebase/<id>/
 def home(request, homebase_id):
     homebase = Homebase.objects.get(id=homebase_id)
-    if (user_in_homebase(request.user, homebase)):
+    if (in_homebase(request.user, homebase)):
         homebase_posts = Posts.get_homebase_posts(homebase_id)
         context = {
             "homebase_posts": homebase_posts,
@@ -20,8 +22,7 @@ def home(request, homebase_id):
         }
         return render(request, 'homebase.html', context)
 
-
-def user_in_homebase(user, homebase):
+def in_homebase(user, homebase):
     return user.homebase_set.contains(homebase)
 
 def hombaseHome(request):
@@ -103,7 +104,6 @@ def create(request):
     }               
     return render(request, 'createhomebase.html', context)
 
-
 # GET homebase/join/<homebase_id>/<code>/
 def join(request, homebase_id, code):
     if (code_is_valid(code)):
@@ -113,17 +113,14 @@ def join(request, homebase_id, code):
         homebase.save()
         return home(request, homebase_id)
 
-
 def code_is_valid(code):
     if (code == code):
         return True
-
 
 # GET homebase/join/
 def join_page(request):
     return render(request, 'joinhomebase.html')
 
-
 # GET homebase/dashboard/<homebase_id>/
-def dashboard(request):
+def dashboard(request, homebase):
     return render(request, 'dashboard.html')
