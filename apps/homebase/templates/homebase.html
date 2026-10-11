@@ -29,9 +29,9 @@
       </div>
       <br>
       <div>
-        <div x-show="activeTab === 'feed'" class="w-full">
-            <c-post title="Something I want to share.." img-url="{% static 'images/post.jpeg' %}" content="I have been living in this community for a while now and I wanted to share my experiences." author="Guest" />
-      </div>
+        <div id="feed-content" x-show="activeTab === 'feed'" class="w-full">
+            <c-post :posts="posts" />
+        </div>
         <div x-show="activeTab === 'events'" class="w-full">
             <c-event title="Community BBQ" image="{% static 'images/bbq.jpeg' %}" description="Join us for a fun-filled community BBQ event! Enjoy delicious food, games, and great company." date="June 15th, 2024" location="Community Park" />
         </div>
