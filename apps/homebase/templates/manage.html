@@ -17,78 +17,68 @@
                 <c-slot name="trigger">
                     <c-ui.button variant="primary"><span class="inline-flex gap-2"><c-heroicon.plus class="size-5 text-accent-foreground"/>Add Subproperty</span></c-ui.button>
                 </c-slot>
-                    <c-subpropertyform :form="form" />
+                <c-subpropertyform :sub_form="sub_form" :rent_form="rental_form" :owned_form="owned_form" />
             </c-ui.dialog>
         </div>
     </div>
     <br />
-    <div class="w-full flex flex-col justify-around md:flex-row gap-4">
+    <div class="flex flex-col sm:flex-row gap-2">
     <c-dbcard 
         label="Total Units"
-        value="10"
+        value="{{ subproperties_count }}"
         description=""
         filled=False
     />
     <c-dbcard 
-        label="Total Members"
-        value="25"
+        label="Rented Units"
+        value="{{ rented_subproperties_count }}"
         description=""
-        filled=False
+        filled=True
     />
     <c-dbcard 
-        label="Active Leases"
-        value="8"
-        description=""
-        filled=False
-    />
-    <c-dbcard
-        label="Pending Applications"
-        value="3"
+        label="Owned Units"
+        value="{{ owned_subproperties_count }}"
         description=""
         filled=False
     />
     </div>
 
     <br />
-
-    <c-ui.table class="w-full rounded">
-        <theader>
-                <tr>
-                    <th><b>Room Number</b></th>
-                    <th><b>Classification</b></th>
-                    <th><b>Status</b></th>
-                    <th></th>
-                </tr>
-        </theader>
-        <tbody>
-            {% for subproperty in subproperties %}
-                <tr>
-                    <td><b>{{ subproperty.room_number }}</b></td>
-                    <td>{{ subproperty.classification }}</td>
-                    <td>{{ subproperty.status }}</td>
-                    <td>
-                        <div class="flex flex-row gap-2 justify-end">
-                        <c-ui.dialog size="md">
-                            <c-slot name="trigger">
-                                <c-ui.button variant="primary"><span class="inline-flex gap-2"><c-heroicon.pencil-square class="size-3 text-accent-foreground"/></span></c-ui.button>
-                            </c-slot>
-                            <c-subpropertyform :form="form" />
-                        </c-ui.dialog>
-                        <c-ui.dialog size="md">
-                            <c-slot name="trigger">
-                                <c-ui.button variant="danger"><span class="inline-flex gap-2"><c-heroicon.trash class="size-3 text-accent-foreground"/></span></c-ui.button>
-                            </c-slot>
-                            <p>Are you sure you want to delete this subproperty?</p>
-                            <br />
-                            <form method="POST" action="">
-                                {% csrf_token %}
-                                <c-ui.button type="submit" variant="danger">Delete</c-ui.button>
-                            </form>
-                        </c-ui.dialog>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </c-ui.table>
-        
+    <div class="flex flex-col w-full md:flex-row gap-2">
+        <c-ui.card class="w-full">
+            <h2 class="text-xl font-bold mb-4">Rented Units</h2>
+            <c-ui.table>
+                <theader>
+                        <tr>
+                            <th><b>Room Number</b></th>
+                            <th><b>Tenant</b></th>
+                            <th><b>Rent</b></th>
+                            <th><b>Start Date</b></th>
+                            <th><b>End Date</b></th>
+                            <th><b>Occupied</b></th>
+                            <th></th>
+                        </tr>
+                </theader>
+                <tbody>
+                    <c-rentedpropertytable :rental_subproperties="rental_subproperties" />
+                </tbody>
+            </c-ui.table>
+        </c-ui.card>
+        <c-ui.card class="w-full">
+            <h2 class="text-xl font-bold mb-4 mt-8">Owned Units</h2>
+            <c-ui.table>
+                <theader>
+                        <tr>
+                            <th><b>Room Number</b></th>
+                            <th><b>Owner</b></th>
+                            <th><b>Start Date</b></th>
+                            <th></th>
+                        </tr>
+                </theader>
+                <tbody>
+                    <c-ownedpropertytable :owned_subproperties="owned_subproperties" />
+                </tbody>
+            </c-ui.table>
+        </c-ui.card>
+    </div>
 </c-layout>

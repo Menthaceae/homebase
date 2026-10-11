@@ -1,47 +1,84 @@
-<c-vars form />
-
-<form method="POST" class="space-y-6">
-    {% csrf_token %}
-
-    <!-- Always visible: Subproperty Details -->
-    <div class="space-y-2">
-        <c-ui.input 
-            name="room_number" 
-            label="Room Number" 
-            placeholder="Enter the room number" 
-            required
-        />
-        
-        <c-ui.select 
-            name="classification" 
-            label="Classification" >
-            <c-ui.select.option value="rental">Rental</c-ui.option>
-            <c-ui.select.option value="owned">Owned</c-ui.option>
-        </c-ui.select>
-        
-        <c-ui.select 
-            name="status" 
-            label="Status" 
-            >
-            <c-ui.select.option value="available">Available</c-ui.option>
-            <c-ui.select.option value="occupied">Occupied</c-ui.option>
-            <c-ui.select.option value="maintenance">Maintenance</c-ui.option>
-        </c-ui.select >  
-
-        {% if form.errors %}
-            <c-ui.alert variant="error">
-                <ul>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
-                    {% endfor %}
-                    {% for error in form.non_field_errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </c-ui.alert>
-        {% endif %}
-    </div>
-    <c-ui.button type="submit" variant="primary">Save Subproperty</c-ui.button>
-</form>
+<c-vars sub_form rent_form owned_email/>
+    <form method="POST" class="space-y-6">
+        {% csrf_token %}
+        <div class="space-y-2">
+            <c-ui.input 
+                name="room_number" 
+                label="Room Number" 
+                placeholder="Enter the room number" 
+                :field:="sub_form.room_number"
+                required
+            />
+        </div>
+    <div x-data="{classification: 'rental'}">
+        <div class="flex gap-2 space-x-4"> 
+            <label class="space-x-2">
+                <input type="radio" value="rental" x-model="classification" checked>
+                <span class="space-x-2">Rental</span>
+            </label>
+            <label class="space-x-2">
+                <input type="radio" value="owned" x-model="classification">
+                <span class="space-x-2">Owned</span>
+            </label>
+        </div>
+        <br />
+            <div x-show="classification === 'rental'">
+                <c-ui.input 
+                    name="tenant" 
+                    label="Tenant" 
+                    placeholder="Enter the tenant's email" 
+                    :field="rent_form.tenant"
+                />
+                <c-ui.input 
+                    name="rent" 
+                    label="Rent" 
+                    placeholder="Enter the rent amount" 
+                    :field="rent_form.rent"
+                    ::required="classification === 'rental'"
+                />
+                <c-ui.input 
+                    name="end_date" 
+                    label="End Date" 
+                    type="date"
+                    :field="rent_form.end_date"
+                />
+                <c-ui.switch 
+                    name="occupied" 
+                    label="Occupied"
+                    value=True
+                    :checked=False 
+                    :field="rent_form.occupied"
+                />
+            </div>
+            <div x-show="classification === 'owned'">
+                <c-ui.input 
+                    name="owners_email" 
+                    label="Owners" 
+                    placeholder="Enter the owner's email" 
+                    ::required="classification === 'owned'"
+                />
+            </div>
+            <br />
+                {% if sub_form.error %}
+                    <c-ui.alert type="error" class="mb-4">
+                        {{ sub_form.error }}
+                    </c-ui.alert>
+                {% endif %}
+            <div x-show="classification === 'rental'">
+                {% if rent_form.error %}
+                    <c-ui.alert type="error" class="mb-4">
+                        {{ rent_form.error }}
+                    </c-ui.alert>
+                {% endif %}
+            </div>
+            <div x-show="classification === 'owned'">
+                {% if owned_form.error %}
+                    <c-ui.alert type="error" class="mb-4">
+                        {{ owned_form.error }}
+                    </c-ui.alert>
+                {% endif %}
+            </div>
+            <br />
+        <c-ui.button type="submit" variant="primary">Submit</c-ui.button>
+    </form>
+</div>

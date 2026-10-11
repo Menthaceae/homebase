@@ -8,9 +8,11 @@
 <c-ui.card class="w-full {{ filled |yesno:'bg-accent-content text-accent-foreground,' }}">
     <div class="flex flex-col justify-between">
         <p class=" font-semibold mb-2">{{ label }}</p>
-        <h2 class="text-3xl font-bold mb-2 text-center {{ filled |yesno:',text-accent-content' }}">
+        <h2 class="text-3xl font-bold text-center {{ filled |yesno:',text-accent-content' }}">
             {{ value }}
         </h2>
     </div>
-    <p class="text-base">{{ description }}</p>  
+    {% if description != '' %}
+        <p class="text-base mt-2">{{ description }}</p>   
+    {% endif %}
 </c-ui.card>

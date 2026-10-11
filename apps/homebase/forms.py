@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Homebase, SubProperty
+from .models import Homebase, OwnedProperty, Rental, SubProperty
 
 class HomebaseCreationForm(ModelForm):
     class Meta:
@@ -10,4 +10,9 @@ class HomebaseCreationForm(ModelForm):
 class SubPropertyCreationForm(ModelForm):
     class Meta:
         model = SubProperty
-        fields = ['room_number', 'classification', 'status']
+        fields = ['room_number']
+
+class RentalCreationForm(ModelForm):
+    class Meta:
+        model = Rental
+        fields = ['rent', 'occupied', 'end_date']

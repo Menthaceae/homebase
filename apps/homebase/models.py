@@ -8,8 +8,7 @@ classification_choices = (
 )
 
 status_choices = (
-    ("available", "Available"),
-    ("occupied", "Occupied"),
+    ("operational", "Operational"),
     ("maintenance", "Maintenance")
 )
 
@@ -31,8 +30,6 @@ class SubProperty(models.Model):
     managed_by = models.ManyToManyField(User)
     homebase = models.ForeignKey(Homebase, on_delete=models.CASCADE)
     room_number = models.CharField(max_length=10)
-    classification = models.CharField(choices=classification_choices, blank=False)
-    status = models.CharField(choices=status_choices, blank=False)
 
 class OwnedProperty(models.Model):    
     id = models.AutoField(primary_key=True)
@@ -43,8 +40,9 @@ class OwnedProperty(models.Model):
 # Think of it like a rental agreement
 class Rental(models.Model):
     id = models.AutoField(primary_key=True)
-    subproperty = models.ForeignKey(SubProperty, on_delete=models.CASCADE)    
+    subproperty = models.ForeignKey(SubProperty, related_name='rentals', on_delete=models.CASCADE)    
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField()
     rent = models.FloatField()
     tenant = models.ForeignKey(Tenant, on_delete=models.SET_NULL, null=True, blank=True)
+    occupied = models.BooleanField(default=False)
