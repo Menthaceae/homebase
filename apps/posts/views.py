@@ -12,7 +12,7 @@ def get_all_posts():
     return posts
 
 def get_homebase_posts(homebase_id): 
-    homebase_posts = Post.objects.all().filter(deleted=False, post_to="homebase")
+    homebase_posts = Post.objects.all().filter(deleted=False, homebase_id=homebase_id)
     return homebase_posts
 
 def get_public_posts():  

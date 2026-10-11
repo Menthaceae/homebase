@@ -2,6 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from apps.users.models import Manager, Owner, Tenant
 
+classification_choices = (
+    ("rental", "Rental"),
+    ("owned", "Owned")
+)
+
+status_choices = (
+    ("operational", "Operational"),
+    ("maintenance", "Maintenance")
+)
+
 class Homebase(models.Model):
     id = models.AutoField(primary_key=True)
     managers = models.ManyToManyField(Manager)
@@ -27,16 +37,13 @@ class OwnedProperty(models.Model):
     subproperty = models.OneToOneField(SubProperty, on_delete=models.CASCADE)
     owners = models.ManyToManyField(Owner) 
     start_date = models.DateField(auto_now_add=True)
-    status = models.CharField()
 
 # Think of it like a rental agreement
 class Rental(models.Model):
     id = models.AutoField(primary_key=True)
-    subproperty = models.ForeignKey(SubProperty, on_delete=models.CASCADE)  
-    owned_property = models.ForeignKey(OwnedProperty, on_delete=models.CASCADE, null=True, blank=True) 
+    subproperty = models.ForeignKey(SubProperty, related_name='rentals', on_delete=models.CASCADE)    
     start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField()
-    status = models.CharField()
     rent = models.FloatField()
     tenant = models.ForeignKey(Tenant, on_delete=models.SET_NULL, null=True, blank=True)
     occupied = models.BooleanField(default=False, blank=True)
