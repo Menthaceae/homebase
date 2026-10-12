@@ -53,8 +53,21 @@
             <div class="mb-4"></div>
 
             <!-- Post inputs (content, post_to (default: public), image (optional))-->
-            <textarea class="post-content" label="Post Content" rows="5" name="body" placeholder="What's on your mind?" required></textarea>
-            <input type="hidden" name="post_to" id="post_to">
+            <textarea 
+                class="post-content required" 
+                id="content"
+                name="content"
+                label="Post Content" 
+                rows="5" 
+                placeholder="What's on your mind?" 
+                required
+            ></textarea>
+            <input 
+                type="hidden" 
+                name="post_to" 
+                id="post_to"
+                required
+            >
             <input
                 type="file"
                 id="post-image"

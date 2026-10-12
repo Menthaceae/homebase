@@ -5,3 +5,9 @@
 :root {
     --card-background-color: #194c47;
 }
+
+.required::after {
+  content: ' *';
+  color: red;
+  font-weight: bold;
+}
