@@ -10,16 +10,24 @@
         <form action="" method="POST">
             {% csrf_token %}
 
-            <!-- Cover photo-->
-            <div class="photo-uploader">
+            <!-- Author -->
+            <input 
+                type="hidden"
+                id="author"
+                name="author"
+                value="{{ user }}"
+            >
+
+            <!-- Cover iamage-->
+            <div class="image-uploader">
                 <i class="icons ti ti-photo-search"></i>
-                <p>Add a cover photo</p>
+                <label>Add a cover photo</label>
                 <div class="image-input">
 
                     <input 
                         type="file" 
-                        id="cover_photo"
-                        name="cover_photo"
+                        id="image"
+                        name="image"
                         alt="File submission" 
                         width="48" 
                         height="48"
@@ -37,9 +45,20 @@
 
             <div class="event-logistics">
                 <c-row class="logistics" cols="1" gap="3">
+                    <!--Event name -->
+                    <c-col class="logistic">
+                        <label class="required">Event name</label>
+                        <input 
+                            type="text"
+                            id="title"
+                            name="title"
+                            label="Event name"
+                            required
+                        >
+                    </c-col>
                     <!-- Event date-->
                     <c-col class="logistic">
-                        <p class="required">Event Date</p>
+                        <label class="required">Event Date</label>
                         <input 
                             type="date" 
                             id="date"
@@ -50,7 +69,7 @@
                     <c-row cols="2">
                         <!-- Start time-->
                         <c-col class="logistic">
-                            <p class="required">Start time</p>
+                            <label class="required">Start time</label>
                             <input 
                                 type="time" 
                                 id="start_time" 
@@ -60,7 +79,7 @@
                         </c-col>
                         <!-- End time-->
                         <c-col class="logistic">
-                            <p>End time</p>
+                            <label>End time</label>
                             <input 
                                 type="time" 
                                 id="end_time" 
@@ -70,6 +89,7 @@
                         </c-col>
                     </c-row>
                 </c-row>
+
                 <!-- Location -->
                 <input 
                     class="logistic required" 
@@ -79,17 +99,29 @@
                     placeholder="Enter location or video link (required)" 
                 >
 
+                <!-- Post to -->
+                <label class="required">Choose which feed to post to</label>
+                <select id="post_to" name="post_to">
+                    <option value="public">Public</option>
+                    <!--TODO: Check if user has homebase-->
+                    <!--TODO: Select which homebase to post to-->
+                    <option value="public">Homebase</option>
+                    <option value="public">Nearby</option>
+
+                </select>
+
                 <!-- Additional details -->
                 <textarea 
                     class="logistic" 
-                    id="description" 
-                    name="description" 
+                    id="details" 
+                    name="details" 
                     rows="5" 
                     placeholder="Additional details"
                 >
                 </textarea>
             </div>
 
+            <!-- Footer -->
             <div class="event-form-footer">
                 <c-ui.button 
                     type="button"
