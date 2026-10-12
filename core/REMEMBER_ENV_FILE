@@ -1,4 +1,0 @@
-Make a .env file and insert the database url.
-Don't push the link to GitHub!
-
-DATABASE_URL=''
