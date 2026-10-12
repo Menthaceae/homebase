@@ -1,0 +1,134 @@
+{% load static %}
+<!-- Form: Create Post -->
+<dialog
+    id="create-post-modal"
+    class="w-full max-w-lg rounded-xl p-0 shadow-xl"
+>
+    <div class="modal-content">
+
+        <form action="" method="post">
+            {% csrf_token %}
+
+            <!-- Header -->
+            <div class="form-header">
+                <button
+                    class="close-dialog"
+                    type="button"
+                    onclick="this.closest('dialog').close()"
+                    aria-label="Close dialog"
+                >
+                    <i class="ti ti-x"></i>
+                </button>
+
+                <div class="left-actions">
+                    <c-ui.button
+                        id="post-to-button"
+                        class="rounded"
+                        type="button"
+                        onclick="openPostTo()"
+                    >
+                        Post to
+                        <i class="ti ti-arrow-badge-down"></i>
+                    </c-ui.button>
+                    <div>
+                        <c-ui.button class="rounded" type="submit" variant="primary" label="Create Post">Post</c-ui.button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Profile Information -->
+            <div class="user-info">
+                {% if user.photo %}
+                <img class="profile-picture" src="{{ user.profile.photo }}" alt="{{ user.username }}'s profile picture">
+                {% else %}
+                <img class="profile-picture" src="{% static 'posts/img/default-pfp.png' %}" alt="Default avatar">
+                {% endif %}
+
+                <div class="sub-info">
+                    <p class="text-sm">{{ user.first_name|default:"Guest User" }} {{ user.last_name }}</p>
+                    <p class="text-sm">City goes here</p>
+                </div>
+            </div>
+
+            <div class="mb-4"></div>
+
+            <!-- Post inputs (content, post_to (default: public), image (optional))-->
+            <textarea class="post-content" label="Post Content" rows="5" name="body" placeholder="What's on your mind?" required></textarea>
+            <input type="hidden" name="post_to" id="post_to">
+            <input
+                type="file"
+                id="post-image"
+                name="photo"
+                accept="image/*"
+                hidden
+            >
+
+            <!-- Footer -->
+            <div class="post-footer">
+                <c-ui.button
+                    class="image-input" 
+                    type="button"
+                    onclick="document.getElementById('post-image').click()"
+                >
+                    <i class="icons ti ti-photo-search"></i>
+                </c-ui.button>
+
+                <c-ui.button 
+                    class="more-options-btn"
+                    type="button"
+                    onclick="moreOptions()"
+                >
+                    <i class="icons ti ti-layout-grid-remove"><span class="mb-2"> More </span></i>
+                </c-ui.button>
+
+            </div>
+
+            <!-- Additional options (sell on marketplace, create event) -->
+            <div id="more-options" class="more-options" hidden>
+                <hr style="height: 1px">
+                <div class="more-btns">
+                    <div class="more-btn sell">
+                        <c-ui.button
+                            class="marketplace-btn"
+                            type="button"
+                        >
+                            Sell or Give Away
+                        </c-ui.button>
+                    </div>
+
+                    <div class="more-btn event">
+                        <c-ui.button
+                            class="event-button"
+                            type="button"
+                            onclick="document.getElementById('create-event-modal').showModal()"
+                        >
+                            Create an event
+                        </c-ui.button>
+                    </div>
+                </div>
+            </div>
+     
+            <br>
+
+            <!-- Form error handling -->
+            {% if form.errors %}
+                <div class="text-red-500">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+        </form>
+    </div>
+</dialog>
+
+<!-- Components -->
+<c-post-to />

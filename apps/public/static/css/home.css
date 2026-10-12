@@ -57,3 +57,22 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
+
+
+#create-post-modal, #post-to-modal, #create-event-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    margin: 0;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+#create-post-modal::backdrop, #create-event-modal::backdrop {
+    background: rgb(0 0 0 / 30%);
+}
+
