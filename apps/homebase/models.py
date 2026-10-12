@@ -41,8 +41,8 @@ class OwnedProperty(models.Model):
 class Rental(models.Model):
     id = models.AutoField(primary_key=True)
     subproperty = models.ForeignKey(SubProperty, related_name='rentals', on_delete=models.CASCADE)    
-    start_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField()
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     rent = models.FloatField()
     tenant = models.ForeignKey(Tenant, on_delete=models.SET_NULL, null=True, blank=True)
     occupied = models.BooleanField(default=False)

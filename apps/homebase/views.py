@@ -1,9 +1,11 @@
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import render
+from apps import homebase
 from apps.posts import views as Posts
 from apps.public.views import invite_user
 from apps.users.models import Owner, Tenant
-from .models import Homebase, OwnedProperty, Rental
+from .models import Homebase, OwnedProperty, Rental, SubProperty
 from django.contrib.auth.models import User
 from .forms import HomebaseCreationForm, RentalCreationForm, SubPropertyCreationForm
 from django.shortcuts import redirect
@@ -35,10 +37,10 @@ def hombaseHome(request):
 
 def manage_homebase(request, homebase_id):
     homebase = Homebase.objects.get(id=homebase_id)
-    subproperties_count = homebase.subproperty_set.all().count()
-    rented_subproperties_count = Rental.objects.filter(subproperty__homebase=homebase, occupied=True).count()
+    subproperties_count = SubProperty.objects.filter(homebase=homebase).count()
+    rented_subproperties_count = Rental.objects.filter(subproperty__homebase=homebase).count()
     owned_subproperties_count = OwnedProperty.objects.filter(subproperty__homebase=homebase).count()
-    rented_subproperties = Rental.objects.filter(subproperty__homebase=homebase, occupied=True)
+    rented_subproperties = Rental.objects.filter(subproperty__homebase=homebase)
     owned_subproperties = OwnedProperty.objects.filter(subproperty__homebase=homebase)
 
     if request.method == 'POST':
@@ -46,31 +48,50 @@ def manage_homebase(request, homebase_id):
         rental_form = RentalCreationForm(request.POST)
         owned_email = request.POST.get('owners_email')
         tenant_email = request.POST.get('tenant')
+        classification = request.POST.get('classification')
 
         with transaction.atomic():
             if sub_form.is_valid():
                 subproperty = sub_form.save(commit=False)
                 subproperty.homebase = homebase
                 subproperty.save()
+            if classification == 'rental' and subproperty is not None:
+                if rental_form.is_valid():
+                    rental = rental_form.save(commit=False)
+                    rental.subproperty = subproperty
+                    rental.homebase = homebase
 
-            if rental_form.is_valid():
-                if tenant_email is not None and tenant_email != '':
-                    user = invite_user(tenant_email, request)
-                    tenant = Tenant.objects.create(tenant=user)
-                    rental.tenant = tenant
-                rental = rental_form.save(commit=False)
-                rental.subproperty = subproperty
-                subproperty.managed_by.add(request.user)
-                rental.save()
+                    if tenant_email is not None and tenant_email != '':
+                        user = invite_user(tenant_email, request)
+                        tenant = Tenant.objects.create(tenant=user)
+                        rental.tenant = tenant
 
-            if owned_email:
-                user = invite_user(owned_email, request)
-                owner = Owner.objects.create(owner=user)
-                owned_property = OwnedProperty.objects.create(subproperty=subproperty)
-                owned_property.owners.add(owner)
-                subproperty.managed_by.add(user)
+                    rental.save()
+                    subproperty.managed_by.add(request.user)
 
-            return redirect('manage_homebase', homebase_id=homebase.id)
+                    response = render(request, 'cotton/rentedpropertytable.html', {'rental': rental})
+                    response['HX-Reswap'] = 'none'
+                    response['HX-Trigger'] = 'closedialog'
+                    return response
+
+            if classification == 'owned' and subproperty is not None:
+                if owned_email:
+                    user = invite_user(owned_email, request)
+                    owner = Owner.objects.create(owner=user)
+                    owned_property = OwnedProperty.objects.create(subproperty=subproperty)
+                    owned_property.owners.add(owner)
+                    subproperty.managed_by.add(user)
+
+                    response = render(request, 'cotton/ownedpropertytable.html', {'owned': owned_property})
+                    response['HX-Reswap'] = 'none'
+                    response['HX-Trigger'] = 'closedialog'
+                    return response
+
+            return render(request, 'cotton/subpropertyform.html', {
+                "sub_form": sub_form,
+                "rental_form": rental_form,
+                "homebase": homebase
+            })
     else:
         sub_form = SubPropertyCreationForm()
         rental_form = RentalCreationForm()

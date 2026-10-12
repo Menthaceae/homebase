@@ -1,84 +1,165 @@
-<c-vars sub_form rent_form owned_email/>
-    <form method="POST" class="space-y-6">
-        {% csrf_token %}
-        <div class="space-y-2">
+<c-vars sub_form rental_form owned_email="" homebase />
+
+<form 
+    id="subpropertyform"
+    method="POST"
+    class="space-y-6"
+    hx-post="{% url 'manage_homebase' homebase.id %}"
+    hx-target="#subpropertyform"
+    hx-swap="outerHTML"
+    x-data="{ classification: 'rental' }"
+>
+    {% csrf_token %}
+
+    <!-- Top-level Non-field Errors -->
+    {% if sub_form.non_field_errors %}
+        <c-ui.alert type="error" class="mb-4">
+            {{ sub_form.non_field_errors.0 }}
+        </c-ui.alert>
+    {% endif %}
+
+    <!-- Room Number -->
+    <div class="space-y-2">
+        <c-ui.input 
+            name="room_number" 
+            label="Room Number" 
+            placeholder="Enter the room number" 
+            :field="sub_form.room_number"
+            required
+        />
+        {% if sub_form.room_number.errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ sub_form.room_number.errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+    </div>
+
+    <!-- Classification Radio Switcher -->
+    <div>
+        <div class="flex gap-4"> 
+            <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="radio" name="classification" value="rental" x-model="classification">
+                <span class="text-sm font-medium text-slate-700">Rental</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="radio" name="classification" value="owned" x-model="classification">
+                <span class="text-sm font-medium text-slate-700">Owned</span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Rental Fields -->
+    <div x-show="classification === 'rental'" class="grid grid-cols-2 gap-2">
+        {% if rental_form.non_field_errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ rental_form.non_field_errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+        <div class="col-span-2">
             <c-ui.input 
-                name="room_number" 
-                label="Room Number" 
-                placeholder="Enter the room number" 
-                :field:="sub_form.room_number"
-                required
+                name="tenant_email" 
+                label="Tenant Email" 
+                type="email"
+                placeholder="Enter the tenant's email" 
+                value="{{ rental_email|default:'' }}"
+
             />
         </div>
-    <div x-data="{classification: 'rental'}">
-        <div class="flex gap-2 space-x-4"> 
-            <label class="space-x-2">
-                <input type="radio" value="rental" x-model="classification" checked>
-                <span class="space-x-2">Rental</span>
-            </label>
-            <label class="space-x-2">
-                <input type="radio" value="owned" x-model="classification">
-                <span class="space-x-2">Owned</span>
-            </label>
+        {% if rental_form.tenant_email.errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ rental_form.tenant_email.errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+        <div class="col-span-1">
+            <c-ui.input 
+                name="rent" 
+                label="Rent" 
+                type="number"
+                step="0.01"
+                placeholder="Enter the rent amount" 
+                value ="{{ rental_form.rent.value|default:'' }}"
+                :field="rental_form.rent"
+                ::required="classification === 'rental'"
+            />
+            {% if rental_form.rent.errors %}
+                <c-ui.alert type="error" class="mb-4">
+                    {{ rental_form.rent.errors.0 }}
+                </c-ui.alert>
+            {% endif %}
         </div>
-        <br />
-            <div x-show="classification === 'rental'">
-                <c-ui.input 
-                    name="tenant" 
-                    label="Tenant" 
-                    placeholder="Enter the tenant's email" 
-                    :field="rent_form.tenant"
-                />
-                <c-ui.input 
-                    name="rent" 
-                    label="Rent" 
-                    placeholder="Enter the rent amount" 
-                    :field="rent_form.rent"
-                    ::required="classification === 'rental'"
-                />
-                <c-ui.input 
-                    name="end_date" 
-                    label="End Date" 
-                    type="date"
-                    :field="rent_form.end_date"
-                />
-                <c-ui.switch 
-                    name="occupied" 
-                    label="Occupied"
-                    value=True
-                    :checked=False 
-                    :field="rent_form.occupied"
-                />
-            </div>
-            <div x-show="classification === 'owned'">
-                <c-ui.input 
-                    name="owners_email" 
-                    label="Owners" 
-                    placeholder="Enter the owner's email" 
-                    ::required="classification === 'owned'"
-                />
-            </div>
-            <br />
-                {% if sub_form.error %}
+        <c-ui.input 
+            name="start_date" 
+            label="Start Date" 
+            type="date"
+            value ="{{ rental_form.start_date.value|default:'' }}"
+            :field="rental_form.start_date"
+        />
+
+        {% if rental_form.start_date.errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ rental_form.start_date.errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+
+        <c-ui.input 
+            name="end_date" 
+            label="End Date" 
+            type="date"
+            value ="{{ rental_form.end_date.value|default:'' }}"
+            :field="rental_form.end_date"
+        />
+        {% if rental_form.end_date.errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ rental_form.end_date.errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+        <div class="col-span-2 mt-2">
+            <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" name="occupied" value="true" {% if rental_form.occupied.value %}checked{% endif %}>
+                <span class="text-sm font-medium text-slate-700">Occupied</span>
+            </label>
+            {% if rental_form.occupied.errors %}
                     <c-ui.alert type="error" class="mb-4">
-                        {{ sub_form.error }}
+                        {{ rental_form.occupied.errors.0 }}
                     </c-ui.alert>
                 {% endif %}
-            <div x-show="classification === 'rental'">
-                {% if rent_form.error %}
-                    <c-ui.alert type="error" class="mb-4">
-                        {{ rent_form.error }}
-                    </c-ui.alert>
-                {% endif %}
-            </div>
-            <div x-show="classification === 'owned'">
-                {% if owned_form.error %}
-                    <c-ui.alert type="error" class="mb-4">
-                        {{ owned_form.error }}
-                    </c-ui.alert>
-                {% endif %}
-            </div>
-            <br />
+        </div>
+    </div>
+
+    <!-- Owned Fields -->
+    <div x-show="classification === 'owned'" x-cloak class="space-y-4">
+        <c-ui.input 
+            name="owners_email" 
+            label="Owner's Email" 
+            type="email"
+            placeholder="Enter the owner's email" 
+            value="{{ owned_email|default:'' }}"
+            ::required="classification === 'owned'"
+        />
+    </div>
+
+    <div class="pt-4">
         <c-ui.button type="submit" variant="primary">Submit</c-ui.button>
-    </form>
-</div>
+    </div>
+</form>
+
+<script>
+    document.addEventListener('htmx:afterRequest', function (evt) {
+        // Only run when the subproperty form finishes with HTTP 204
+        if (evt.detail.elt.id === 'subpropertyform') {
+            // 1. Reset standard HTML inputs (text, number, date, checkbox)
+            evt.detail.elt.reset();
+
+            // 2. Reset Alpine internal reactive state (classification switcher)
+            if (evt.detail.elt._x_dataStack) {
+                evt.detail.elt._x_dataStack[0].classification = 'rental';
+            }
+
+            // 3. Close the modal
+            const closeBtn = document.querySelector('button[x-bind=closeButton]');
+            if (closeBtn) {
+                closeBtn.click();
+            }
+        }
+    });
+</script>

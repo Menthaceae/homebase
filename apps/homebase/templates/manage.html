@@ -17,7 +17,7 @@
                 <c-slot name="trigger">
                     <c-ui.button variant="primary"><span class="inline-flex gap-2"><c-heroicon.plus class="size-5 text-accent-foreground"/>Add Subproperty</span></c-ui.button>
                 </c-slot>
-                <c-subpropertyform :sub_form="sub_form" :rent_form="rental_form" :owned_form="owned_form" />
+                <c-subpropertyform :sub_form="sub_form" :rental_form="rental_form" :owned_form="owned_form" />
             </c-ui.dialog>
         </div>
     </div>
@@ -42,7 +42,6 @@
         filled=False
     />
     </div>
-
     <br />
     <div class="flex flex-col w-full md:flex-row gap-2">
         <c-ui.card class="w-full">
@@ -59,8 +58,10 @@
                             <th></th>
                         </tr>
                 </theader>
-                <tbody>
-                    <c-rentedpropertytable :rental_subproperties="rental_subproperties" />
+                <tbody id="rentedpropertytable">
+                    {% for rental in rental_subproperties %}
+                    <c-rentedpropertytable :rental="rental" />
+                    {% endfor %}
                 </tbody>
             </c-ui.table>
         </c-ui.card>
@@ -75,8 +76,8 @@
                             <th></th>
                         </tr>
                 </theader>
-                <tbody>
-                    <c-ownedpropertytable :owned_subproperties="owned_subproperties" />
+                <tbody id="ownedpropertytable">
+                    <c-ownedpropertytable :owned="owned_subproperties" />
                 </tbody>
             </c-ui.table>
         </c-ui.card>
