@@ -1,0 +1,72 @@
+{% load static %}
+<!-- Form: Create event-->
+<dialog
+    id="create-event-modal"
+    class="w-full max-w-lg rounded-xl p-0 shadow-xl"
+>
+    <div class="modal-content">
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <div class="photo-uploader">
+                <i class="icons ti ti-photo-search"></i>
+                <p>Add a cover photo</p>
+                <div class="image-input">
+
+                    <input 
+                        type="file" 
+                        id="event-photo"
+                        name="event-photo"
+                        alt="File submission" 
+                        width="48" 
+                        height="48"
+                        hidden
+                        required
+                    >
+
+                    <c-ui.button
+                        type="button"
+                        onclick="document.getElementById('event-photo').click()"
+                    >
+                    Upload
+                    </c-ui.button>
+                </div>
+            </div>
+
+            <div class="event-logistics">
+                <c-row class="logistics" cols="1" gap="3">
+                    <c-col>
+                        <p>Event Date</p>
+                        <input type="date" lable="Date" name="event_date">
+                    </c-col>
+                    <c-col>
+                        <p>Start time</p>
+                        <input type="time" label="Start time" name="start_time" required>
+                    </c-col>
+                    <c-col>
+                        <p>End time</p>
+                        <input type="time" label="End time" name="end_time" required>
+                    </c-col>
+                </c-row>
+                <!-- Location -->
+                <input type="text" placeholder="Enter location or video link" required>
+                <textarea class="event-description" name="event_description" rows="5" placeholder="Additional details"></textarea>
+            </div>
+
+            <div class="event-form-footer">
+                <c-ui.button 
+                    type="button"
+                    onclick="document.getElementById('create-post-modal').showModal()"
+                >
+                    Cancel</c-ui.button>
+                <c-ui.button type="submit">Submit</c-ui.button>
+            </div>
+
+        </form>
+
+    </div>
+
+</dialog>
+
+<c-post-create />
