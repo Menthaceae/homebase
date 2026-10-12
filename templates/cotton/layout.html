@@ -14,6 +14,8 @@
     <!-- Global CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <link rel="stylesheet" href="{% static 'posts/css/posts.css' %}">
+    <link rel="stylesheet" href="{% static 'events/css/events.css' %}"
 
     <!--Custom CSS -->
     {% block custom_css %}
@@ -37,6 +39,9 @@
         {% endblock %}
     </main>
 
+    <!-- Global js -->
+    <script src="{% static 'posts/js/posts.js' %}"></script>
+
     <!-- Cotton UI bundle first: it registers components on Alpine's alpine:init event -->
     <script defer src="{% static 'django_cotton_ui/cotton-ui.min.js' %}"></script>
 
@@ -51,3 +56,4 @@
 
 </body>
 </html>
+
