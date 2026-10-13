@@ -1,0 +1,51 @@
+{% load static %}
+
+<c-layout>
+<h1 class="text-2xl font-bold mb-4">Welcome, {{ userName }}!</h1>
+<div class="w-full flex flex-col justify-around md:flex-row gap-4">
+    <c-dbcard label="Tenants" value="2" description="Active tenants" filled=False />
+    <c-dbcard label="Properties" value="6" description="Total properties" filled=True />
+    <c-dbcard label="Maintenance Requests" value="1" description="Pending requests" filled=False />
+    <c-dbcard label="Gross Income" value="$3500" description="From all rentals" filled=True />
+</div>
+<br />
+<c-ui.card class="w-full">
+        <h2 class="text-xl font-bold mb-4">Rented Units</h2>
+        <c-ui.table>
+            <theader>
+                    <tr>
+                        <th><b>Room Number</b></th>
+                        <th><b>Tenant</b></th>
+                        <th><b>Rent</b></th>
+                        <th><b>Start Date</b></th>
+                        <th><b>End Date</b></th>
+                        <th><b>Occupied</b></th>
+                        <th></th>
+                    </tr>
+            </theader>
+            <tbody>
+                {% for rental in rentalProperties %}
+                    <c-rentedpropertytable :rental="rental" />
+                {% endfor %}
+            </tbody>
+        </c-ui.table>
+</c-ui.card>
+
+<div class="flex flex-col md:flex-row">
+    <div class="w-full py-4">
+    <c-ui.card>
+        <div class="flex justify-between">
+            <h1 class="text-2xl font-bold mb-4">Open Service Tickets</h1>
+            <c-ui.button size="lg" variant="text" href="/tickets">View All</c-ui.button>
+        </div>  
+        <c-ui.table>
+            <tbody>
+                <c-maintenanceTable />
+                <c-maintenanceTable />
+            </tbody>
+            </c-ui.table>
+        </c-ui.card>
+    </div>
+    <c-upcomingEvents />
+</div>
+</c-layout>

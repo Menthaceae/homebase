@@ -96,6 +96,7 @@ def manage_homebase(request, homebase_id):
                 "toast": {"message": "Something went wrong", "variant": "error"},
                 "closedialog": {}
             })
+            print(f"Error occurred: {e}")
             return response
 
     sub_form = SubPropertyCreationForm()
@@ -153,4 +154,11 @@ def join_page(request):
 
 # GET homebase/dashboard/
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'propertyManagerDb.html')
+
+def owner_dashboard(request):
+    rentalProperties = Rental(subproperty=SubProperty.objects.get(id=100), rent=1000, start_date="2023-01-01", end_date="2023-12-31", occupied=True )
+    context = {
+        "rentalProperties": [rentalProperties]
+    }
+    return render(request, 'ownerDb.html', context)
