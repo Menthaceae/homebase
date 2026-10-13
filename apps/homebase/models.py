@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from apps.users.models import Manager, Owner, Tenant
 
 classification_choices = (
-    ("rental", "Rental"),
-    ("owned", "Owned")
+    ("rented", "rented"),
+    ("residential", "residential"),
 )
 
 status_choices = (
@@ -36,6 +36,7 @@ class OwnedProperty(models.Model):
     subproperty = models.OneToOneField(SubProperty, on_delete=models.CASCADE)
     owners = models.ManyToManyField(Owner) 
     start_date = models.DateField(auto_now_add=True)
+    classification = models.CharField(choices=classification_choices, default="residential", max_length=20)
 
 # Think of it like a rental agreement
 class Rental(models.Model):
@@ -46,3 +47,4 @@ class Rental(models.Model):
     rent = models.FloatField()
     tenant = models.ForeignKey(Tenant, on_delete=models.SET_NULL, null=True, blank=True)
     occupied = models.BooleanField(default=False)
+    owned_property = models.ForeignKey(OwnedProperty, on_delete=models.SET_NULL, null=True, blank=True)
