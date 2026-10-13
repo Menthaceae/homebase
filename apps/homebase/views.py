@@ -57,6 +57,7 @@ def home(request, homebase_id):
         return HttpResponse("Not authorzied")
 
 
+# Eventually I will make a thing where it will go to your default Homebase or something
 def hombaseHome(request):
     posts = Posts.get_homebase_posts(homebase_id=2)
     context = {
