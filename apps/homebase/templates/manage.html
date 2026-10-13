@@ -58,9 +58,9 @@
                             <th></th>
                         </tr>
                 </theader>
-                <tbody id="rentedpropertytable">
+                <tbody>
                     {% for rental in rental_subproperties %}
-                    <c-rentedpropertytable :rental="rental" />
+                        <c-rentedpropertytable :rental="rental" />
                     {% endfor %}
                 </tbody>
             </c-ui.table>
@@ -76,10 +76,14 @@
                             <th></th>
                         </tr>
                 </theader>
-                <tbody id="ownedpropertytable">
-                    <c-ownedpropertytable :owned="owned_subproperties" />
+                <tbody>
+                    {% for owned in owned_subproperties %}
+                        <c-ownedpropertytable :owned="owned" />
+                    {% endfor %}
                 </tbody>
             </c-ui.table>
         </c-ui.card>
     </div>
+
+<c-ui.toast.container position="top-right" />
 </c-layout>

@@ -142,9 +142,8 @@
         <c-ui.button type="submit" variant="primary">Submit</c-ui.button>
     </div>
 </form>
-
 <script>
-    document.addEventListener('htmx:afterRequest', function (evt) {
+    document.addEventListener('closedialog', function (evt) {
         // Only run when the subproperty form finishes with HTTP 204
         if (evt.detail.elt.id === 'subpropertyform') {
             // 1. Reset standard HTML inputs (text, number, date, checkbox)
@@ -160,6 +159,9 @@
             if (closeBtn) {
                 closeBtn.click();
             }
+
+            // 4. Trigger a custom event
+
         }
     });
 </script>

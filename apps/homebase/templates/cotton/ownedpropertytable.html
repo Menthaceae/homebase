@@ -1,5 +1,5 @@
 <c-vars owned />
-<tr id="owned-row-{{ owned.id }}" hx-swap-oob="beforeend:#ownedpropertytable">
+<tr>
     <td><b>{{ owned.subproperty.room_number }}</b></td>
     {% comment %} <td>{% if owned.owners.first %}{{ owned.owners.first.user.first_name }} {{ owned.owners.first.user.last_name }}{% else %}-{% endif %}</td> {% endcomment %}
     <td>{{ owned.start_date }}</td>

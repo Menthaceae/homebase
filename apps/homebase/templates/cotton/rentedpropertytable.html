@@ -1,5 +1,5 @@
 <c-vars rental />
-<tr id="rental-row-{{ rental.id }}" hx-swap-oob="beforeend:#rentedpropertytable">
+<tr>
     <td><b>{{ rental.subproperty.room_number }}</b></td>
     <td>{% if rental.tenant %}{{ rental.tenant.user.first_name }} {{ rental.tenant.user.last_name }}{% else %}-{% endif %}</td>
     <td><b>${{ rental.rent }}</b></td>
