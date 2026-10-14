@@ -2,18 +2,18 @@
 {% load tailwind_cli %}
 
 {% block custom_css %}
-<link rel="stylesheet" href="{% static 'css/events.css' %}">
+<link rel="stylesheet" href="{% static 'events/css/events.css' %}">
 {% endblock %}
 
 {% block content %}
 <c-layout>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 items-start">
+    <div class="grid grid-cols-3 gap-4 items-start">
 
         <!-- Left Panel -->
         <div class="left-panel col-span-1">
             <!-- Create Post-->
-            <c-ui.card class="p-4 bg-accent-content text-accent-foreground w-96">
+            <c-ui.card class="p-4 bg-accent-content text-accent-foreground w-50">
                 <p class="text-lg font-semibold mb-2">Create a New Post</p>
                 <p class="text-sm mb-4">Start sharing your thoughts and ideas with the community by creating a new post.</p>
                 <c-ui.button
@@ -43,11 +43,11 @@
                 <p class="text-lg font-semibold mb-2">Events</p>
 
                 <div class="create-event-btn">
-                    <i class="ti ti-plus"></i>
                     <c-ui.button
                         type="button"
-                        onclick="openEventModal()"
+                        onclick="document.getElementById('create-event-modal').showModal()"
                     >
+                    <i class="ti ti-plus"></i>
                     Create event
                     </c-ui.button>
                 </div>
@@ -65,7 +65,6 @@
             </div>
 
             <div class="load-events">
-                <!-- TODO: Load events here -->
             </div>
         </div>
     </div>
