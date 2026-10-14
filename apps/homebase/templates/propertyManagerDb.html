@@ -8,22 +8,19 @@
     <c-dbcard label="Maintenance Requests" value="5" description="Pending requests" filled=True />
     <c-dbcard label="Announcements" value="3" description="New announcements" filled=False />
 </div>
+
+
 <div class="py-4">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <c-ui.card class="flex justify-between gap-2 items-center col-span-1">
+        {% for homebase in managedHomebases %}
+            <c-ui.card class="flex justify-between gap-2 items-center col-span-1">
             <div class="flex flex-col">
-                <h1 class="text-2xl font-bold mb-4">Homebase Name</h1>
-                <p>HomeBaseAddress</p>
-                <p>This homebase contians 12 properties and {{tenantCount}} tenants.</p>
+                <h1 class="text-2xl font-bold mb-4">{{homebase.name}}</h1>
+                <p>{{homebase.street_address}}</p>
+                <p>This homebase contians 12 properties and 12 tenants.</p>
             </div>
-        </c-ui.card> 
-         <c-ui.card class="flex justify-between gap-2 items-center col-span-1">
-            <div class="flex flex-col">
-                <h1 class="text-2xl font-bold mb-4">Homebase Name</h1>
-                <p>HomeBaseAddress</p>
-                <p>This homebase contians 12 properties and 88 tenants.</p>
-            </div>
-        </c-ui.card> 
+            </c-ui.card> 
+        {% endfor %}
     </div> 
 </div>
 <div class="flex flex-col md:flex-row">

@@ -1,18 +1,16 @@
 import json
+
 from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import render
-from apps.posts import views as Posts
-from apps.public.views import invite_user
 from django.contrib.auth.decorators import login_required
-from .models import Homebase, OwnedProperty, Rental, SubProperty
-from .forms import HomebaseCreationForm, RentalCreationForm, SubPropertyCreationForm
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.http import HttpResponse
 
 from apps.posts import views as Posts
+from apps.events.models import *
 from apps.users.models import *
 from apps.public.views import *
 from .models import *
@@ -218,11 +216,14 @@ def count_all_managed_properties(user):
 def property_manager_dashboard(request):
     tenantsCount = count_all_managed_tenants(request.user)
     propertiesCount = count_all_managed_properties(request.user)
+    managed_homebases = Homebase.objects.filter(managers=request.user)
     context = {
         "tenantsCount": tenantsCount,
-        "propertiesCount": propertiesCount
+        "propertiesCount": propertiesCount,
+        "managedHomebases": managed_homebases
     }
     return render(request, 'propertyManagerDb.html', context)
+
 
 #GET homebase/dashboard/owner/
 @login_required
