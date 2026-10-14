@@ -50,6 +50,10 @@
     line-height: 1.5;
 }
 
+/* =======================
+    EVENT DETAILS GRID
+   ======================= */
+
 /* Event fields section */
 .event-logistics {
     display: flex;
