@@ -9,6 +9,14 @@
         <form action="" method="post">
             {% csrf_token %}
 
+            <!-- Author -->
+            <input
+                type="hidden"
+                id="author"
+                name="author"
+                value="{{ user }}"
+            >
+
             <!-- Header -->
             <div class="form-header">
                 <button
@@ -52,26 +60,25 @@
 
             <div class="mb-4"></div>
 
-            <!-- Post inputs (content, post_to (default: public), image (optional))-->
+            <!-- Body -->
             <textarea 
                 class="post-content required" 
-                id="content"
-                name="content"
-                label="Post Content" 
+                id="body"
+                name="body"
                 rows="5" 
                 placeholder="What's on your mind?" 
                 required
             ></textarea>
             <input 
                 type="hidden" 
-                name="post_to" 
                 id="post_to"
+                name="post_to"
                 required
             >
             <input
                 type="file"
-                id="post-image"
-                name="photo"
+                id="image"
+                name="image"
                 accept="image/*"
                 hidden
             >
