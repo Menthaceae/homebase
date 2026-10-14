@@ -1,10 +1,11 @@
+import json
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import render
 from apps.posts import views as Posts
 from apps.public.views import invite_user
 from apps.users.models import Owner, Tenant
-from .models import Homebase, OwnedProperty, Rental
-from django.contrib.auth.models import User
+from .models import Homebase, OwnedProperty, Rental, SubProperty
 from .forms import HomebaseCreationForm, RentalCreationForm, SubPropertyCreationForm
 from django.shortcuts import redirect
 
@@ -33,10 +34,10 @@ def hombaseHome(request):
 
 def manage_homebase(request, homebase_id):
     homebase = Homebase.objects.get(id=homebase_id)
-    subproperties_count = homebase.subproperty_set.all().count()
-    rented_subproperties_count = Rental.objects.filter(subproperty__homebase=homebase, occupied=True).count()
+    subproperties_count = SubProperty.objects.filter(homebase=homebase).count()
+    rented_subproperties_count = Rental.objects.filter(subproperty__homebase=homebase).count()
     owned_subproperties_count = OwnedProperty.objects.filter(subproperty__homebase=homebase).count()
-    rented_subproperties = Rental.objects.filter(subproperty__homebase=homebase, occupied=True)
+    rented_subproperties = Rental.objects.filter(subproperty__homebase=homebase)
     owned_subproperties = OwnedProperty.objects.filter(subproperty__homebase=homebase)
 
     if request.method == 'POST':
@@ -44,34 +45,60 @@ def manage_homebase(request, homebase_id):
         rental_form = RentalCreationForm(request.POST)
         owned_email = request.POST.get('owners_email')
         tenant_email = request.POST.get('tenant')
+        classification = request.POST.get('classification')
+        try:
+            if classification == 'rental' and rental_form.is_valid():
+                if sub_form.is_valid():
+                    with transaction.atomic():
+                        subproperty = sub_form.save(commit=False)
+                        subproperty.homebase = homebase
+                        subproperty.save()
 
-        with transaction.atomic():
-            if sub_form.is_valid():
-                subproperty = sub_form.save(commit=False)
-                subproperty.homebase = homebase
-                subproperty.save()
+                        rental = rental_form.save(commit=False)
+                        rental.subproperty = subproperty
+                        rental.homebase = homebase
 
-            if rental_form.is_valid():
-                if tenant_email is not None and tenant_email != '':
-                    user = invite_user(tenant_email, request)
-                    tenant = Tenant.objects.create(tenant=user)
-                    rental.tenant = tenant
-                rental = rental_form.save(commit=False)
-                rental.subproperty = subproperty
-                subproperty.managed_by.add(request.user)
-                rental.save()
+                        if tenant_email is not None and tenant_email != '':
+                            user = invite_user(tenant_email, request)
+                            rental.tenant = user
+                        rental.save()
+                        subproperty.managed_by.add(request.user)
+                        saved_successfully = True
 
-            if owned_email:
-                user = invite_user(owned_email, request)
-                owner = Owner.objects.create(owner=user)
-                owned_property = OwnedProperty.objects.create(subproperty=subproperty)
-                owned_property.owners.add(owner)
-                subproperty.managed_by.add(user)
+            if classification == 'owned' and sub_form.is_valid():
+                if owned_email:
+                    with transaction.atomic():
+                        user = invite_user(owned_email, request)
+                        subproperty = sub_form.save(commit=False)
+                        subproperty.homebase = homebase
+                        subproperty.save()
+                        owned_property = OwnedProperty.objects.create(subproperty=subproperty, classification="residential")
+                        owned_property.owners.add(user)
+                        subproperty.managed_by.add(user)
+                        saved_successfully = True
+                    
 
-            return redirect('manage_homebase', homebase_id=homebase.id)
-    else:
-        sub_form = SubPropertyCreationForm()
-        rental_form = RentalCreationForm()
+            if saved_successfully:
+                response = HttpResponse(status=204)
+                response['HX-Refresh'] = 'true'
+                return response
+            
+            return render(request, 'cotton/subpropertyform.html', {
+                "sub_form": sub_form,
+                "rental_form": rental_form,
+                "homebase": homebase,
+            }, status=422)
+        except Exception as e:
+            response = HttpResponse(status=204)
+            response["HX-Trigger"] = json.dumps({
+                "toast": {"message": f"Something went wrong: {e}", "variant": "error"},
+                "closedialog": {}
+            })
+            print(f"Error occurred: {e}")
+            return response
+
+    sub_form = SubPropertyCreationForm()
+    rental_form = RentalCreationForm()
 
     context = {
         "sub_form": sub_form,
@@ -126,4 +153,11 @@ def join_page(request):
 
 # GET homebase/dashboard/<homebase_id>/
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'propertyManagerDb.html')
+
+def owner_dashboard(request):
+    rentalProperties = Rental(subproperty=SubProperty.objects.get(id=100), rent=1000, start_date="2023-01-01", end_date="2023-12-31", occupied=True )
+    context = {
+        "rentalProperties": [rentalProperties]
+    }
+    return render(request, 'ownerDb.html', context)

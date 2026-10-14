@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from apps.users.models import Manager, Owner, Tenant
 
 classification_choices = (
-    ("rental", "Rental"),
-    ("owned", "Owned")
+    ("rented", "rented"),
+    ("residential", "residential"),
 )
 
 status_choices = (
@@ -35,15 +35,17 @@ class OwnedProperty(models.Model):
     id = models.AutoField(primary_key=True)
     classification = models.CharField()
     subproperty = models.OneToOneField(SubProperty, on_delete=models.CASCADE)
-    owners = models.ManyToManyField(Owner) 
+    owners = models.ManyToManyField(User, related_name='owned_properties') 
     start_date = models.DateField(auto_now_add=True)
+    classification = models.CharField(choices=classification_choices, default="residential", max_length=20)
 
 # Think of it like a rental agreement
 class Rental(models.Model):
     id = models.AutoField(primary_key=True)
     subproperty = models.ForeignKey(SubProperty, related_name='rentals', on_delete=models.CASCADE)    
-    start_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField()
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     rent = models.FloatField()
-    tenant = models.ForeignKey(Tenant, on_delete=models.SET_NULL, null=True, blank=True)
-    occupied = models.BooleanField(default=False, blank=True)
+    tenant = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    occupied = models.BooleanField(default=False)
+    owned_property = models.ForeignKey(OwnedProperty, on_delete=models.SET_NULL, null=True, blank=True)
