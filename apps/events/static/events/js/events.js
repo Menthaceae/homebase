@@ -1,12 +1,12 @@
-const endTime = document.querySelector(".endTime");
-const endDate = document.querySelector(".endDate");
+const endTime = document.querySelector(".end-time");
+const endDate = document.querySelector(".end-date");
 
 function showEndDate() {
-    if (endTime.hidden == true) {
+    if (endTime.clicked == true) {
         endTime.hidden = false;
         endDate.hidden = false;
     } else {
         endTime.hidden = true;
         endDate.hidden = true;
     }
-}
+};
