@@ -1,10 +1,10 @@
 {% load static %}
 
 <c-layout>
-<h1 class="text-2xl font-bold mb-4">Welcome, {{ userName }}!</h1>
+<h1 class="text-2xl font-bold mb-4">Welcome, {{username}}!</h1>
 <div class="w-full flex flex-col justify-around md:flex-row gap-4">
-    <c-dbcard label="Tenants" value={{tenantsCount}} description="Active tenants" filled=True />
-    <c-dbcard label="Properties" value={{propertiesCount}} description="Total properties" filled=False />
+    <c-dbcard label="Tenants" value={{tenants_count}} description="Active tenants" filled=True />
+    <c-dbcard label="Properties" value={{properties_count}} description="Total properties" filled=False />
     <c-dbcard label="Maintenance Requests" value="5" description="Pending requests" filled=True />
     <c-dbcard label="Announcements" value="3" description="New announcements" filled=False />
 </div>
@@ -12,7 +12,7 @@
 
 <div class="py-4">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {% for homebase in managedHomebases %}
+        {% for homebase in managed_homebases %}
             <c-ui.card class="flex justify-between gap-2 items-center col-span-1">
             <div class="flex flex-col">
                 <h1 class="text-2xl font-bold mb-4">{{homebase.name}}</h1>
