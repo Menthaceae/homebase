@@ -5,7 +5,7 @@
     class="w-full max-w-lg rounded-xl p-0 shadow-xl"
 >
     <div class="event-modal-content">
-        <form action="" method="POST" class="event-form">
+        <form method="POST" action="" class="event-form">
             {% csrf_token %}
 
             <!-- Author -->
@@ -37,7 +37,7 @@
 
                     <c-ui.button
                         type="button"
-                        onclick="document.getElementById('event-photo').click()"
+                        onclick="document.getElementById('image').click()"
                     >
                         Upload image
                     </c-ui.button>

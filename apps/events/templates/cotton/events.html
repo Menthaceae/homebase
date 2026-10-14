@@ -1,0 +1,11 @@
+{% load static %}
+{% for event in events %}
+
+    <c-ui.card class="p-4">
+        <p>{{ event.name }}</p>
+        
+    </c-ui.card>
+
+{% empty %}
+    <p class="text-gray-500 text-center py-4">No events available</p>
+{% endfor %}
