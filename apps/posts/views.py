@@ -10,17 +10,17 @@ from .forms import *
 
 # Only getters
 def get_all_posts():
-    posts = Post.objects.all().filter(deleted=False)
+    posts = Post.objects.all().filter()
     return posts
 
 
 def get_homebase_posts(homebase_id): 
-    homebase_posts = Post.objects.all().filter(deleted=False, homebase_id=homebase_id)
+    homebase_posts = Post.objects.all().filter(homebase_id=homebase_id)
     return homebase_posts
 
 
 def get_public_posts():  
-    public_posts = Post.objects.all().filter(deleted=False, post_to="public")
+    public_posts = Post.objects.all().filter(post_to="public")
     return public_posts
 
 
@@ -31,17 +31,25 @@ def get_by_id(request, id):
 
 # POST posts/create/
 def create(request):
+    form = PostCreationForm(request.POST)
+
     if request.method == 'POST':
-        form = PostCreationForm(request.POST)
         if form.is_valid():
-            post = form.save(commit=False) # Don't save yet
+            post = form.save(commit=False)
             post.author = request.user
             post.save()
+
             messages.success(request, "Post creation successful")
-            return redirect('home')
+            return redirect(' ')
+        else:
+            print(form.errors)
+            messages.error(request, "Your post could not be created. Please check the form.")
+            return render(request, 'public/home.html', {"form": form})#TODO: Perserve and display form errors. 
+        #TODO: You can't render post_create.html because it's a cotton component, not a Django template
+
     else:
-        form = PostCreationForm()           
-    return render(request, 'testcreatepost.html', {"form": form})
+        return render(request, 'home', {"form": form})
+
 
 
 # POST posts/comment/
@@ -76,11 +84,10 @@ def update(request):
 
 
 # POST posts/delete/
-def delete(request):
-    post_id = request.id
-    post = Post.objects.get(id=post_id)
-    if (post.author == request.user):
-        post.deleted = True
-        post.save()
-        return get_all_posts()
+# def delete(request):
+#     post_id = request.id
+#     post = Post.objects.get(id=post_id)
 
+#     if (post.author == request.user):
+#         post.save()
+#         return get_all_posts()        

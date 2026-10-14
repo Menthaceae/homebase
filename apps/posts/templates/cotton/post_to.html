@@ -1,0 +1,69 @@
+<!-- Choose which feed to post to -->
+<dialog
+    id="post-to-modal"
+    class="w-full max-w-lg rounded-xl p-0"
+
+>
+
+    <div class="post-to">
+        <p class="text-lg font-semibold mb-2">Choose which feed to post to</p>
+
+        <hr>
+
+        <!-- Public -->
+        <button 
+            type="button" 
+            class="post-to-option"
+            onclick="selectPostDestination('public')"
+        >
+
+            <div class="option-details">
+                <div class="icon"><i class="ti ti-world descr-icon"></i></div>
+                <div class="destination-descr">
+                    <p class="text-lg font-semibold">Public</p>
+                    <p class="text-sm" style="width: 215px;">Anyone can view this post </p>
+                </div>
+                <div class="selected" hidden><i class="ti ti-check"></i></div>
+            </div>
+
+        </button>
+        
+        <!-- Nearby neighbors -->
+        <button 
+            type="button"
+            class="post-to-option"
+            onclick="selectPostDestination('nearby')"
+        >
+
+            <div class="option-details">
+                <div class="icon"><i class="ti ti-building-community descr-icon"></i></div>
+                <div class="destination-descr">
+                    <p class="text-lg font-semibold">Nearby</p>
+                    <p class="text-sm" style="width: 215px;">Anyone in a nearby neighborhood can view this post</p>
+                </div>
+                <div class="selected" hidden><i class="ti ti-check"></i></div>
+            </div>
+
+        </button>
+
+        <!-- Homebase -->
+        <!-- TODO: Check if user has homebase -->
+        <!-- TODO: If user has homebase, select which homebase to post to -->
+        <button 
+            type="button" 
+            class="post-to-option"
+            onclick="selectPostDestination('homebase')"
+        >
+            <div class="option-details">
+                <div class="icon"><i class="ti ti-home descr-icon"></i></div>
+                <div class="destination-descr">
+                    <p class="text-lg font-semibold">Homebase</p>
+                    <p class="text-sm" style="width: 215px;">Only those in your homebase can view this post </p>
+                </div>
+                <div class="selected" hidden><i class="ti ti-check"></i></div>
+            </div>
+        </button>
+
+    </div>
+
+</dialog>

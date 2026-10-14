@@ -10,13 +10,14 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
-# Create your views here.
+# Landing page
 def home(request):
     public_posts = Posts.get_public_posts()
     context = {
-        "public_posts": public_posts
+        "public_posts": public_posts,
     }
-    return render(request, 'home.html', context)
+
+    return render(request, 'public/home.html', context)
 
 def layout(request):
     return render(request, 'layout.html')
@@ -39,7 +40,10 @@ def register(request):
         "form": form
     }        
 
-    return render(request, "register.html", context) 
+    return render(request, "public/register.html", context) 
+
+def events(request):
+    return render(request, '/events/')
 
 def invite_user(email, request):
     user, created = User.objects.get_or_create(
