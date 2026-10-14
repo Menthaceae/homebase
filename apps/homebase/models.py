@@ -34,7 +34,7 @@ class SubProperty(models.Model):
 class OwnedProperty(models.Model):    
     id = models.AutoField(primary_key=True)
     subproperty = models.OneToOneField(SubProperty, on_delete=models.CASCADE)
-    owners = models.ManyToManyField(Owner) 
+    owners = models.ManyToManyField(User, related_name='owned_properties') 
     start_date = models.DateField(auto_now_add=True)
     classification = models.CharField(choices=classification_choices, default="residential", max_length=20)
 
@@ -45,6 +45,6 @@ class Rental(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     rent = models.FloatField()
-    tenant = models.ForeignKey(Tenant, on_delete=models.SET_NULL, null=True, blank=True)
+    tenant = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     occupied = models.BooleanField(default=False)
     owned_property = models.ForeignKey(OwnedProperty, on_delete=models.SET_NULL, null=True, blank=True)

@@ -1,4 +1,5 @@
 import json
+from django.db import transaction
 from django.http import HttpResponse
 from django.shortcuts import render
 from apps.posts import views as Posts
@@ -50,35 +51,34 @@ def manage_homebase(request, homebase_id):
         try:
             if classification == 'rental' and rental_form.is_valid():
                 if sub_form.is_valid():
-                    subproperty = sub_form.save(commit=False)
-                    subproperty.homebase = homebase
-                    subproperty.save()
+                    with transaction.atomic():
+                        subproperty = sub_form.save(commit=False)
+                        subproperty.homebase = homebase
+                        subproperty.save()
 
-                    rental = rental_form.save(commit=False)
-                    rental.subproperty = subproperty
-                    rental.homebase = homebase
+                        rental = rental_form.save(commit=False)
+                        rental.subproperty = subproperty
+                        rental.homebase = homebase
 
-                    if tenant_email is not None and tenant_email != '':
-                        user = invite_user(tenant_email, request)
-                        tenant = Tenant.objects.create(tenant=user)
-                        rental.tenant = tenant
-
-                    rental.save()
-                    subproperty.managed_by.add(request.user)
-                    subproperty.save()
-                    saved_successfully = True
+                        if tenant_email is not None and tenant_email != '':
+                            user = invite_user(tenant_email, request)
+                            rental.tenant = user
+                        rental.save()
+                        subproperty.managed_by.add(request.user)
+                        saved_successfully = True
 
             if classification == 'owned' and sub_form.is_valid():
                 if owned_email:
-                    user = invite_user(owned_email, request)
-                    owner = Owner.objects.create(owner=user)
-                    subproperty = sub_form.save(commit=False)
-                    subproperty.homebase = homebase
-                    subproperty.save()
-                    owned_property = OwnedProperty.objects.create(subproperty=subproperty)
-                    owned_property.owners.add(owner)
-                    subproperty.managed_by.add(user)
-                    saved_successfully = True
+                    with transaction.atomic():
+                        user = invite_user(owned_email, request)
+                        subproperty = sub_form.save(commit=False)
+                        subproperty.homebase = homebase
+                        subproperty.save()
+                        owned_property = OwnedProperty.objects.create(subproperty=subproperty, classification="residential")
+                        owned_property.owners.add(user)
+                        subproperty.managed_by.add(user)
+                        saved_successfully = True
+                    
 
             if saved_successfully:
                 response = HttpResponse(status=204)
@@ -93,7 +93,7 @@ def manage_homebase(request, homebase_id):
         except Exception as e:
             response = HttpResponse(status=204)
             response["HX-Trigger"] = json.dumps({
-                "toast": {"message": "Something went wrong", "variant": "error"},
+                "toast": {"message": f"Something went wrong: {e}", "variant": "error"},
                 "closedialog": {}
             })
             print(f"Error occurred: {e}")
