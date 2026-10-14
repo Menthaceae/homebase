@@ -37,6 +37,8 @@
         </c-ui.button>
       </div>
 
+      <hr>
+
       <!-- Comment & Share Links -->
       <c-ui.button href="/comment" class="rounded-full">
         <c-tablericon.message-circle class="size-5" />
@@ -47,6 +49,8 @@
       </c-ui.button>
     </div>
   </c-ui.card>
+
+  <div class="div p-1"></div>
 {% empty %}
-  <p class="text-gray-500 text-center py-4">No posts available.</p>
+  <p class="text-gray-500 text-center py-4">No posts available</p>
 {% endfor %}

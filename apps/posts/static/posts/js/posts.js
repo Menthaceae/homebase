@@ -53,3 +53,19 @@ function moreOptions() {
     }
     
 }
+
+function openEventModal() {
+    const postModal = document.getElementById('create-post-modal');
+    const eventModal = document.getElementById('create-post-modal');
+
+    if (postModal.open) {
+        print("Closing post modal");
+        postModal.close();
+    }
+
+    if (eventModal && !eventModal.open) {
+        print("Opening event modal");
+        eventModal.showModal();
+    }
+
+}
