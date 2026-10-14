@@ -1,62 +1,192 @@
-
-.modal-content {
-    padding: 20px;
-    gap: 5px;
+/* Event creation form */
+.event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 28px;
+    color: #1f2937;
 }
 
-
-
-/* ===================================
-    COVER PHOTO
-    =================================== */
-
+/* Cover image uploader */
 .image-uploader {
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-direction: column;
-
-    width: 100%;
-    height: 200px;
-
-    border: medium black dashed;
-    border-radius: 5px;
-    padding-bottom: 10px;
-    gap: 2px;
+    gap: 16px;
+    padding: 20px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+    background: #f8fafc;
 }
 
+.image-uploader-icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: #e8edff;
+    font-size: 25px;
+}
 
-/* ===================================
-    EVENT DETAILS
-    =================================== */
+.image-uploader-text {
+    flex: 1;
+    min-width: 0;
+}
 
+.image-uploader-text label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: 650;
+    color: #1f2937;
+}
+
+.image-uploader-text p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Event fields section */
 .event-logistics {
     display: flex;
     flex-direction: column;
-
-    padding-top: 10px;
-    gap: 10px;
+    gap: 20px;
 }
 
-.logistics {
+.event-section-title {
+    margin: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 17px;
+    font-weight: 650;
+    color: #111827;
+}
+
+/* Name and date columns */
+.event-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 16px;
+}
+
+/* Individual fields */
+.logistic {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.logistic label {
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.required::after {
+    content: " *";
+    color: #dc2626;
+}
+
+.logistic input,
+.logistic select,
+.logistic textarea,
+.event-post-to select,
+.event-location input {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+    padding: 11px 12px;
+    background: #fff;
+    color: #1f2937;
+    font: inherit;
+    font-size: 14px;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.logistic input:focus,
+.logistic select:focus,
+.logistic textarea:focus,
+.event-post-to select:focus,
+.event-location input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgb(99 102 241 / 13%);
+}
+
+.logistic input::placeholder,
+.logistic textarea::placeholder,
+.event-location input::placeholder {
+    color: #9ca3af;
+}
+
+.logistic textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.6;
+}
+
+/* Start and end time fields */
+.event-time-fields {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+/* Full-width fields */
+.event-location,
+.event-post-to,
+.event-details {
     width: 100%;
 }
 
-.logistic {
-    border: medium solid black;
-    border-radius: 5px;
-}
-
-/* ===================================
-    FOOTER
-    =================================== */
-
+/* Footer */
 .event-form-footer {
     display: flex;
-    justify-content: end;
-    flex-direction: row;
-
-    padding-top: 10px;
-    gap: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
 }
 
+/* Smaller screens */
+@media (max-width: 600px) {
+    .event-form {
+        padding: 18px;
+        gap: 20px;
+    }
+
+    .image-uploader {
+        flex-wrap: wrap;
+        padding: 16px;
+    }
+
+    .image-uploader-text {
+        flex-basis: calc(100% - 70px);
+    }
+
+    .image-input {
+        width: 100%;
+    }
+
+    .event-fields-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .event-time-fields {
+        grid-column: auto;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .event-form-footer {
+        flex-wrap: wrap;
+    }
+}
