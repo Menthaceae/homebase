@@ -13,7 +13,7 @@ status_choices = (
 
 class Homebase(models.Model):
     id = models.AutoField(primary_key=True)
-    managers = models.ManyToManyField(User, related_name='managers')
+    managers = models.ManyToManyField(User, related_name='managed_homebases')
     users = models.ManyToManyField(User)
     bio = models.TextField(blank=True)
     street_address = models.CharField()

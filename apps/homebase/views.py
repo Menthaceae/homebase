@@ -77,8 +77,8 @@ def hombaseHome(request):
 def manage_homebase(request, homebase_id):
     logged_in_user = request.user
     if not logged_in_user.is_authenticated:
-        return redirect('login')
-    if not logged_in_user.homebase_set.filter(id=homebase_id).exists():
+        return redirect('/login')
+    if logged_in_user.managed_homebases.filter(id=homebase_id).exists() == False:
         return HttpResponse("You do not have permission to manage this homebase.", status=403)
     homebase = Homebase.objects.get(id=homebase_id)
     subproperties_count = SubProperty.objects.filter(homebase=homebase).count()
