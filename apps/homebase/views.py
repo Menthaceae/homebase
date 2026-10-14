@@ -76,11 +76,11 @@ def hombaseHome(request):
 @login_required
 def manage_homebase(request, homebase_id):
     logged_in_user = request.user
+    homebase = Homebase.objects.get(id=homebase_id)
     if not logged_in_user.is_authenticated:
         return redirect('/login')
-    if logged_in_user.managed_homebases.filter(id=homebase_id).exists() == False:
+    if (manages(logged_in_user, homebase))== False:
         return HttpResponse("You do not have permission to manage this homebase.", status=403)
-    homebase = Homebase.objects.get(id=homebase_id)
     subproperties_count = SubProperty.objects.filter(homebase=homebase).count()
     rented_subproperties_count = Rental.objects.filter(subproperty__homebase=homebase).count()
     owned_subproperties_count = OwnedProperty.objects.filter(subproperty__homebase=homebase).count()
@@ -197,10 +197,26 @@ def join_page(request):
     return render(request, 'joinhomebase.html')
 
 
+def count_all_managed_tenants(user):
+    managed_homebases = Homebase.objects.filter(managers=user)
+    tenant_count = 0
+    for managed_homebase in managed_homebases:
+        subproperties = managed_homebase.subproperty_set.all()
+        for property in subproperties:
+            rentals = property.rentals.all()
+            tenant_count += rentals.count()
+    return tenant_count
+
+
 # GET homebase/dashboard/property-manager/
-@login_required
+# @login_required
+# request
 def property_manager_dashboard(request):
-    return render(request, 'propertyManagerDb.html')
+    tenantCount = count_all_managed_tenants(request.user)
+    context = {
+        "tenantCount": tenantCount
+    }
+    return render(request, 'propertyManagerDb.html', context)
 
 #GET homebase/dashboard/owner/
 @login_required
