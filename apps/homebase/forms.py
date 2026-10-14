@@ -15,4 +15,4 @@ class SubPropertyCreationForm(ModelForm):
 class RentalCreationForm(ModelForm):
     class Meta:
         model = Rental
-        fields = ['rent', 'occupied', 'end_date']
+        fields = ['rent', 'occupied', 'start_date', 'end_date']
