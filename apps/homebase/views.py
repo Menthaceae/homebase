@@ -207,14 +207,20 @@ def count_all_managed_tenants(user):
             tenant_count += rentals.count()
     return tenant_count
 
+def count_all_managed_properties(user):
+    managed_properties = SubProperty.objects.filter(managed_by=user)
+    return managed_properties.count()
+
 
 # GET homebase/dashboard/property-manager/
 # @login_required
 # request
 def property_manager_dashboard(request):
-    tenantCount = count_all_managed_tenants(request.user)
+    tenantsCount = count_all_managed_tenants(request.user)
+    propertiesCount = count_all_managed_properties(request.user)
     context = {
-        "tenantCount": tenantCount
+        "tenantsCount": tenantsCount,
+        "propertiesCount": propertiesCount
     }
     return render(request, 'propertyManagerDb.html', context)
 
