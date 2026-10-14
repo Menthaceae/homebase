@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'django_cotton_ui',
     'django_tailwind_cli',
     'cotton_icons',
+
+    # Custom apps
     'apps.public',
     'apps.users',
     'apps.homebase',

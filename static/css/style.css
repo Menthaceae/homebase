@@ -4,4 +4,59 @@
 
 :root {
     --card-background-color: #194c47;
+    --navbar-height: 64px;
+}
+
+body {
+    background-color: #FAF8F5;
+}
+
+.web-content {
+    margin-top: calc(var(--navbar-height) + 10px);
+}
+
+/* ----- Navbar ----- */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--navbar-height);
+    z-index: 1000;
+
+    padding: 10px;
+    background-color: white;
+
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    height: 80px;
+}
+
+.search-bar {
+    width: 500px;
+    border-radius: 24px;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    background-color: #FAF8F5;
+    color: black;
+    padding: 4px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+}
+
+.required::after {
+  content: ' *';
+  color: red;
+  font-weight: bold;
+}
+
+.appbar-content {
+    display: flex;
+    justify-content: center;
 }

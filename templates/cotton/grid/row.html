@@ -1,0 +1,12 @@
+<!-- Default values for the row layout -->
+<c-vars cols="3" gap="4" />
+
+<!-- 
+  {{ attrs.style }} and other attributes pass through natively.
+Append default layout classes while allowing custom class overrides via attrs.class 
+-->
+<div class="grid grid-cols-1 md:grid-cols-{{ cols }} gap-{{ gap }} {{ attrs.class|default:'' }}"
+{{ attrs }}
+>
+    {{ slot }}
+</div>
