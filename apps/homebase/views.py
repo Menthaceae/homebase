@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from apps.posts import views as Posts
 from apps.public.views import invite_user
-from apps.users.models import Owner, Tenant
+from django.contrib.auth.decorators import login_required
 from .models import Homebase, OwnedProperty, Rental, SubProperty
 from .forms import HomebaseCreationForm, RentalCreationForm, SubPropertyCreationForm
 from django.contrib.auth.models import User
@@ -73,8 +73,13 @@ def hombaseHome(request):
     }
     return render(request, 'homebase.html', context)
 
-
+@login_required
 def manage_homebase(request, homebase_id):
+    logged_in_user = request.user
+    if not logged_in_user.is_authenticated:
+        return redirect('login')
+    if not logged_in_user.homebase_set.filter(id=homebase_id).exists():
+        return HttpResponse("You do not have permission to manage this homebase.", status=403)
     homebase = Homebase.objects.get(id=homebase_id)
     subproperties_count = SubProperty.objects.filter(homebase=homebase).count()
     rented_subproperties_count = Rental.objects.filter(subproperty__homebase=homebase).count()
@@ -156,14 +161,17 @@ def manage_homebase(request, homebase_id):
 
 
 # POST homebase/create/
+@login_required
 def create(request):
+    user = request.user
     error_message = None
     if request.method == 'POST':
         form = HomebaseCreationForm(request.POST)
         if form.is_valid():
             homebase = form.save()
             homebase.save()
-            return redirect('/homebase')
+            homebase.managers.add(user)
+            return redirect('/homebase/manage/' + str(homebase.id) + '/')
         error_message = form.errors.as_text()
     else:
         form = HomebaseCreationForm()
@@ -188,20 +196,14 @@ def join(request, homebase_id, code):
 def join_page(request):
     return render(request, 'joinhomebase.html')
 
-"""
-# GET homebase/dashboard/<homebase_id>/
-def dashboard(request):
-    homebase = Homebase.objects.get(id=homebase_id)
-    authorized = (in_homebase(request.user, homebase) and manages(request.user, homebase))
-    if (authorized):
-        return render(request, 'propertyManagerDb.html')
-    else:
-        return HttpResponse("Not authorized")
-"""
 
-def dashboard(request):
+# GET homebase/dashboard/property-manager/
+@login_required
+def property_manager_dashboard(request):
     return render(request, 'propertyManagerDb.html')
-    
+
+#GET homebase/dashboard/owner/
+@login_required
 def owner_dashboard(request):
     rentalProperties = Rental(subproperty=SubProperty.objects.get(id=100), rent=1000, start_date="2023-01-01", end_date="2023-12-31", occupied=True )
     context = {
