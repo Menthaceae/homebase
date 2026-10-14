@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="image-uploader-text">
-                    <label for="image">Add a cover image</label>
+                    <label for="image">Add a cover photo</label>
                     <p>Make your event stand out with a cover photo.</p>
                 </div>
 
@@ -50,28 +50,42 @@
                 <div class="event-fields-grid">
                     <!-- Event name -->
                     <div class="logistic">
-                        <label for="title" class="required">Event name</label>
+                        <label for="name" class="required">Event name</label>
                         <input
                             type="text"
-                            id="title"
-                            name="title"
+                            id="name"
+                            name="name"
                             placeholder="Give your event a name"
                             required
                         >
                     </div>
 
-                    <!-- Event date -->
-                    <div class="logistic">
-                        <label for="date" class="required">Event date</label>
-                        <input
-                            type="date"
-                            id="date"
-                            name="date"
-                        >
+                    <!-- Event dates -->
+                    <div class="event-date-fields">
+                        <!-- Start date -->
+                        <div class="logistic">
+                            <label for="start_date" class="required">Start date</label>
+                            <input
+                                type="date"
+                                id="start_date"
+                                name="start_date"
+                            >
+                        </div>
+                        <!-- End date -->
+                        <div class="end-date logistic" hidden>
+                            <label for="end_date" class="required">End date</label>
+                            <input 
+                                type="date"
+                                id="end_date"
+                                name="end_date"
+                            >
+                        </div>
                     </div>
+                    
 
                     <!-- Event duration -->
                     <div class="event-time-fields">
+                        <!-- Start time-->
                         <div class="logistic">
                             <label for="start_time" class="required">Start time</label>
                             <input
@@ -81,7 +95,8 @@
                             >
                         </div>
 
-                        <div class="logistic">
+                        <!-- End time -->
+                        <div class="end-time logistic" hidden>
                             <label for="end_time">End time</label>
                             <input
                                 type="time"
@@ -91,6 +106,14 @@
                         </div>
                     </div>
                 </div>
+
+                <c-ui.button
+                    class="showEndDate"
+                    type="button"
+                    onclick="showEndDate()"
+                >
+                    Add end time
+                </c-ui.button>
 
                 <!-- Location -->
                 <div class="logistic event-location">
@@ -118,10 +141,10 @@
 
                 <!-- Additional details -->
                 <div class="logistic event-details">
-                    <label for="details">Additional details</label>
+                    <label for="body">Additional details</label>
                     <textarea
-                        id="details"
-                        name="details"
+                        id="body"
+                        name="body"
                         rows="5"
                         placeholder="Tell people more about your event..."
                     ></textarea>
