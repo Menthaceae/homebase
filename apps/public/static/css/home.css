@@ -7,7 +7,7 @@
     GRID
     =================================== */
 
-/* ── Right Grid ── */
+/* ── Right panel ── */
 
 .right-panel {
     display: grid;
@@ -30,7 +30,7 @@
 
 
 
-/* ── Right Grid ── */
+/* ── Left panel ── */
 
 
 .left-panel {

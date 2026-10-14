@@ -6,7 +6,8 @@
 
 {% block content %}
 <c-layout>
-    <div class="grid grid-cols-3 md:grid-cols-4 gap-2">
+    
+    <div class="grid grid-cols-3 md:grid-cols-4 gap-2 items-start">
 
         <!-- Left Panel -->
         <div class="left-panel col-span-1">
@@ -55,9 +56,8 @@
             </c-ui.card>
         </div>
 
-        <!-- Posts -->
-         
-        <div class="center-panel col-span-2 gap-15">
+        <!-- Center panel -->
+        <div class="center-panel col-span-2">
             <div class="posts">
                 <div class="filters">
                     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" data-post-filter="all">All</button>
@@ -73,8 +73,6 @@
                 <c-post title={{post.title}} img-url={{post.image}} content={{post.body}} author={{post.author}} />
             </div>
             {% endfor %}
-            <!-- Generate posts here -->
-
         </div>
 
         <!-- Right Panel-->
@@ -95,7 +93,6 @@
             </c-ui.card>
         </div>
     </div>
-</div>
 
 <!-- Components -->
 <c-post-create />
