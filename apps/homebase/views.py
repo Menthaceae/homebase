@@ -205,22 +205,15 @@ def count_all_managed_tenants(user):
             tenant_count += rentals.count()
     return tenant_count
 
-def count_all_managed_properties(user):
-    managed_properties = SubProperty.objects.filter(managed_by=user)
-    return managed_properties.count()
-
-def count_all_owned_properties(user):
-    owned_properties = OwnedProperty.objects.filter(owners=user)
-    return owned_properties.count()
-
 
 # GET homebase/dashboard/property-manager/
 @login_required
 def property_manager_dashboard(request):
     user = request.user
     tenants_count = count_all_managed_tenants(user)
-    properties_count = count_all_managed_properties(user)
     managed_homebases = Homebase.objects.filter(managers=user)
+    properties_count = managed_homebases.count()
+    
     context = {
         "tenants_count": tenants_count,
         "properties_count": properties_count,
@@ -230,25 +223,21 @@ def property_manager_dashboard(request):
 
 
 #GET homebase/dashboard/owner/
-# @login_required
+@login_required
 def owner_dashboard(request):
     user = request.user
-    properties_count = count_all_owned_properties(user)
     owned_properties = OwnedProperty.objects.filter(owners=user)
-    rentals = []
+    properties_count = owned_properties.count()
 
+    rentals = []
     for property in owned_properties:
         rentals.append(property.rental_set)
-
-
-    # Rental(subproperty=SubProperty.objects.get(id=100), rent=1000, start_date="2023-01-01", end_date="2023-12-31", occupied=True)
 
     context = {
         "properties_count": properties_count,
         "owned_properties": owned_properties,
-        "rentals": [rentals],
-        "rentals_count": rentals.count(any)
+        "rentals_count": len(rentals),
+        "rentals": rentals
     }
-
     return render(request, 'ownerDb.html', context)
 
