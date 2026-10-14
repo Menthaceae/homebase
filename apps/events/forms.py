@@ -11,7 +11,7 @@ class EventCreationForm(ModelForm):
             'start_time',
             'end_time',
             'location',
-            'details',
+            'body',
             'image',
             'post_to',
         ]
