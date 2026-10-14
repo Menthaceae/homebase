@@ -4,10 +4,15 @@
 
 :root {
     --card-background-color: #194c47;
+    --navbar-height: 64px;
 }
 
 body {
     background-color: #FAF8F5;
+}
+
+.web-content {
+    margin-top: calc(var(--navbar-height) + 10px);
 }
 
 /* ----- Navbar ----- */
@@ -16,6 +21,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--navbar-height);
+    z-index: 1000;
+
     padding: 10px;
     background-color: white;
 
