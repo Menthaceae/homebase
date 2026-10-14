@@ -77,6 +77,20 @@
     gap: 18px 16px;
 }
 
+/* Event name spans the entire row */
+.event-fields-grid > .logistic:first-child {
+    grid-column: 1 / -1;
+}
+
+/* Date and time sections each occupy one column */
+.event-date-fields,
+.event-time-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px 16px;
+}
+
+
 /* Individual fields */
 .logistic {
     display: flex;
@@ -84,6 +98,7 @@
     gap: 8px;
     min-width: 0;
 }
+
 
 .logistic label {
     color: #374151;
@@ -192,5 +207,221 @@
 
     .event-form-footer {
         flex-wrap: wrap;
+    }
+}
+
+/* =======================
+    VIEW EVENTS PAGE
+   ======================= */
+
+.all-events-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.create-events-btn {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.load-events {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+#create-event-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    margin: 0;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+#create-event-modal::backdrop {
+    background: rgb(0 0 0 / 30%);
+}
+
+
+/* ------ Load events ----- */
+
+
+/* Responsive event card grid */
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    align-items: stretch;
+}
+
+/* Card */
+.event-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    padding: 0 !important;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 0 3px 12px rgb(15 23 42 / 5%);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgb(15 23 42 / 10%);
+}
+
+/* Banner */
+.event-card-banner {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+    background: #f3f4f6;
+}
+
+.event-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.event-card-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+    color: #6366f1;
+    font-size: 42px;
+}
+
+/* Visibility badge */
+.event-card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 92%);
+    color: #374151;
+    font-size: 11px;
+    font-weight: 650;
+    text-transform: capitalize;
+}
+
+/* Content */
+.event-card-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 13px;
+    padding: 18px;
+    min-width: 0;
+}
+
+.event-card-title {
+    margin: 0;
+    color: #111827;
+    font-size: 18px;
+    line-height: 1.35;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.event-card-detail {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    color: #4b5563;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.event-card-detail i {
+    flex-shrink: 0;
+    color: #6366f1;
+    font-size: 17px;
+}
+
+.event-card-description {
+    margin: 0;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.event-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.event-card-author {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.event-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #4f46e5;
+    font-size: 13px;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.event-card-link:hover {
+    color: #3730a3;
+}
+
+/* Empty state */
+.events-empty {
+    grid-column: 1 / -1;
+    padding: 56px 20px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.events-empty > i {
+    font-size: 42px;
+    color: #9ca3af;
+}
+
+.events-empty h3 {
+    margin: 12px 0 6px;
+    color: #111827;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.events-empty p {
+    margin: 0;
+    font-size: 14px;
+}
+
+@media (max-width: 640px) {
+    .events-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 }

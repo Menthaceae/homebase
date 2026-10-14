@@ -5,7 +5,7 @@
     class="w-full max-w-lg rounded-xl p-0 shadow-xl"
 >
     <div class="event-modal-content">
-        <form method="POST" action="" class="event-form">
+        <form method="POST" action="#" class="event-form">
             {% csrf_token %}
 
             <!-- Author -->
@@ -107,13 +107,12 @@
                     </div>
                 </div>
 
-                <c-ui.button
-                    class="showEndDate"
-                    type="button"
-                    onclick="showEndDate()"
-                >
-                    Add end time
-                </c-ui.button>
+                <div class="flex items-center gap-3">
+                    <c-ui.switch
+                        id="add-end-time"
+                    />
+                    <span class="text-sm text-ink-700 dark:text-ink-300">Add end time</span>
+                </div>
 
                 <!-- Location -->
                 <div class="logistic event-location">
@@ -170,3 +169,7 @@
 </dialog>
 
 <c-post-create />
+
+{% block custom_js %}
+<script src="{% static 'events/js/events.js' %}"></script>
+{% endblock %}
