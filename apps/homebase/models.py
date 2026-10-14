@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from apps.users.models import Manager, Owner, Tenant
 
 classification_choices = (
     ("rented", "rented"),
@@ -14,7 +13,7 @@ status_choices = (
 
 class Homebase(models.Model):
     id = models.AutoField(primary_key=True)
-    managers = models.ManyToManyField(Manager)
+    managers = models.ManyToManyField(User, related_name='managers')
     users = models.ManyToManyField(User)
     bio = models.TextField(blank=True)
     street_address = models.CharField()
@@ -47,5 +46,5 @@ class Rental(models.Model):
     end_date = models.DateField(blank=True, null=True)
     rent = models.FloatField()
     tenant = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-    occupied = models.BooleanField(default=False)
+    occupied = models.BooleanField(default=False, blank=True)
     owned_property = models.ForeignKey(OwnedProperty, on_delete=models.SET_NULL, null=True, blank=True)

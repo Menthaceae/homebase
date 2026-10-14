@@ -7,30 +7,72 @@ from apps.public.views import invite_user
 from apps.users.models import Owner, Tenant
 from .models import Homebase, OwnedProperty, Rental, SubProperty
 from .forms import HomebaseCreationForm, RentalCreationForm, SubPropertyCreationForm
+from django.contrib.auth.models import User
 from django.shortcuts import redirect
+from django.shortcuts import render
+from django.http import HttpResponse
+
+from apps.posts import views as Posts
+from apps.users.models import *
+from apps.public.views import *
+from .models import *
+from .forms import *
+
+
+"""
+Begin Homebase authentication logic and stuff
+"""
+
+
+def code_is_valid(code):
+    if (code == code):
+        return True
+
+
+def in_homebase(user, homebase):
+    return homebase.users.contains(user)
+
+
+def manages(user, homebase):
+    return homebase.managers.contains(user)
+
+
+def owns(user, owned_property):
+    return owned_property.users.contains(user)
+
+
+def rents(user, rental):
+    return rental.users.contains(user)
+
+
+"""
+End Homebase authentication logic and stuff
+"""
 
 
 # GET homebase/<id>/
 def home(request, homebase_id):
     homebase = Homebase.objects.get(id=homebase_id)
-    if (user_in_homebase(request.user, homebase)):
+    authorized = in_homebase(request.user, homebase)
+    if (authorized):
         homebase_posts = Posts.get_homebase_posts(homebase_id)
         context = {
             "homebase_posts": homebase_posts,
             "homebase": homebase
         }
         return render(request, 'homebase.html', context)
+    else:
+        return HttpResponse("Not authorzied")
 
 
-def user_in_homebase(user, homebase):
-    return user.homebase_set.contains(homebase)
-
+# Eventually I will make a thing where it will go to your default Homebase or something
 def hombaseHome(request):
     posts = Posts.get_homebase_posts(homebase_id=2)
     context = {
         "posts": posts
     }
     return render(request, 'homebase.html', context)
+
 
 def manage_homebase(request, homebase_id):
     homebase = Homebase.objects.get(id=homebase_id)
@@ -112,6 +154,7 @@ def manage_homebase(request, homebase_id):
     }
     return render(request, 'manage.html', context)
 
+
 # POST homebase/create/
 def create(request):
     error_message = None
@@ -141,23 +184,25 @@ def join(request, homebase_id, code):
         return home(request, homebase_id)
 
 
-def code_is_valid(code):
-    if (code == code):
-        return True
-
-
 # GET homebase/join/
 def join_page(request):
     return render(request, 'joinhomebase.html')
 
 
 # GET homebase/dashboard/<homebase_id>/
-def dashboard(request):
-    return render(request, 'propertyManagerDb.html')
+def dashboard(request, homebase_id):
+    homebase = Homebase.objects.get(id=homebase_id)
+    authorized = (in_homebase(request.user, homebase) and manages(request.user, homebase))
+    if (authorized):
+        return render(request, 'propertyManagerDb.html')
+    else:
+        return HttpResponse("Not authorized")
 
+    
 def owner_dashboard(request):
     rentalProperties = Rental(subproperty=SubProperty.objects.get(id=100), rent=1000, start_date="2023-01-01", end_date="2023-12-31", occupied=True )
     context = {
         "rentalProperties": [rentalProperties]
     }
     return render(request, 'ownerDb.html', context)
+

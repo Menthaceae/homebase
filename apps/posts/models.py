@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 from apps.homebase.models import Homebase
+
 
 class Post(models.Model):
     #("Key", "Value")
@@ -27,6 +29,7 @@ class Post(models.Model):
     deleted = models.BooleanField(default=False, blank=True)
     likes = models.IntegerField(default=0, blank=True)
 
+
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     parent_post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -36,3 +39,5 @@ class Comment(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True, blank=True)
     likes = models.IntegerField(default=0, blank=True)
+
+    
