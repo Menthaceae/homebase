@@ -1,4 +1,11 @@
 from django.contrib import admin
-from .models import Homebase
+from .models import *
 
-admin.site.register(Homebase)
+models = (
+    Homebase,
+    SubProperty,
+    OwnedProperty,
+    Rental,
+)
+
+admin.site.register(models)

@@ -1,32 +1,52 @@
-<c-vars
-    title=""
-    img-url=""
-    content=""
-    author=""
-/>
-
-<c-ui.card class="p-4 flex-1">
+{% for post in posts %}
+  <c-ui.card class="p-4 flex-1">
+    <!-- Header -->
     <div class="flex flex-row items-center gap-2 mb-4">
-        <c-ui.avatar size="sm"></c-ui.avatar>
-        <span class="text-sm font-semibold">{{ author }}</span>
+      <c-ui.avatar name="{{ post.author }}" size="sm" />
+      <span class="text-sm font-semibold">{{ post.author }}</span>
     </div>
-    <div>
-        {% if img_url %}
-            <img src="{{ img_url }}" alt="Post Image" class="w-full h-auto mb-4 rounded">
-        {% endif %}
+
+    <!-- Media -->
+    {% if post.image %}
+      <div class="mb-4">
+        <img 
+          src="{{ post.image.url }}" 
+          alt="{{ post.title }}" 
+          class="w-full h-auto rounded object-cover" />
+      </div>
+    {% endif %}
+
+    <!-- Content -->
+    <h3 class="text-lg font-semibold mb-2">{{ post.title }}</h3>
+    <p class="text-sm text-gray-700">{{ post.body }}</p>
+
+    <!-- Actions -->
+    <div class="mt-4 flex flex-row items-center gap-2">
+      <!-- Like Toggle via Alpine -->
+      <div x-data="{ liked: false }">
+        <c-ui.button 
+          @click="liked = !liked" 
+          type="button"
+          class="rounded-full flex items-center justify-center">
+          <span x-show="liked" class="text-red-500">
+            <c-tablericon.heart variant="filled" class="size-5" />
+          </span>
+          <span x-show="!liked">
+            <c-tablericon.heart class="size-5" />
+          </span>
+        </c-ui.button>
+      </div>
+
+      <!-- Comment & Share Links -->
+      <c-ui.button href="/comment" class="rounded-full">
+        <c-tablericon.message-circle class="size-5" />
+      </c-ui.button>
+
+      <c-ui.button href="/share" class="rounded-full">
+        <c-tablericon.share-3 class="size-5" />
+      </c-ui.button>
     </div>
-    <p class="text-lg font-semibold mb-2">{{ title }}</p>
-    <p class="text-sm">{{ content }}</p>
-    <div class="mt-4 flex flex-row gap-2">
-        <div x-data="{ liked: false }" class="flex flex-row gap-2">
-            <span x-show="liked">
-            <c-ui.button @click="liked = !liked" label="Like" class="rounded-full" ><c-tablericon.heart variant="filled" class="size-5" /></c-ui.button>
-            </span>
-            <span x-show="!liked">
-            <c-ui.button @click="liked = !liked" class="rounded-full" ><c-tablericon.heart  class="size-5" /></c-ui.button>
-            </span>
-        </div>
-        <c-ui.button label="Comment" href="/comment" class="rounded-full" ><c-tablericon.message-circle class="size-5" /></c-ui.button>
-        <c-ui.button label="Share" href="/share" class="rounded-full" ><c-tablericon.share-3 class="size-5" /></c-ui.button>
-    </div>
-</c-ui.card>
+  </c-ui.card>
+{% empty %}
+  <p class="text-gray-500 text-center py-4">No posts available.</p>
+{% endfor %}

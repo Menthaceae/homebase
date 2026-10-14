@@ -1,92 +1,138 @@
 <c-layout>
-    <div>
-        <h1 class="text-2xl font-bold mb-4">Create a New Homebase</h1>
-        <p class="mb-6">Fill out the form below to create a new homebase. Please provide accurate information to ensure a smooth setup process.</p>
-    </div>
-    
-    <c-ui.card class="w-full p-8 shadow-sm">
-        <form action="/homebase/create/" method="POST" class="space-y-4">
-            {% csrf_token %}
-                <div class="mb-4">
-                    <c-ui.input 
-                        label="Homebase Name" 
-                        name="name" 
-                        type="text" 
-                        value="{{ form.name.value|default_if_none:'' }}" 
-                        required 
-                    />
+    <div class="max-w-4xl mx-auto py-8">
+        <!-- Header Section -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Create a New Homebase</h1>
+            <p class="text-sm text-gray-500 mt-1">Set up your property profile by entering the core details and location below.</p>
+        </div>
+        
+        <c-ui.card class="p-8 shadow-sm rounded-xl border border-gray-150">
+            <form action="/homebase/create/" method="POST" class="space-y-8">
+                {% csrf_token %}
+
+                <!-- Section 1: General Information -->
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900">Basic Information</h2>
+                    <p class="text-xs text-gray-500 mb-4">Identify your complex and add visual branding.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 py-3">
+                        <div class="md:col-span-2">
+                            <c-ui.input 
+                                label="Homebase Name" 
+                                name="name" 
+                                type="text" 
+                                placeholder="e.g., Oakridge Heights Complex"
+                                value="{{ form.name.value|default_if_none:'' }}" 
+                                required 
+                            />
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <c-ui.input 
+                                label="Banner Image URL" 
+                                name="banner" 
+                                type="url" 
+                                placeholder="https://example.com/images/complex-banner.jpg"
+                                value="{{ form.banner.value|default_if_none:'' }}" 
+                                required
+                            />
+                        </div>
+
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Description / Bio</label>
+                            <textarea 
+                                name="bio" 
+                                rows="3" 
+                                placeholder="Brief overview of the property, community amenities, or management guidelines..."
+                                class="w-full rounded-md border border-gray-300 p-2.5 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                                required>{{ form.bio.value|default_if_none:'' }}</textarea>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <c-ui.input 
-                        label="Street Address" 
-                        name="street_address" 
-                        type="text" 
-                        value="{{ form.street_address.value|default_if_none:'' }}"
-                        required 
-                    />
+
+                
+
+                <!-- Section 2: Address & Location -->
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900">Location Details</h2>
+                    <p class="text-xs text-gray-500 mb-4">Provide the physical address for navigation and local compliance.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4 py-3">
+                        <div class="md:col-span-6">
+                            <c-ui.input 
+                                label="Street Address" 
+                                name="street_address" 
+                                type="text" 
+                                placeholder="1234 Main St, Suite 100"
+                                value="{{ form.street_address.value|default_if_none:'' }}" 
+                                required 
+                            />
+                        </div>
+
+                        <div class="md:col-span-3">
+                            <c-ui.input 
+                                label="City" 
+                                name="city" 
+                                type="text" 
+                                placeholder="Dallas"
+                                value="{{ form.city.value|default_if_none:'' }}" 
+                                required 
+                            />
+                        </div>
+
+                        <div class="md:col-span-3">
+                            <c-ui.input 
+                                label="State / Province" 
+                                name="state" 
+                                type="text" 
+                                placeholder="TX"
+                                value="{{ form.state.value|default_if_none:'' }}" 
+                                required
+                            />
+                        </div>
+
+                        <div class="md:col-span-3">
+                            <c-ui.input 
+                                label="Postal / Zip Code" 
+                                name="zipcode" 
+                                type="text" 
+                                placeholder="75001"
+                                value="{{ form.zipcode.value|default_if_none:'' }}" 
+                                required
+                            />
+                        </div>
+
+                        <div class="md:col-span-3">
+                            <c-ui.input 
+                                label="Country" 
+                                name="country" 
+                                type="text" 
+                                placeholder="United States"
+                                value="{{ form.country.value|default_if_none:'' }}" 
+                                required 
+                            />
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <c-ui.input 
-                        label="City Name" 
-                        name="city" 
-                        type="text"
-                        value="{{ form.city.value|default_if_none:'' }}"
-                        required 
-                    />
-                </div>
-                <div class="mb-4">
-                    <c-ui.input 
-                        label="State" 
-                        name="state" 
-                        type="text" 
-                        value="{{ form.state.value|default_if_none:'' }}"
-                        required
-                    />
-                </div>
-                <div class="mb-4">
-                    <c-ui.input 
-                        label="Zip Code" 
-                        name="zipcode" 
-                        type="text" 
-                        value="{{ form.zipcode.value|default_if_none:'' }}"
-                        required
-                    />
-                </div>
-                <div class="mb-4">
-                    <c-ui.input 
-                        label="Country" 
-                        name="country" 
-                        type="text"
-                        value="{{ form.country.value|default_if_none:'' }}"
-                        required 
-                    />
-                </div>
-                <div class="mb-4">
-                    <c-ui.input 
-                        label="Bio" 
-                        name="bio" 
-                        type="text" 
-                        value="{{ form.bio.value|default_if_none:'' }}"
-                        required
-                    />
-                </div>
-                <div class="mb-4">
-                    <c-ui.input 
-                        label="Banner Image url" 
-                        name="banner" 
-                        type="text" 
-                        value="{{ form.banner.value|default_if_none:'' }}"
-                        required
-                    />
-                </div>
+
+                <!-- Error Messages -->
                 {% if error_message %}
                     <div>
-                        <c-ui.alert type="info" class="mb-4">
+                        <c-ui.alert type="error" class="mb-4">
                             {{ error_message }}
                         </c-ui.alert>
                     </div>
                 {% endif %}
-                <c-ui.button type="submit" variant="primary">Create Homebase</c-ui.button>
-        </form>
-    </c-ui.card>
+
+                <!-- Action Footer -->
+                <c-ui.button href="/" variant="default" class="mr-4">
+                        Cancel
+                </c-ui.button> 
+                    <c-ui.button type="submit" variant="primary">
+                        Create Homebase
+                    </c-ui.button>
+                </div>
+            </form>
+        </c-ui.card>
+    </div>
 </c-layout>

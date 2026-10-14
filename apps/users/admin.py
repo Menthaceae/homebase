@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import Profile
+from .models import *
 
-# Register your models here.
-admin.site.register(Profile)
+models = (
+    Profile,
+    Manager,
+    Owner,
+    Tenant
+)
+
+admin.site.register(models)

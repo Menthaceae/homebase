@@ -1,0 +1,9 @@
+<c-vars owned_subproperties/>
+
+{% for owned in owned_subproperties %}
+    <tr>
+        <td><b>{{ owned.subproperty.room_number }}</b></td>
+        <td>{% if owned.owners.first %}{{ owned.owners.first.user.first_name }} {{ owned.owners.first.user.last_name }}{% else %}-{% endif %}</td>
+        <td>{{ owned.start_date }}</td>
+    </tr>
+{% endfor %}

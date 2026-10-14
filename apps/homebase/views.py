@@ -1,31 +1,91 @@
+from django.db import transaction
 from django.shortcuts import render
 from apps.posts import views as Posts
-from .models import Homebase
+from apps.public.views import invite_user
+from apps.users.models import Owner, Tenant
+from .models import Homebase, OwnedProperty, Rental
 from django.contrib.auth.models import User
-from .forms import HomebaseCreationForm
+from .forms import HomebaseCreationForm, RentalCreationForm, SubPropertyCreationForm
 from django.shortcuts import redirect
 
 
-# GET homebase/
+# GET homebase/<id>/
 def home(request, homebase_id):
     homebase = Homebase.objects.get(id=homebase_id)
-    homebase_posts = Posts.get_homebase_posts(homebase_id)
-
-    if (authorize_user(request.user, homebase)):
+    if (user_in_homebase(request.user, homebase)):
+        homebase_posts = Posts.get_homebase_posts(homebase_id)
         context = {
             "homebase_posts": homebase_posts,
             "homebase": homebase
         }
-        return render(request, 'testhomebase.html', context)
+        return render(request, 'homebase.html', context)
+
+
+def user_in_homebase(user, homebase):
+    return user.homebase_set.contains(homebase)
 
 def hombaseHome(request):
-    return render(request, 'homebase.html')
+    posts = Posts.get_homebase_posts(homebase_id=2)
+    context = {
+        "posts": posts
+    }
+    return render(request, 'homebase.html', context)
 
-def authorize_user(user, homebase):
-    return True
+def manage_homebase(request, homebase_id):
+    homebase = Homebase.objects.get(id=homebase_id)
+    subproperties_count = homebase.subproperty_set.all().count()
+    rented_subproperties_count = Rental.objects.filter(subproperty__homebase=homebase, occupied=True).count()
+    owned_subproperties_count = OwnedProperty.objects.filter(subproperty__homebase=homebase).count()
+    rented_subproperties = Rental.objects.filter(subproperty__homebase=homebase, occupied=True)
+    owned_subproperties = OwnedProperty.objects.filter(subproperty__homebase=homebase)
+
+    if request.method == 'POST':
+        sub_form = SubPropertyCreationForm(request.POST)
+        rental_form = RentalCreationForm(request.POST)
+        owned_email = request.POST.get('owners_email')
+        tenant_email = request.POST.get('tenant')
+
+        with transaction.atomic():
+            if sub_form.is_valid():
+                subproperty = sub_form.save(commit=False)
+                subproperty.homebase = homebase
+                subproperty.save()
+
+            if rental_form.is_valid():
+                if tenant_email is not None and tenant_email != '':
+                    user = invite_user(tenant_email, request)
+                    tenant = Tenant.objects.create(tenant=user)
+                    rental.tenant = tenant
+                rental = rental_form.save(commit=False)
+                rental.subproperty = subproperty
+                subproperty.managed_by.add(request.user)
+                rental.save()
+
+            if owned_email:
+                user = invite_user(owned_email, request)
+                owner = Owner.objects.create(owner=user)
+                owned_property = OwnedProperty.objects.create(subproperty=subproperty)
+                owned_property.owners.add(owner)
+                subproperty.managed_by.add(user)
+
+            return redirect('manage_homebase', homebase_id=homebase.id)
+    else:
+        sub_form = SubPropertyCreationForm()
+        rental_form = RentalCreationForm()
+
+    context = {
+        "sub_form": sub_form,
+        "rental_form": rental_form,
+        "homebase": homebase,
+        "rental_subproperties": rented_subproperties,
+        "owned_subproperties": owned_subproperties,
+        "subproperties_count": subproperties_count,
+        "rented_subproperties_count": rented_subproperties_count,
+        "owned_subproperties_count": owned_subproperties_count
+    }
+    return render(request, 'manage.html', context)
 
 # POST homebase/create/
-# Homebase creation logic
 def create(request):
     error_message = None
     if request.method == 'POST':
@@ -36,26 +96,34 @@ def create(request):
             return redirect('/homebase')
         error_message = form.errors.as_text()
     else:
-        form = HomebaseCreationForm()           
-    return render(request, 'createhomebase.html', {"form": form, "error_message": error_message })
+        form = HomebaseCreationForm()
+    context = {
+        "form": form,
+        "error_message": error_message
+    }               
+    return render(request, 'createhomebase.html', context)
+
 
 # GET homebase/join/<homebase_id>/<code>/
-# User gets link from property manager.
-# User clicks on link.
-# If the user is logged in and the code is valid, then they join the homebase.
 def join(request, homebase_id, code):
-    if (validate_code(code)):
+    if (code_is_valid(code)):
         user = request.user
         homebase = Homebase.objects.get(id=homebase_id)
         homebase.users.add(user)
         homebase.save()
         return home(request, homebase_id)
 
-def validate_code(code):
+
+def code_is_valid(code):
     if (code == code):
         return True
 
+
+# GET homebase/join/
 def join_page(request):
-    return render(request, 'joinhomebase.html')        
+    return render(request, 'joinhomebase.html')
+
+
+# GET homebase/dashboard/<homebase_id>/
 def dashboard(request):
     return render(request, 'dashboard.html')
