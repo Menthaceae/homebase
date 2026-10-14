@@ -40,7 +40,7 @@ def create(request):
             post.save()
 
             messages.success(request, "Post creation successful")
-            return redirect(' ')
+            return redirect('')
         else:
             print(form.errors)
             messages.error(request, "Your post could not be created. Please check the form.")
