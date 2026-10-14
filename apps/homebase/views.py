@@ -188,16 +188,19 @@ def join(request, homebase_id, code):
 def join_page(request):
     return render(request, 'joinhomebase.html')
 
-
+"""
 # GET homebase/dashboard/<homebase_id>/
-def dashboard(request, homebase_id):
+def dashboard(request):
     homebase = Homebase.objects.get(id=homebase_id)
     authorized = (in_homebase(request.user, homebase) and manages(request.user, homebase))
     if (authorized):
         return render(request, 'propertyManagerDb.html')
     else:
         return HttpResponse("Not authorized")
+"""
 
+def dashboard(request):
+    return render(request, 'propertyManagerDb.html')
     
 def owner_dashboard(request):
     rentalProperties = Rental(subproperty=SubProperty.objects.get(id=100), rent=1000, start_date="2023-01-01", end_date="2023-12-31", occupied=True )
