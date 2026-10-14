@@ -15,8 +15,8 @@ class Event(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField()
 
-    start_date = models.DateField(default=timezone.localdate)
-    start_time = models.TimeField(auto_now=timezone.localtime)
+    start_date = models.DateField()
+    start_time = models.TimeField()
 
 
     end_date = models.DateField(null=True, blank=True)
