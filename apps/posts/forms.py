@@ -7,13 +7,21 @@ from .models import *
 class PostCreationForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'body', 'category', 'post_to', 'image']
-
-
+        fields = [
+            'body',
+            'image',
+            'post_to',
+            'homebase',
+            'likes',
+            ]
 class PostUpdateForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['id', 'title', 'body', 'category', 'post_to', 'image']    # I.D. needs to be hidden in the form
+        fields = [
+            'id', 
+            'body', 
+            'image',
+            ] 
 
 
 # Parent comment and parent post need to be hidden. I think you should be able to insert the object in the front end in the form.

@@ -1,0 +1,175 @@
+{% load static %}
+<!-- Form: Create event-->
+<dialog
+    id="create-event-modal"
+    class="w-full max-w-lg rounded-xl p-0 shadow-xl"
+>
+    <div class="event-modal-content">
+        <form method="POST" action="#" class="event-form">
+            {% csrf_token %}
+
+            <!-- Author -->
+            <input
+                type="hidden"
+                id="author"
+                name="author"
+                value="{{ user }}"
+            >
+
+            <!-- Cover image -->
+            <div class="image-uploader">
+                <div class="image-uploader-icon">
+                    <i class="icons ti ti-photo-search"></i>
+                </div>
+
+                <div class="image-uploader-text">
+                    <label for="image">Add a cover photo</label>
+                    <p>Make your event stand out with a cover photo.</p>
+                </div>
+
+                <div class="image-input">
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        hidden
+                    >
+
+                    <c-ui.button
+                        type="button"
+                        onclick="document.getElementById('image').click()"
+                    >
+                        Upload image
+                    </c-ui.button>
+                </div>
+            </div>
+
+            <div class="event-logistics">
+                <h3 class="event-section-title">Event information</h3>
+
+                <div class="event-fields-grid">
+                    <!-- Event name -->
+                    <div class="logistic">
+                        <label for="name" class="required">Event name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Give your event a name"
+                            required
+                        >
+                    </div>
+
+                    <!-- Event dates -->
+                    <div class="event-date-fields">
+                        <!-- Start date -->
+                        <div class="logistic">
+                            <label for="start_date" class="required">Start date</label>
+                            <input
+                                type="date"
+                                id="start_date"
+                                name="start_date"
+                            >
+                        </div>
+                        <!-- End date -->
+                        <div class="end-date logistic" hidden>
+                            <label for="end_date" class="required">End date</label>
+                            <input 
+                                type="date"
+                                id="end_date"
+                                name="end_date"
+                            >
+                        </div>
+                    </div>
+                    
+
+                    <!-- Event duration -->
+                    <div class="event-time-fields">
+                        <!-- Start time-->
+                        <div class="logistic">
+                            <label for="start_time" class="required">Start time</label>
+                            <input
+                                type="time"
+                                id="start_time"
+                                name="start_time"
+                            >
+                        </div>
+
+                        <!-- End time -->
+                        <div class="end-time logistic" hidden>
+                            <label for="end_time">End time</label>
+                            <input
+                                type="time"
+                                id="end_time"
+                                name="end_time"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <c-ui.switch
+                        id="add-end-time"
+                    />
+                    <span class="text-sm text-ink-700 dark:text-ink-300">Add end time</span>
+                </div>
+
+                <!-- Location -->
+                <div class="logistic event-location">
+                    <label for="location" class="required">Location</label>
+                    <input
+                        class="logistic-input"
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="Enter a location or video link"
+                    >
+                </div>
+
+                <!-- Post to -->
+                <div class="logistic event-post-to">
+                    <label for="post_to" class="required">Post to</label>
+                    <select id="post_to" name="post_to">
+                        <option value="public">Public</option>
+                        <!-- TODO: Check if user has homebase -->
+                        <!-- TODO: Select which homebase to post to -->
+                        <option value="public">Homebase</option>
+                        <option value="public">Nearby</option>
+                    </select>
+                </div>
+
+                <!-- Additional details -->
+                <div class="logistic event-details">
+                    <label for="body">Additional details</label>
+                    <textarea
+                        id="body"
+                        name="body"
+                        rows="5"
+                        placeholder="Tell people more about your event..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="event-form-footer">
+                <c-ui.button
+                    type="button"
+                    onclick="document.getElementById('create-event-modal').close()"
+                >
+                    Cancel
+                </c-ui.button>
+
+                <c-ui.button type="submit">
+                    Create event
+                </c-ui.button>
+            </div>
+        </form>
+    </div>
+
+</dialog>
+
+<c-post-create />
+
+{% block custom_js %}
+<script src="{% static 'events/js/events.js' %}"></script>
+{% endblock %}

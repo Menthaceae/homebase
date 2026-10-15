@@ -1,0 +1,144 @@
+/* ===================================
+    POST-CREATE
+    =================================== */
+.post-modal-content {
+    padding: 20px;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.close-dialog {
+    font-size: 24px;
+}
+
+.left-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.post-content {
+    border: none;
+    outline: none;
+    resize: none;
+}
+
+.more-options {
+    display: flex;
+    flex-direction: column;
+
+    padding-top: 20px;
+}
+
+/* ----- Custom button css ----- */
+
+.more-btns {
+    display: flex;
+    flex-direction: row;
+    padding-top: 20px;
+    gap: 10px;
+}
+
+/* ----- Footer ----- */
+
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ----- User Profile Information ----- */
+
+.user-info {
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+}
+
+.profile-picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.sub-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* ----- Icons ----- */
+
+.icons {
+    font-size: 18px;
+}
+
+/* ===================================
+    POST TO
+    =================================== */
+
+#post-to-modal {
+    padding: 10px;
+    width: 350px;
+    height: 200px;
+    overflow-y: scroll;
+    overflow-x: none;
+}
+
+.option-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    gap: 10px;
+    width: 100%;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.post-to-option {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+.destination-info {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.destination-descr {
+    display: flex;
+    flex-direction: column;
+
+    width: 300px;
+}
+
+.descr-icon {
+    align-self: auto;
+    font-size: 28px;
+}
+
+.selected {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ti-check {
+    font-size: 18px;
+}

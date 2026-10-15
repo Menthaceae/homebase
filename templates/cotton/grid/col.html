@@ -1,0 +1,7 @@
+<!-- 
+  The column component wraps content slot and appends 
+  any classes passed directly from the parent template 
+-->
+<div class="{{ attrs.class|default:'' }}" {{ attrs }}>
+    {{ slot }}
+</div>
