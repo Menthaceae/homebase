@@ -23,6 +23,8 @@
 </head>
 <body>
 
+    <c-vars :hide_content_container="False" />
+
     <!--Reusable Cotton components -->
     <c-appbar :is-logged-in="False" username="" avatar-url="" />
     <div>
@@ -30,15 +32,18 @@
     </div>
 
     <!-- Webpage content -->
+    {% if not hide_content_container %}
     <div class="web-content p-4">
         {{ slot }}
     </div>
+    
+   
 
     <main>
         {% block content %}
         {% endblock %}
     </main>
-
+{% endif %}
     <!-- Global js -->
     <script src="{% static 'posts/js/posts.js' %}"></script>
 

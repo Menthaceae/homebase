@@ -1,0 +1,45 @@
+{% load static %}
+<c-layout :hide_content_container="True">
+    <c-slot name="banner">
+    <div class="relative w-full flex items-center justify-center overflow-hidden bg-no-repeat bg-center" style="background-image: url({% static 'images/hero-bg.jpg' %});height: calc(100vh - var(--navbar-height));margin-top: var(--navbar-height);background-size: 100% auto;">
+
+    <!-- Gradient Overlay (Ensures text contrast, sits between image and text) -->
+    <div class="absolute inset-0 z-1 bg=linear-to-b from-black/85 via-black/70 to-black/90 backdrop-blur-[2px]0 backdrop-blur-[2px]"></div>
+    <c-ui.card class="relative z-10 max-w-3xl mx-auto px-6 py-12 sm:py-16 text-center bg-gray-50/70 border border-accent/20 backdrop-blur-sm shadow-lg rounded-3xl">
+    <!-- Content & Buttons (Inside the container, elevated above the image and scrim) -->
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center text-accent">
+        <span class="inline-block px-3 py-1 mb-4 text-md font-semibold tracking-wider uppercase bg-accent/15 border border-accent/30 rounded-full text-accent-content">
+        Apartment Management Platform
+        </span>
+
+        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight drop-shadow-md text-accent-content">
+        Welcome to Homebase
+        </h1>
+
+        <p class="mt-4 text-lg sm:text-xl text-accent-muted font-light max-w-xl mx-auto drop-shadow-sm">
+        Every home, community, and service—connected in one unified platform.
+        </p>
+
+        <!-- CTAs -->
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a 
+            href="#"
+            class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-medium bg-accent text-accent-content hover:bg-accent/90 shadow-lg transition-all duration-200"
+        >
+            Create a Homebase
+        </a>
+
+        <a 
+            href="#"
+            class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-medium text-accent bg-accent/20 hover:bg-accent/30 border border-accent/40 backdrop-blur-md transition-all duration-200"
+        >
+            Connect as a Renter
+        </a>
+        </div>
+    </c-ui.card>
+    </div>
+
+    </div>
+    </c-slot>
+
+</c-layout>

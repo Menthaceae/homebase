@@ -45,6 +45,7 @@ def register(request):
 def events(request):
     return render(request, '/events/')
 
+
 def invite_user(email, request):
     user, created = User.objects.get_or_create(
         email=email,
@@ -67,3 +68,7 @@ def invite_user(email, request):
         # Send email (e.g. using send_mail)
 
     return user
+
+
+def complete_onboarding(request):
+    return render(request, 'onboarding.html')
