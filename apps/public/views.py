@@ -10,11 +10,17 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
+from apps.posts.models import Tag
+
 # Landing page
 def home(request):
     public_posts = Posts.get_public_posts()
+    tags = Tag.objects.all()
+
     context = {
+        "active_page": "home",
         "public_posts": public_posts,
+        "tags": tags,
     }
 
     return render(request, 'public/home.html', context)
@@ -36,7 +42,7 @@ def register(request):
         form = CustomUserCreationForm()
 
     context = {
-        "page": "register",
+        "active_page": "register",
         "form": form
     }        
 
