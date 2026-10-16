@@ -1,5 +1,10 @@
+from logging import exception
+
+from django.db import transaction
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render
-from django.urls import reverse
+from apps.homebase.models import Homebase, Rental, SubProperty
 from apps.posts import views as Posts
 from django.shortcuts import redirect, render
 from django.contrib.auth import login as django_login
@@ -71,4 +76,109 @@ def invite_user(email, request):
 
 
 def complete_onboarding(request):
+    user = request.user
+    if user.is_authenticated:
+        return redirect('/')
     return render(request, 'onboarding.html')
+
+@require_GET
+def check_renter_email(request):
+
+    email = request.GET.get('email', '').strip().lower()
+    if not email:
+        return JsonResponse({'found': False, 'error': 'Email is required.'}, status=400)
+
+    rental = Rental.objects.filter(tenant__email=email).select_related('subproperty').first()
+
+    if rental:
+        return JsonResponse({
+            'found': True,
+            'homebase_name': rental.subproperty.homebase.name,
+            'unit_number': rental.subproperty.room_number if rental.subproperty else 'Unassigned'
+        })
+
+    return JsonResponse({
+        'found': False,
+        'error': 'No pending lease found for this email. Contact your property manager.'
+    }, status=404)
+
+
+@require_POST
+@transaction.atomic
+def onboarding_manager_submit(request):
+    try:
+        post = request.POST
+        
+        # 1. Validate Passwords
+        pwd1 = post.get('password1')
+        pwd2 = post.get('password2')
+        if pwd1 != pwd2:
+            return redirect('/onboarding')
+
+        # 2. Create Manager User
+        user = User.objects.create_user(
+            username=post.get('username'),
+            email=post.get('email'),
+            first_name=post.get('first_name'),
+            last_name=post.get('last_name'),
+            password=pwd1
+        )
+
+        # 3. Create Homebase Complex
+        homebase = Homebase.objects.create(
+            name=post.get('name'),
+            banner=post.get('banner'),
+            bio=post.get('bio'),
+            street_address=post.get('street_address'),
+            city=post.get('city'),
+            state=post.get('state'),
+            zipcode=post.get('zipcode'),
+            country=post.get('country'),
+        )
+        homebase.managers.add(user)
+
+        # 4. Batch Create Sub-Properties
+        num_units = int(post.get('num_units', 10))
+        start_unit = int(post.get('start_unit_num', 101))
+        
+        sub_properties = [
+            SubProperty(
+                homebase=homebase,
+                room_number=str(start_unit + i),
+            )
+            for i in range(num_units)
+        ]
+        SubProperty.objects.bulk_create(sub_properties)
+
+        django_login(request, user)
+        return redirect('/homebase/dashboard/property-manager/') 
+    except Exception as e:
+        messages.error(request, f"something went wrong during onboarding please try again")
+        return redirect('/onboarding/')  
+
+
+@require_POST
+@transaction.atomic
+def onboarding_renter_submit(request):
+    try:
+        post = request.POST
+        email = post.get('email', '').strip().lower()
+
+        pwd1 = post.get('password1')
+        pwd2 = post.get('password2')
+        if pwd1 != pwd2:
+            return redirect('onboarding')
+
+        user = User.objects.get(email=email)
+
+        # Create Renter User
+        user.set_password(pwd1)
+        user.first_name = post.get('first_name')
+        user.last_name = post.get('last_name')
+        user.save()
+
+        django_login(request, user)
+        return redirect('renter_dashboard')
+    except Exception as e:
+        messages.error(request, f"something went wrong during onboarding please try again")
+        return redirect('/onboarding/')  
