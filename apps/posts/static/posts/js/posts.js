@@ -69,3 +69,29 @@ function openEventModal() {
     }
 
 }
+
+const tags = document.querySelectorAll(".tag-option");
+
+tags.forEach((button) => {
+    button.addEventListener("click", () => {
+        const selected = button.getAttribute("aria-pressed") === "true";
+        const tagId = button.dataset.tagId;
+        const selectedTags = document.getElementById("selected-tags");
+
+        button.setAttribute("aria-pressed", String(!selected));
+
+        if (!selected) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "tags";
+            input.value = tagId;
+            input.dataset.tagId = tagId;
+
+            selectedTags.appendChild(input);
+        } else {
+            selectedTags
+                .querySelector(`input[data-tag-id="${tagId}"]`)
+                ?.remove();
+        }
+    });
+});
