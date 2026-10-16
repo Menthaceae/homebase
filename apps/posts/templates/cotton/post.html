@@ -10,8 +10,8 @@
     {% if post.image %}
       <div class="mb-4">
         <img 
-          src="{{ post.image.url }}" 
-          alt="{{ post.title }}" 
+          src="static/images/{{post.image.url}}/" 
+          alt="{{post.image.url}}" 
           class="w-full h-auto rounded object-cover" />
       </div>
     {% endif %}

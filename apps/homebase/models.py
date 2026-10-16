@@ -22,7 +22,7 @@ class Homebase(models.Model):
     zipcode = models.CharField()
     country = models.CharField()
     name = models.CharField()
-    banner = models.CharField(blank=True)
+    banner = models.ImageField(blank=True, upload_to='homebase')    # /static/images/
     
 class SubProperty(models.Model):
     id = models.AutoField(primary_key=True)

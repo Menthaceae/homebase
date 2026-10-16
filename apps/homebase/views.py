@@ -164,7 +164,7 @@ def create(request):
     user = request.user
     error_message = None
     if request.method == 'POST':
-        form = HomebaseCreationForm(request.POST)
+        form = HomebaseCreationForm(request.POST, request.FILES)
         if form.is_valid():
             homebase = form.save()
             homebase.save()

@@ -31,8 +31,7 @@ def get_by_id(request, id):
 
 # POST posts/create/
 def create(request):
-    form = PostCreationForm(request.POST)
-
+    form = PostCreationForm(request.POST, request.FILES)
     if request.method == 'POST':
         if form.is_valid():
             post = form.save(commit=False)
@@ -46,10 +45,8 @@ def create(request):
             messages.error(request, "Your post could not be created. Please check the form.")
             return render(request, 'public/home.html', {"form": form})#TODO: Perserve and display form errors. 
         #TODO: You can't render post_create.html because it's a cotton component, not a Django template
-
     else:
         return render(request, 'home', {"form": form})
-
 
 
 # POST posts/comment/

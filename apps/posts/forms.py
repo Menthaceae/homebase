@@ -9,11 +9,13 @@ class PostCreationForm(ModelForm):
         model = Post
         fields = [
             'body',
-            'image',
             'post_to',
             'homebase',
-            'likes',
+            'category',
+            'image'
             ]
+
+        
 class PostUpdateForm(ModelForm):
     class Meta:
         model = Post
