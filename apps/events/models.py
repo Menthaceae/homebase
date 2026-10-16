@@ -14,15 +14,11 @@ class Event(models.Model):
     homebase = models.ForeignKey(Homebase, null=True, blank=True, on_delete=models.CASCADE) # Only set if post to homebase
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField()
-
     start_date = models.DateField()
     start_time = models.TimeField()
-
-
     end_date = models.DateField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
-
     location = models.CharField()
     body = models.TextField()
-    image = models.CharField(blank=True)
+    image = models.ImageField(blank=True, upload_to='events')   # /static/images/
     post_to = models.CharField(choices=post_to_choices) 

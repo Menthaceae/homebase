@@ -10,17 +10,19 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
+
 # Landing page
 def home(request):
     public_posts = Posts.get_public_posts()
     context = {
         "public_posts": public_posts,
     }
-
     return render(request, 'public/home.html', context)
+
 
 def layout(request):
     return render(request, 'layout.html')
+
 
 # GET and POST register/
 def register(request):
@@ -34,16 +36,16 @@ def register(request):
             return redirect('home')
     else:
         form = CustomUserCreationForm()
-
     context = {
         "page": "register",
         "form": form
     }        
-
     return render(request, "public/register.html", context) 
+
 
 def events(request):
     return render(request, '/events/')
+
 
 def invite_user(email, request):
     user, created = User.objects.get_or_create(
@@ -65,5 +67,5 @@ def invite_user(email, request):
         # )
         
         # Send email (e.g. using send_mail)
-
     return user
+

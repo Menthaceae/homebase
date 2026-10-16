@@ -19,15 +19,13 @@ class Post(models.Model):
     id = models.AutoField(primary_key=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()
-    image = models.CharField(blank=True)
-
+    category = models.CharField(choices=category_choices, null=True, blank=True)
+    image = models.ImageField(blank=True, upload_to='posts')    # /static/images/
     post_to = models.CharField(choices=post_to_choices) 
     homebase = models.ForeignKey(Homebase, null=True, blank=True, on_delete=models.CASCADE) # Only set if post to homebase
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
-    likes = models.IntegerField(default=0, blank=True)
+    likes = models.IntegerField(default=0, blank=True, null=True)
 
 
 class Comment(models.Model):

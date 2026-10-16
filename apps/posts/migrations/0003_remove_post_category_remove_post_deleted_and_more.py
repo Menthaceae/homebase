@@ -12,10 +12,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name='post',
-            name='category',
-        ),
-        migrations.RemoveField(
-            model_name='post',
             name='deleted',
         ),
         migrations.RemoveField(

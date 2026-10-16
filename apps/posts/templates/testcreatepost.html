@@ -1,5 +1,5 @@
 <c-layout>
-    <form action="" method="post">
+    <form action='/posts/create/' method="post" enctype='multipart/form-data'>
         {% csrf_token %}
         <div>
             <c-ui.input label="Post Title" name="title" placeholder="Enter post title" required />
