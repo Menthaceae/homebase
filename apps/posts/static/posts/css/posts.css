@@ -76,6 +76,25 @@
     font-size: 18px;
 }
 
+/* ----- Tags -----*/
+.tag-option {
+    padding: 8px 12px;
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-weight: 500;
+    transition: filter 0.2s, border-color 0.2s;
+}
+
+.tag-option[aria-pressed="true"] {
+    border-color: currentColor;
+    filter: saturate(1.3);
+}
+
+.tag-option:hover {
+    filter: brightness(0.96);
+}
+
 /* ===================================
     POST TO
     =================================== */
@@ -141,4 +160,53 @@
 
 .ti-check {
     font-size: 18px;
+}
+
+/* ===================================
+    POSTS
+    =================================== */
+
+    
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.post-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
+}
+
+/* Unique colors for each tag */
+.tag-announcement {
+    background-color: #FCE7F3;
+    color: #9D174D;
+}
+
+.tag-maintenance {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+.tag-marketplace {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.tag-event {
+    background-color: #DBEAFE;
+    color: #1E40AF;
+}
+
+.tag-general {
+    background-color: #EDE9FE;
+    color: #5B21B6;
 }

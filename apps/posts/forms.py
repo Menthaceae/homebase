@@ -8,23 +8,22 @@ class PostCreationForm(ModelForm):
     class Meta:
         model = Post
         fields = [
+            'title',
             'body',
             'post_to',
             'homebase',
-            'category',
             'image'
             ]
 
-        
 class PostUpdateForm(ModelForm):
     class Meta:
         model = Post
         fields = [
             'id', 
+            'title',
             'body', 
             'image',
             ] 
-
 
 # Parent comment and parent post need to be hidden. I think you should be able to insert the object in the front end in the form.
 class CommentCreationForm(ModelForm):
