@@ -1,9 +1,75 @@
 {% for post in posts %}
-  <c-ui.card class="p-4 flex-1">
+  <c-ui.card class="p-4 flex-1 w-full">
     <!-- Header -->
-    <div class="flex flex-row items-center gap-2 mb-4">
-      <c-ui.avatar name="{{ post.author }}" size="sm" />
-      <span class="text-sm font-semibold">{{ post.author }}</span>
+    <div class="flex flex-row justify-between items-center gap-2 mb-4">
+      <div class="flex flex-row gap-2">
+        <c-ui.avatar name="{{ post.author }}" size="sm" />
+        <div class="grid grid-cols-2">
+          <span class="text-sm font-semibold">{{ post.author.first_name }} {{ post.author.last_name }}</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1">
+        <div class="flex flex-row gap-2">
+          {% for tag in post.tags.all %}
+            <span class="post-tag uppercase tag-{{ tag.slug }}">
+              {{ tag.name }}
+            </span>
+          {% endfor %}
+        </div>
+        <div class="flex justify-end">
+          <!-- Post menu button (horizontal dots)-->
+          <c-ui.dropdown position="bottom" align="end">
+            <c-slot name="trigger" >
+                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 12h.01m6 0h.01m5.99 0h.01"/>
+                </svg>
+            </c-slot>
+  
+              {% if post.author == request.user %}
+              <form>
+                {% csrf_token %}
+                <c-ui.dropdown.item onclick="document.getElementById('edit').click()">
+                      <c-slot name="icon">
+                          <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                          </svg>
+                      </c-slot>
+                      Edit
+                  </c-ui.dropdown.item>
+                  <c-ui.button 
+                    id="edit" 
+                    hidden 
+                    type="button" 
+                    onclick="document.getElementById('update-post-modal').showModal()"
+                    style="background: none; color: black; border: none; text-decoration: none; cursor: pointer; padding: 0; font: inherit;">
+                  </c-ui.button>
+              </form>
+              <form method="POST" action="{% url 'delete_post' post.id %}">
+                {% csrf_token %}
+                <c-ui.dropdown.item onclick="document.getElementById('delete').click()">
+                      <c-slot name="icon">
+                          <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                          </svg>
+                      </c-slot>
+                      Delete
+                  </c-ui.dropdown.item>
+                  <c-ui.button 
+                    id="delete" 
+                    hidden 
+                    type="submit" 
+                    size="sm" 
+                    style="background: none; color: black; border: none; text-decoration: none; cursor: pointer; padding: 0; font: inherit;">
+                  </c-ui.button>
+              </form>
+              {% else %}
+              <p>No options</p>
+              {% endif %}
+          </c-ui.dropdown>          
+        </div>
+      </div>
+
     </div>
 
     <!-- Media -->
@@ -20,37 +86,58 @@
     <h3 class="text-lg font-semibold mb-2">{{ post.title }}</h3>
     <p class="text-sm text-gray-700">{{ post.body }}</p>
 
+    <hr class="my-2 border-stone-500 dark:border-gray-300">
+
     <!-- Actions -->
-    <div class="mt-4 flex flex-row items-center gap-2">
-      <!-- Like Toggle via Alpine -->
-      <div x-data="{ liked: false }">
-        <c-ui.button 
-          @click="liked = !liked" 
-          type="button"
-          class="rounded-full flex items-center justify-center">
-          <span x-show="liked" class="text-red-500">
-            <c-tablericon.heart variant="filled" class="size-5" />
-          </span>
-          <span x-show="!liked">
-            <c-tablericon.heart class="size-5" />
-          </span>
+    <div class="mt-4 flex flex-row justify-between">  
+
+      <div class="flex flex-row gap-2">
+        <!-- Like Toggle via Alpine -->
+        <div x-data="{ liked: false }">
+          <c-ui.button 
+            @click="liked = !liked" 
+            type="button"
+            class="rounded-full flex items-center justify-center">
+            <span x-show="liked" class="text-red-500">
+              <c-tablericon.heart variant="filled" class="size-5" />
+            </span>
+            <span x-show="!liked">
+              <c-tablericon.heart class="size-5" />
+            </span>
+          </c-ui.button>
+        </div>
+
+
+        <!-- Comment & Share Links -->
+        <c-ui.button href="/comment" class="rounded-full">
+          <c-tablericon.message-circle class="size-5" />
+        </c-ui.button>
+
+        <c-ui.button href="/share" class="rounded-full">
+          <c-tablericon.share-3 class="size-5" />
         </c-ui.button>
       </div>
 
-      <hr>
-
-      <!-- Comment & Share Links -->
-      <c-ui.button href="/comment" class="rounded-full">
-        <c-tablericon.message-circle class="size-5" />
+      <c-ui.button 
+        type="button"
+        style="all: unset; cursor: pointer;"
+      >
+        <div class="flex flex-row items-center gap-2">
+          View Details
+          <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/>
+          </svg>
+        </div>
       </c-ui.button>
 
-      <c-ui.button href="/share" class="rounded-full">
-        <c-tablericon.share-3 class="size-5" />
-      </c-ui.button>
     </div>
+
+   
   </c-ui.card>
 
   <div class="div p-1"></div>
+
+<c-post-update />
 {% empty %}
   <p class="text-gray-500 text-center py-4">No posts available</p>
 {% endfor %}

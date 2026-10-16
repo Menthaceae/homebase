@@ -1,0 +1,151 @@
+{% load static %}
+<!-- Edit or Delete Post-->
+ {% load static %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'posts/css/posts.css' %}">
+{% endblock %}
+<dialog
+    id="update-post-modal"
+    class="w-full max-w-lg rounded-xl p-0 shadow-xl"
+>
+    <div class="post-modal-content">
+
+        <div class="post-modal-content">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Author -->
+            <input
+                type="hidden"
+                id="author"
+                name="author"
+                value="{{ user }}"
+            >
+
+            <!-- Header -->
+            <div class="form-header">
+                <button
+                    class="close-dialog"
+                    type="button"
+                    onclick="this.closest('dialog').close()"
+                    aria-label="Close dialog"
+                >
+                    <i class="ti ti-x"></i>
+                </button>
+
+                <div class="left-actions">
+                    <form method="POST" action="{% url 'update_post' post.id %}">
+                        <c-ui.button class="rounded" type="submit" variant="primary">Save changes</c-ui.button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- User Profile Information -->
+            <div class="user-info">
+                {% if user.photo %}
+                <img class="profile-picture" src="{{ user.profile.photo }}" alt="{{ user.username }}'s profile picture">
+                {% else %}
+                <img class="profile-picture" src="{% static 'posts/img/default-pfp.png' %}" alt="Default avatar">
+                {% endif %}
+
+                <div class="sub-info">
+                    <p class="text-sm">{{ user.first_name |default:"Guest User" }} {{ user.last_name }}</p>
+                </div>
+            </div>
+
+            <div class="mb-4"></div>
+
+            <div class="grid grid-columns-1">
+                <!-- Title -->
+                <input
+                    class="rounded-lg shadow-md border border-gray-200 p-6 block text-black text-sm mb-2 required"
+                    type="text" 
+                    id="title" 
+                    name="title" 
+                    placeholder="{{ form.title.value|default_if_none:''  }}"
+                    required
+                >
+                
+                <!-- Body -->
+                <textarea 
+                    class="rounded-lg shadow-md border border-gray-200 p-6 block text-black text-sm mb-2 required" 
+                    id="body"
+                    name="body"
+                    rows="5" 
+                    placeholder="{{ form.body.value|default_if_none:'' }}" 
+                    required
+                ></textarea>
+            </div>
+
+            <!-- Post to -->
+            <input 
+                type="hidden" 
+                id="post_to"
+                name="post_to"
+                required
+            >
+
+            <!-- Image -->
+            <input
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+                hidden
+            >
+
+            <!-- Tags -->
+            <div class="">
+                <h3 class="mb-3 text-sm font-semibold text-gray-800">
+                    Add tags
+                    <span class="text-xs ml-1 font-normal text-gray-400">(Optional)</span>
+                </h3>
+
+                <div class="grid grid-cols-3 gap-2 sm:grid-cols-3">
+                    {% for tag in tags %}
+                        <button
+                            type="button"
+                            class="tag-option tag-{{ tag.slug }} rounded-full border border-transparent
+                                   px-3 py-2 text-sm font-medium transition hover:brightness-95
+                                   focus-visible:outline-none focus-visible:ring-2
+                                   focus-visible:ring-blue-400"
+                            data-tag-id="{{ tag.id }}"
+                            aria-pressed="false"
+                        >
+                            {{ tag.name }}
+                        </button>
+                    {% endfor %}
+                </div>
+
+                <div id="selected-tags"></div>
+            </div>
+
+            <!-- Form error handling -->
+            {% if form.errors %}
+                <div class="text-red-500">
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+        </form>
+    </div>
+           
+</dialog>
+
+<!-- Components -->
+<c-post-to />
+
+{% block custom_js %}
+<script src="{% static 'posts/js/posts.js' %}"></script>
+{% endblock %}

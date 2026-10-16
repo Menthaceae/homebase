@@ -36,7 +36,6 @@
                 <div class="left-actions">
                     <c-ui.button
                         id="post-to-button"
-                        class="rounded"
                         type="button"
                         onclick="openPostTo()"
                     >
@@ -59,21 +58,32 @@
 
                 <div class="sub-info">
                     <p class="text-sm">{{ user.first_name |default:"Guest User" }} {{ user.last_name }}</p>
-                    <p class="text-sm">City goes here</p>
                 </div>
             </div>
 
             <div class="mb-4"></div>
 
-            <!-- Body -->
-            <textarea 
-                class="post-content required" 
-                id="body"
-                name="body"
-                rows="5" 
-                placeholder="What's on your mind?" 
-                required
-            ></textarea>
+            <div class="grid grid-columns-1">
+                <!-- Title -->
+                <input
+                    class="rounded-lg shadow-md border border-gray-200 p-6 block text-black text-sm mb-2 required"
+                    type="text" 
+                    id="title" 
+                    name="title" 
+                    placeholder="Title"
+                    required
+                >
+                
+                <!-- Body -->
+                <textarea 
+                    class="rounded-lg shadow-md border border-gray-200 p-6 block text-black text-sm mb-2 required" 
+                    id="body"
+                    name="body"
+                    rows="5" 
+                    placeholder="What's on your mind?" 
+                    required
+                ></textarea>
+            </div>
 
             <!-- Post to -->
             <input 
@@ -91,6 +101,32 @@
                 accept="image/*"
                 hidden
             >
+
+            <!-- Tags -->
+            <div class="">
+                <h3 class="mb-3 text-sm font-semibold text-gray-800">
+                    Add tags
+                    <span class="text-xs ml-1 font-normal text-gray-400">(Optional)</span>
+                </h3>
+
+                <div class="grid grid-cols-3 gap-2 sm:grid-cols-3">
+                    {% for tag in tags %}
+                        <button
+                            type="button"
+                            class="tag-option tag-{{ tag.slug }} rounded-full border border-transparent
+                                   px-3 py-2 text-sm font-medium transition hover:brightness-95
+                                   focus-visible:outline-none focus-visible:ring-2
+                                   focus-visible:ring-blue-400"
+                            data-tag-id="{{ tag.id }}"
+                            aria-pressed="false"
+                        >
+                            {{ tag.name }}
+                        </button>
+                    {% endfor %}
+                </div>
+
+                <div id="selected-tags"></div>
+            </div>
 
             <!-- Footer -->
             <div class="post-footer">
@@ -113,31 +149,32 @@
             </div>
 
             <!-- Additional options (sell on marketplace, create event) -->
-            <div id="more-options" class="more-options" hidden>
-                <hr style="height: 1px">
-                <div class="more-btns">
-                    <div class="more-btn sell">
-                        <c-ui.button
-                            class="marketplace-btn"
-                            type="button"
-                        >
-                            Sell or Give Away
-                        </c-ui.button>
-                    </div>
+            <div id="more-options" class="mt-4 space-y-3 rounded-xl bg-gray-50 p-4" hidden>
+                <h3 class="text-sm font-semibold text-gray-700">More ways to post</h3>
 
-                    <div class="more-btn event">
-                        <c-ui.button
-                            class="event-button"
-                            type="button"
-                            onclick="document.getElementById('create-event-modal').showModal()"
-                        >
-                            Create an event
-                        </c-ui.button>
-                    </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <c-ui.button
+                        class="marketplace-btn w-full justify-start rounded-lg bg-white px-4 py-3
+                            text-left text-sm text-gray-700 hover:bg-gray-100"
+                        type="button"
+                    >
+                        <i class="ti ti-gift mr-2"></i>
+                        Sell or give away
+                    </c-ui.button>
+
+                    <c-ui.button
+                        class="event-button w-full justify-start rounded-lg bg-white px-4 py-3
+                            text-left text-sm text-gray-700 hover:bg-gray-100"
+                        type="button"
+                        onclick="document.getElementById('create-event-modal').showModal()"
+                    >
+                        <i class="ti ti-calendar-event mr-2"></i>
+                        Create an event
+                    </c-ui.button>
                 </div>
             </div>
+
      
-            <br>
 
             <!-- Form error handling -->
             {% if form.errors %}
