@@ -5,7 +5,9 @@
     avatar-url="user.avatar_url" 
 />
 
-<div class="navbar">
+<c-ui.navbar>
+
+    <div class="navbar">
 
         <!-- Brand -->
         <div class="brand">
@@ -23,29 +25,48 @@
         {% endif %}
         
         <!-- Actions -->
-        <div class="actions">
+        <div class="actions flex justify-center items-center gap-4">
             {% if user.is_authenticated %}
-            <c-ui.dropdown position="bottom" size="sm">
+            <c-ui.nav.item href="{% url 'home' %}" class="rounded-full {% if active_page == 'home' %}active{% else %}inactive{% endif %}" current>Feed</c-ui.nav.item>
+            <c-ui.nav.item href="#" class="{% if active_page == 'dashboard' %}active{% else %}inactive{% endif %}" current>Dashboard</c-ui.nav.item>
+            <c-ui.nav.item href="#" class="{% if active_page == 'homebase' %}active{% else %}inactive{% endif %}" current>Homebase</c-ui.nav.item>
+            <c-ui.button class="rounded-full {% if active_page == 'notifications' %}active{% else %}inactive{% endif %}">
+                <i class="ti ti-bell"></i>
+            </c-ui.button>
+            <c-ui.button class="rounded-full {% if active_page == messages %}active{% else %}inactive{% endif %}">
+                <i class="ti ti-messages"></i>
+            </c-ui.button>
+            <c-ui.dropdown position="bottom">
                 <c-slot name="trigger">
-                    <div class="flex items-center gap-2 cursor-pointer">
+                    <button type="button" class="flex flex-row items-center gap-2 p-2 rounded-md hover:bg-ink-100" aria-label="More options">
                         <c-ui.avatar size="sm" ></c-ui.avatar>
-                        <span class="text-sm font-medium">{{ username }}</span>
-                    </div>
+                        <span class="text-sm font-medium">{{ user.first_name }} {{ user.last_name }}</span>
+                    </button>
                 </c-slot>
-                <c-ui.dropdown.item href="/profile" size="sm">Profile</c-ui.dropdown.item>
-                <c-ui.dropdown.item href="/settings" size="sm">Settings</c-ui.dropdown.item>
+                <c-ui.dropdown.item href="/profile">
+                    <c-slot name="icon">
+                        <i class="ti ti-user-circle"></i>
+                    </c-slot>
+                    Profile
+                </c-ui.dropdown.item>
+                <c-ui.dropdown.separator />
+                <form method="POST" action="/logout/">
+                    {% csrf_token %}
+                    <c-ui.dropdown.item onclick="document.getElementById('logout').click()">
+                        <c-slot name="icon">
+                            <i class="ti ti-logout"></i>
+                        </c-slot>
+                        Logout
+                    </c-ui.dropdown.item>
+                    <c-ui.button id="logout" hidden type="submit" size="sm" variant="danger" style="background: none; color: black; border: none; text-decoration: none; cursor: pointer; padding: 0; font: inherit;">
+                    </c-ui.button>
+                </form>
             </c-ui.dropdown>
-            <form method="POST" action="/logout/">
-                {% csrf_token %}
-                <c-ui.button type="submit" size="sm" variant="primary">Logout</c-ui.button>
-            </form>
             {% else %}
             <c-ui.button href="/login" size="sm">Sign in</c-ui.button>
             <c-ui.button href="/register" size="sm" variant="primary">Sign up</c-ui.button>
             {% endif %}
         </div>
-
     </div>
-
         
-</div>
+</c-ui.navbar>
