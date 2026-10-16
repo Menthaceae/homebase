@@ -74,12 +74,12 @@ def hombaseHome(request):
 @login_required
 def manage_homebase(request, homebase_id):
     logged_in_user = request.user
-    homebase = Homebase.objects.get(id=homebase_id)
     if not logged_in_user.is_authenticated:
         return redirect('/login')
+    homebase = Homebase.objects.get(id=homebase_id)
     if (manages(logged_in_user, homebase))== False:
         return HttpResponse("You do not have permission to manage this homebase.", status=403)
-    subproperties_count = SubProperty.objects.filter(homebase=homebase).count()
+    subproperties = SubProperty.objects.filter(homebase=homebase)
     rented_subproperties_count = Rental.objects.filter(subproperty__homebase=homebase).count()
     owned_subproperties_count = OwnedProperty.objects.filter(subproperty__homebase=homebase).count()
     rented_subproperties = Rental.objects.filter(subproperty__homebase=homebase)
@@ -89,26 +89,22 @@ def manage_homebase(request, homebase_id):
         sub_form = SubPropertyCreationForm(request.POST)
         rental_form = RentalCreationForm(request.POST)
         owned_email = request.POST.get('owners_email')
-        tenant_email = request.POST.get('tenant')
+        tenant_email = request.POST.get('tenant_email')
         classification = request.POST.get('classification')
+        subproperty = request.POST.get('subproperty_id')
+        saved_successfully = False
         try:
-            if classification == 'rental' and rental_form.is_valid():
-                if sub_form.is_valid():
-                    with transaction.atomic():
-                        subproperty = sub_form.save(commit=False)
-                        subproperty.homebase = homebase
-                        subproperty.save()
-
-                        rental = rental_form.save(commit=False)
-                        rental.subproperty = subproperty
-                        rental.homebase = homebase
-
-                        if tenant_email is not None and tenant_email != '':
-                            user = invite_user(tenant_email, request)
-                            rental.tenant = user
-                        rental.save()
-                        subproperty.managed_by.add(request.user)
-                        saved_successfully = True
+            if rental_form.is_valid():
+                with transaction.atomic():
+                    subproperty = SubProperty.objects.get(id=subproperty)
+                    rental = rental_form.save(commit=False)
+                    rental.subproperty = subproperty
+                    if tenant_email is not None and tenant_email != '':
+                        user = invite_user(tenant_email, request)
+                        rental.tenant = user
+                    rental.save()
+                    subproperty.managed_by.add(request.user)
+                    saved_successfully = True
 
             if classification == 'owned' and sub_form.is_valid():
                 if owned_email:
@@ -151,7 +147,7 @@ def manage_homebase(request, homebase_id):
         "homebase": homebase,
         "rental_subproperties": rented_subproperties,
         "owned_subproperties": owned_subproperties,
-        "subproperties_count": subproperties_count,
+        "subproperties": subproperties,
         "rented_subproperties_count": rented_subproperties_count,
         "owned_subproperties_count": owned_subproperties_count
     }
@@ -164,7 +160,7 @@ def create(request):
     user = request.user
     error_message = None
     if request.method == 'POST':
-        form = HomebaseCreationForm(request.POST)
+        form = HomebaseCreationForm(request.POST, request.FILES)
         if form.is_valid():
             homebase = form.save()
             homebase.save()

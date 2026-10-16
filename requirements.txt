@@ -1,4 +1,6 @@
 asgiref==3.12.1
+boto3==1.43.114
+botocore==1.43.114
 click==8.5.0
 cotton-icons==0.2.0
 Django==6.1.2
@@ -7,7 +9,13 @@ django-cotton==2.7.2
 django-cotton-ui==0.3.4
 django-tailwind-cli==4.8.1
 dotenv==0.9.9
+jmespath==1.1.0
+pillow==12.3.0
 psycopg2-binary==2.9.13
+python-dateutil==2.9.0.post0
 python-dotenv==1.2.4
+s3transfer==0.19.2
 semver==3.1.0
+six==1.17.0
 sqlparse==0.6.0
+urllib3==2.8.0

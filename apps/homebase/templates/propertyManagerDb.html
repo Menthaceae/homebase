@@ -13,6 +13,7 @@
 <div class="py-4">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         {% for homebase in managed_homebases %}
+        <a href='/homebase/manage/{{homebase.id}}/'>
             <c-ui.card class="flex justify-between gap-2 items-center col-span-1">
             <div class="flex flex-col">
                 <h1 class="text-2xl font-bold mb-4">{{homebase.name}}</h1>
@@ -20,6 +21,7 @@
                 <p>This homebase contians 12 properties and 12 tenants.</p>
             </div>
             </c-ui.card> 
+        </a>            
         {% endfor %}
     </div> 
 </div>

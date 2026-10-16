@@ -1,0 +1,437 @@
+{% load static %}
+<c-layout :hide_content_container="True" :is_banner="False" :isfull_page="True">
+    <c-slot name="banner">
+    <div 
+        x-data="{
+            step: 'landing', // 'landing', 'mgr_basic', 'mgr_units', 'mgr_location', 'mgr_account', 'renter_email', 'renter_account'
+            
+            manager: {
+                name: '',
+                banner: '',
+                bio: '',
+                num_units: 10,
+                start_unit_num: 101,
+                street_address: '',
+                city: '',
+                state: '',
+                zipcode: '',
+                country: 'United States',
+                username: '',
+                first_name: '',
+                last_name: '',
+                email: '',
+                password1: '',
+                password2: ''
+            },
+            
+            renter: {
+                email: '',
+                homebase_name: '',
+                unit_number: '',
+                username: '',
+                first_name: '',
+                last_name: '',
+                password1: '',
+                password2: ''
+            },
+
+            renterError: '',
+            checkingRenter: false,
+
+            async checkRenterEmail() {
+                this.renterError = '';
+                if (!this.renter.email) {
+                    this.renterError = 'Please provide an email address.';
+                    return;
+                }
+                this.checkingRenter = true;
+                try {
+                    const res = await fetch(`/api/check-renter/?email=${encodeURIComponent(this.renter.email)}`);
+                    const data = await res.json();
+                    if (res.ok && data.found) {
+                        this.renter.homebase_name = data.homebase_name || '';
+                        this.renter.unit_number = data.unit_number || '';
+                        this.step = 'renter_account';
+                    } else {
+                        this.renterError = data.error || 'No active lease or invitation found for this email.';
+                    }
+                } catch (e) {
+                    this.renterError = 'Connection error. Please try again.';
+                } finally {
+                    this.checkingRenter = false;
+                }
+            }
+        }"
+        class="relative w-screen flex h-screen items-center justify-center overflow-hidden bg-no-repeat bg-center" 
+        style="background-image: url({% static 'images/hero-bg.jpg' %}); background-size: cover;"
+    >
+
+        <!-- Dark Scrim Backdrop -->
+        <div class="absolute inset-0 z-0 bg-linear-to-b from-black/85 via-black/75 to-black/90 backdrop-blur-[2px]">
+        </div>
+
+        <!-- Single Floating Card Container with Smooth Height Adaptation -->
+        <c-ui.card class="relative max-h-[95vh] overflow-auto scroll-smooth z-10 w-full max-w-xl mx-4 px-6 py-8 sm:p-10 bg-gray-50/90 border border-accent/20 backdrop-blur-md shadow-2xl rounded-3xl transition-all duration-300">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                            <strong class="font-bold">Error!</strong>
+                            <span class="block sm:inline">{{ message }} <a href="/onboarding/" class="underline">Try again</a></span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <!-- ========================================== -->
+            <!-- VIEW 0: LANDING                            -->
+            <!-- ========================================== -->
+            <div 
+                x-show="step === 'landing'" 
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                class="text-center"
+            >
+                <span class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider uppercase bg-accent/15 border border-accent/30 rounded-full text-accent-content">
+                    Apartment Management Platform
+                </span>
+
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight drop-shadow-sm text-accent-content">
+                    Welcome to Homebase
+                </h1>
+
+                <p class="mt-4 text-base sm:text-lg text-gray-600 font-light max-w-md mx-auto">
+                    Every home, community, and service—connected in one unified platform.
+                </p>
+
+                <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button 
+                        type="button"
+                        @click="step = 'mgr_basic'"
+                        class="w-full sm:w-auto px-7 py-3 rounded-xl font-medium bg-accent text-accent-content hover:bg-accent/90 shadow-lg transition-all duration-150"
+                    >
+                        Create a Homebase
+                    </button>
+
+                    <button 
+                        type="button"
+                        @click="step = 'renter_email'"
+                        class="w-full sm:w-auto px-7 py-3 rounded-xl font-medium text-accent bg-accent/10 hover:bg-accent/20 border border-accent/30 transition-all duration-150"
+                    >
+                        Connect as a Renter
+                    </button>
+                </div>
+                <br>
+                <p>If you already have an account, <a href="{% url 'login' %}" class="text-accent font-medium hover:underline">log in here</a>.</p>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- MANAGER STEP 1: IDENTITY & BRANDING        -->
+            <!-- ========================================== -->
+            <div 
+                x-show="step === 'mgr_basic'" 
+                x-cloak
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+            >
+                <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-accent">Step 1 of 4</span>
+                        <h2 class="text-xl font-bold text-gray-900">Basic Information</h2>
+                    </div>
+                    <button type="button" @click="step = 'landing'" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</button>
+                </div>
+
+                <form @submit.prevent="step = 'mgr_units'" class="space-y-4 mt-5">
+                    <div>
+                        <c-ui.input 
+                            label="Homebase Name" 
+                            name="name" 
+                            type="text" 
+                            placeholder="e.g., Oakridge Heights Complex"
+                            x-model="manager.name"
+                            required 
+                        />
+                    </div>
+                    <div>
+                        <c-ui.input 
+                            label="Banner Image URL" 
+                            name="banner" 
+                            type="url" 
+                            placeholder="https://example.com/images/complex-banner.jpg"
+                            x-model="manager.banner"
+                            required 
+                        />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Description / Bio</label>
+                        <textarea 
+                            name="bio" 
+                            rows="2" 
+                            x-model="manager.bio"
+                            placeholder="Brief overview of amenities, guidelines, or community..."
+                            class="w-full rounded-md border border-gray-300 p-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <button type="button" @click="step = 'landing'" class="text-sm font-medium text-gray-500 hover:text-gray-700">Back</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-lg text-sm font-medium bg-accent text-accent-content hover:bg-accent/90 shadow">Next: Units &rarr;</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- MANAGER STEP 2: UNITS / SUB-PROPERTIES     -->
+            <!-- ========================================== -->
+            <div 
+                x-show="step === 'mgr_units'" 
+                x-cloak
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+            >
+                <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-accent">Step 2 of 4</span>
+                        <h2 class="text-xl font-bold text-gray-900">Units Setup</h2>
+                    </div>
+                    <button type="button" @click="step = 'landing'" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</button>
+                </div>
+
+                <form @submit.prevent="step = 'mgr_location'" class="space-y-4 mt-5">
+                    <p class="text-xs text-gray-500">Configure your property's sub-properties to auto-generate units.</p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <c-ui.input 
+                                label="Number of Units" 
+                                name="num_units" 
+                                type="number" 
+                                min="1" 
+                                max="500"
+                                x-model="manager.num_units"
+                                required 
+                            />
+                        </div>
+                        <div>
+                            <c-ui.input 
+                                label="Starting Unit #" 
+                                name="start_unit_num" 
+                                type="number" 
+                                min="1"
+                                x-model="manager.start_unit_num"
+                                required 
+                            />
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 bg-accent/10 border border-accent/20 rounded-xl text-xs text-gray-700">
+                        Units <span class="font-bold text-accent-content" x-text="manager.start_unit_num"></span> through 
+                        <span class="font-bold text-accent-content" x-text="Number(manager.start_unit_num) + Number(manager.num_units) - 1"></span> 
+                        will be automatically registered.
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <button type="button" @click="step = 'mgr_basic'" class="text-sm font-medium text-gray-500 hover:text-gray-700">&larr; Back</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-lg text-sm font-medium bg-accent text-accent-content hover:bg-accent/90 shadow">Next: Location &rarr;</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- MANAGER STEP 3: LOCATION DETAILS           -->
+            <!-- ========================================== -->
+            <div 
+                x-show="step === 'mgr_location'" 
+                x-cloak
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+            >
+                <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-accent">Step 3 of 4</span>
+                        <h2 class="text-xl font-bold text-gray-900">Physical Location</h2>
+                    </div>
+                    <button type="button" @click="step = 'landing'" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</button>
+                </div>
+
+                <form @submit.prevent="step = 'mgr_account'" class="space-y-3.5 mt-5">
+                    <div>
+                        <c-ui.input label="Street Address" name="street_address" type="text" placeholder="1234 Main St" x-model="manager.street_address" required />
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <c-ui.input label="City" name="city" type="text" placeholder="Dallas" x-model="manager.city" required />
+                        <c-ui.input label="State" name="state" type="text" placeholder="TX" x-model="manager.state" required />
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <c-ui.input label="Zip Code" name="zipcode" type="text" placeholder="75001" x-model="manager.zipcode" required />
+                        <c-ui.input label="Country" name="country" type="text" x-model="manager.country" required />
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <button type="button" @click="step = 'mgr_units'" class="text-sm font-medium text-gray-500 hover:text-gray-700">&larr; Back</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-lg text-sm font-medium bg-accent text-accent-content hover:bg-accent/90 shadow">Next: Manager Setup &rarr;</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- MANAGER STEP 4: ACCOUNT CREDENTIALS        -->
+            <!-- ========================================== -->
+            <div 
+                x-show="step === 'mgr_account'" 
+                x-cloak
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+            >
+                <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-accent">Final Step</span>
+                        <h2 class="text-xl font-bold text-gray-900">Manager Profile</h2>
+                    </div>
+                    <button type="button" @click="step = 'landing'" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</button>
+                </div>
+
+                <form method="POST" action="{% url 'onboarding_manager_submit' %}" class="space-y-3 mt-4">
+                    {% csrf_token %}
+                    <!-- Hidden inputs forwarding data from steps 1-3 -->
+                    <input type="hidden" name="name" :value="manager.name">
+                    <input type="hidden" name="banner" :value="manager.banner">
+                    <input type="hidden" name="bio" :value="manager.bio">
+                    <input type="hidden" name="num_units" :value="manager.num_units">
+                    <input type="hidden" name="start_unit_num" :value="manager.start_unit_num">
+                    <input type="hidden" name="street_address" :value="manager.street_address">
+                    <input type="hidden" name="city" :value="manager.city">
+                    <input type="hidden" name="state" :value="manager.state">
+                    <input type="hidden" name="zipcode" :value="manager.zipcode">
+                    <input type="hidden" name="country" :value="manager.country">
+
+                    <div>
+                        <c-ui.input label="Username" name="username" type="text" x-model="manager.username" required />
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <c-ui.input label="First Name" name="first_name" type="text" x-model="manager.first_name" required />
+                        <c-ui.input label="Last Name" name="last_name" type="text" x-model="manager.last_name" required />
+                    </div>
+                    <div>
+                        <c-ui.input label="Email" name="email" type="email" x-model="manager.email" required />
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <c-ui.input label="Password" name="password1" type="password" x-model="manager.password1" required />
+                        <c-ui.input label="Confirm" name="password2" type="password" x-model="manager.password2" required />
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <button type="button" @click="step = 'mgr_location'" class="text-sm font-medium text-gray-500 hover:text-gray-700">&larr; Back</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-lg text-sm font-medium bg-accent text-accent-content hover:bg-accent/90 shadow">Create Homebase</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- RENTER STEP 1: VERIFY EMAIL                -->
+            <!-- ========================================== -->
+            <div 
+                x-show="step === 'renter_email'" 
+                x-cloak
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+            >
+                <div class="text-center mb-5">
+                    <h2 class="text-xl font-bold text-gray-900">Connect to Your Homebase</h2>
+                    <p class="mt-1 text-xs text-gray-500">Enter the email registered with your leasing office.</p>
+                </div>
+
+                <div x-show="renterError" class="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-xs border border-red-200" x-text="renterError"></div>
+
+                <form @submit.prevent="checkRenterEmail()" class="space-y-4">
+                    <div>
+                        <c-ui.input 
+                            label="Renter Email" 
+                            name="renter_email" 
+                            type="email" 
+                            placeholder="resident@example.com"
+                            x-model="renter.email" 
+                            required 
+                        />
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        :disabled="checkingRenter"
+                        class="w-full py-2.5 rounded-lg text-sm font-medium bg-accent text-accent-content hover:bg-accent/90 shadow flex items-center justify-center gap-2"
+                    >
+                        <span x-show="!checkingRenter">Verify Invitation &rarr;</span>
+                        <span x-show="checkingRenter">Searching Property Records...</span>
+                    </button>
+
+                    <button type="button" @click="step = 'landing'" class="w-full text-center text-xs text-gray-500 hover:text-gray-700 pt-1">
+                        &larr; Back to Welcome Screen
+                    </button>
+                </form>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- RENTER STEP 2: FINISH PROFILE              -->
+            <!-- ========================================== -->
+            <div 
+                x-show="step === 'renter_account'" 
+                x-cloak
+                x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+            >
+                <div class="mb-4 text-center">
+                    <span class="inline-block px-2.5 py-0.5 mb-1.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">
+                        Invitation Found
+                    </span>
+                    <h2 class="text-xl font-bold text-gray-900">Complete Profile</h2>
+                    <p class="text-xs text-gray-600 mt-1">
+                        Matched to: <strong class="text-gray-900" x-text="renter.homebase_name"></strong> (Unit <span x-text="renter.unit_number"></span>)
+                    </p>
+                </div>
+
+                <form method="POST" action="{% url 'onboarding_renter_submit' %}" class="space-y-3">
+                    {% csrf_token %}
+                    {% if renter_error %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <strong class="font-bold">Error!</strong>
+                            <span class="block sm:inline">{{ renter_error }}</span>
+                        </div>
+                    {% endif %}
+                    <input type="hidden" name="email" :value="renter.email">
+
+                    <div>
+                        <c-ui.input label="Username" name="username" type="text" x-model="renter.username" required />
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <c-ui.input label="First Name" name="first_name" type="text" x-model="renter.first_name" required />
+                        <c-ui.input label="Last Name" name="last_name" type="text" x-model="renter.last_name" required />
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <c-ui.input label="Password" name="password1" type="password" x-model="renter.password1" required />
+                        <c-ui.input label="Confirm" name="password2" type="password" x-model="renter.password2" required />
+                    </div>
+
+                    <div class="pt-3 flex gap-3">
+                        <button type="button" @click="step = 'renter_email'" class="w-1/3 py-2 rounded-lg border border-gray-300 text-xs font-medium text-gray-700 hover:bg-gray-100">
+                            Back
+                        </button>
+                        <button type="submit" class="w-2/3 py-2 rounded-lg text-xs font-medium bg-accent text-accent-content hover:bg-accent/90 shadow">
+                            Join Community
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </c-ui.card>
+    </div>
+    </c-slot>
+</c-layout>

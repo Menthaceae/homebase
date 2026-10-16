@@ -23,22 +23,43 @@
 </head>
 <body>
 
+    <c-vars :hide_content_container="False" :is_banner="False" :isfull_page="False" />
+
     <!--Reusable Cotton components -->
+    {% if not hide_content_container %}
     <c-appbar :is-logged-in="False" username="" avatar-url="" />
+    {% endif %}
+
+    {% if isfull_page %}
     <div>
+        {{ banner }}
+    </div>
+    {% endif %}
+
+    {% if is_banner and not isfull_page %}
+    <div class='web-content'>
         {{banner}}
     </div>
 
-    <!-- Webpage content -->
-    <div class="web-content p-4">
+    <div class="p-4">
         {{ slot }}
     </div>
+    {% else %}
+        {% if not hide_content_container and not isfull_page %}
+            <!-- Webpage content -->
+            <div class="web-content p-4">
+                {{ slot }}
+            </div>
+    
+   
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
-
+            <main>
+                {% block content %}
+                {% endblock %}
+            </main>
+        {% endif %}
+    {% endif %}
+    
     <!-- Global js -->
     <script src="{% static 'posts/js/posts.js' %}"></script>
 
