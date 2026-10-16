@@ -1,7 +1,7 @@
 
-<c-layout>
+<c-layout :is_banner="True">
     <c-slot name="banner">
-        <div class="w-full bg-cover bg-center p-4 h-20" style="background-image:url('/static/images/homebase-bg.png');">
+        <div class="w-full bg-cover bg-center p-4 h-20" style="background-image:url({{ homebase.banner }});">
             
                 <h1 class="text-2xl font-bold text-white">Manage Your Homebase</h1>
                 <p class="text-sm text-gray-300">Manage your homebase settings and members.</p>
@@ -25,13 +25,13 @@
     <div class="flex flex-col sm:flex-row gap-2">
     <c-dbcard 
         label="Total Units"
-        value="{{ subproperties_count }}"
+        value="{{ 5 }}"
         description=""
         filled=False
     />
     <c-dbcard 
         label="Rented Units"
-        value="{{ rented_subproperties_count }}"
+        value="{{ rental_subproperties_count }}"
         description=""
         filled=True
     />
@@ -66,19 +66,27 @@
             </c-ui.table>
         </c-ui.card>
         <c-ui.card class="w-full">
-            <h2 class="text-xl font-bold mb-4 mt-8">Owned Units</h2>
+            <h2 class="text-xl font-bold mb-4 mt-8">Properties not assigned to a tenant</h2>
             <c-ui.table>
                 <theader>
                         <tr>
                             <th><b>Room Number</b></th>
-                            <th><b>Owner</b></th>
-                            <th><b>Start Date</b></th>
                             <th></th>
                         </tr>
                 </theader>
                 <tbody>
-                    {% for owned in owned_subproperties %}
-                        <c-ownedpropertytable :owned="owned" />
+                    {% for property in subproperties %}
+                        <tr>
+                            <td>{{ property.room_number }}</td>
+                            <td>
+                                <c-ui.dialog size="lg">
+                                    <c-slot name="trigger">
+                                        <c-ui.button variant="primary"><span class="inline-flex gap-2"><c-heroicon.plus class="size-5 text-accent-foreground"/>Assign Tenant</span></c-ui.button>
+                                    </c-slot>
+                                    <c-rentalform :subproperty="property.id" :rental-form="rental_form" :homebase="homebase" />
+                                </c-ui.dialog>
+                            </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </c-ui.table>

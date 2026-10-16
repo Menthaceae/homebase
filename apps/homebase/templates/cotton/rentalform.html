@@ -1,0 +1,111 @@
+<c-vars :subproperty="None" :rental-form="None" :homebase="None" />
+
+<form   method="POST" 
+        class="grid grid-cols-2 gap-4"
+        x-post="{% url 'manage_homebase' homebase.id %}"
+        x-target="#rentalform"
+        x-swap="outerHTML"
+        id="rentalform"
+        >
+    {% csrf_token %}
+{% if rental_form.non_field_errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ rental_form.non_field_errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+        <div class="col-span-2">
+            <c-ui.input 
+                name="tenant_email" 
+                label="Tenant Email" 
+                type="email"
+                placeholder="Enter the tenant's email" 
+                value="{{ rental_email|default:'' }}"
+
+            />
+        </div>
+        {% if rental_form.tenant_email.errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ rental_form.tenant_email.errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+        <div class="col-span-1">
+            <c-ui.input 
+                name="rent" 
+                label="Rent" 
+                type="number"
+                step="0.01"
+                placeholder="Enter the rent amount" 
+                value ="{{ rental_form.rent.value|default:'' }}"
+                :field="rental_form.rent"
+                ::required="classification === 'rental'"
+            />
+            {% if rental_form.rent.errors %}
+                <c-ui.alert type="error" class="mb-4">
+                    {{ rental_form.rent.errors.0 }}
+                </c-ui.alert>
+            {% endif %}
+        </div>
+        <c-ui.input 
+            name="start_date" 
+            label="Start Date" 
+            type="date"
+            value ="{{ rental_form.start_date.value|default:'' }}"
+            :field="rental_form.start_date"
+        />
+
+        {% if rental_form.start_date.errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ rental_form.start_date.errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+
+        <c-ui.input 
+            name="end_date" 
+            label="End Date" 
+            type="date"
+            value ="{{ rental_form.end_date.value|default:'' }}"
+            :field="rental_form.end_date"
+        />
+        {% if rental_form.end_date.errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ rental_form.end_date.errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+        <div class="col-span-2 mt-2">
+            <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" name="occupied" value="true" {% if rental_form.occupied.value %}checked{% endif %}>
+                <span class="text-sm font-medium text-slate-700">Occupied</span>
+            </label>
+            {% if rental_form.occupied.errors %}
+                    <c-ui.alert type="error" class="mb-4">
+                        {{ rental_form.occupied.errors.0 }}
+                    </c-ui.alert>
+                {% endif %}
+        </div>
+
+        <c-ui.input 
+            name="subproperty_id" 
+            type="hidden"
+            value="{{ subproperty }}"
+        />
+
+    <div class="col-span-2">
+        <c-ui.button type="submit" variant="primary">Submit</c-ui.button>
+    </div>
+</form>
+
+<script>
+    document.addEventListener('closedialog', function (evt) {
+
+        // Only run when the subproperty form finishes with HTTP 204
+        if (evt.detail.elt.id === 'rentalform') {
+            evt.detail.elt.reset();
+
+            // 3. Close the modal
+            const closeBtn = document.querySelector('button[x-bind=closeButton]');
+            if (closeBtn) {
+                closeBtn.click();
+            }
+        }
+    });
+</script>
