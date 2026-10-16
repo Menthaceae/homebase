@@ -33,8 +33,8 @@ class Post(models.Model):
     image = models.ImageField(blank=True, upload_to='posts')    # /static/images/
     post_to = models.CharField(choices=post_to_choices) 
     homebase = models.ForeignKey(Homebase, null=True, blank=True, on_delete=models.CASCADE) # Only set if post to homebase
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
     likes = models.IntegerField(default=0, blank=True, null=True)
 
     tags = models.ManyToManyField(Tag, blank=True, related_name="posts")
