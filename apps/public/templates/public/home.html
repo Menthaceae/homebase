@@ -14,7 +14,7 @@
         <!-- Left Panel -->
         <div class="left-panel col-span-1">
             <!-- Create Post-->
-            <c-ui.card class="p-4 bg-accent-content text-accent-foreground w-96">
+            <c-ui.card class="p-4 bg-accent-content text-accent-foreground w-full">
                 <p class="text-lg font-semibold mb-2">Create a New Post</p>
                 <p class="text-sm mb-4">Start sharing your thoughts and ideas with the community by creating a new post.</p>
                 <c-ui.button
@@ -26,7 +26,7 @@
                 </c-ui.button>
             </c-ui.card>
             <!-- Quick Resources-->
-            <c-ui.card class="p-4 w-md bg-white text-accent-foreground">
+            <c-ui.card class="p-4 w-full bg-white text-accent-foreground">
                 <p class="text-lg font-semibold mb-2" style="color: black">Quick Resources</i></span></p>
                 <div class="resource">
                     <p style="color: black"><i class="ti ti-book-2"></i> Building Rules & Bylaws </p>
@@ -37,53 +37,18 @@
         </div>
 
         <!-- Center panel -->
-        <div class="center-panel col-span-2">
+        <div class="col-span-2">
             <div class="filters">
                 <c-ui.button type="button" class="filter-button" data-post-filter="all">All</c-ui.button>
-                {% if user.homebase %}
-                <c-ui.button type="button" class="filter-button" data-post-filter="homebase">Homebase</c-ui.button>
-                {% endif %}
-                <c-ui.button type="button" class="filter-button" data-post-filter="announcements">Nearby</c-ui.button>
-                        <c-ui.button type="button" class="filter-button" data-post-filter="trending">Recent</c-ui.button>
-                <c-ui.button type="button" class="filter-button" data-post-filter="trending">Trending</c-ui.button>
+                {% for tag in tags %}    
+                <c-ui.button type="button" class="filter-button" data-post-filter="{{ tag.slug }}">{{ tag.name }}</c-ui.button>
+                {% endfor %}
             </div>
-            <c-post :posts="public_posts" />
+            <c-post :posts="public_posts"/>
         </div>
 
         <!-- Right Panel-->
         <div class="right-panel col-span-1">
-            {% if user.homebase %}
-            <!-- Your Community -->
-            <c-ui.card class="p-4 bg-white text-accent-foreground" >
-                <p class="text-lg font-semibold mb-2">Your Community</p>
-
-                <div class="your-community">
-                    <c-ui.card class="p-3 ">
-                        <h2 class="community-metric text-sm font-semibold">Active Homebases</h2>
-                        <p class="text-xs text-black mt-1">Number of active homebases nearby</p>
-                    </c-ui.card>
-                    <c-ui.card class="p-3">
-                        <h2 class="community-metric text-sm font-semibold">Neighbors online</h2>
-                        <p class="text-xs text-black mt-1"># of nearby online neighbors</p>
-                    </c-ui.card>
-                    <c-ui.card class="p-3">
-                        <h2 class="community-metric text-sm font-semibold">Local Events Scheduled </h2>
-                        <p class="text-xs text-black mt-1"># of local events</p>
-                    </c-ui.card>
-                    <c-ui.card class="p-3">
-                        <h2 class="community-metric text-sm font-semibold">Resolving Maintenance</h2>
-                        <p class="text-xs text-black mt-1">Homebase Maintenance metrics</p>
-                    </c-ui.card>
-                </div>
-            </c-ui.card>
-            {% else %}
-            <c-ui.card class="p-4 w-md bg-white text-accent-foreground">
-                    <p class="text-lg font-semibold mb-2" style="color: black">Join a homebase</p>
-                    <hr class="border-gray-300 mb-4">
-                    <p class="text-sm mb-4" style="color: black">Become a part of our growing community and connect with like-minded individuals.</p>
-                    <c-ui.button label="Join Now" href="homebase/join/" class="w-full" >Join Now</c-ui.button>   
-            </c-ui.card>
-            {% endif %}
             <c-ui.card class="p-4 bg-white text-accent-foreground" >
                     <div>
                         <p class="text-lg font-semibold mb-2" style="color: black">Upcoming events</p>
@@ -96,7 +61,7 @@
     </div>
 
 <!-- Components -->
-<c-post-create />
+<c-post-create :tags="tags"/>
 <c-event-create />
 
 </c-layout>

@@ -12,7 +12,15 @@ body {
 }
 
 .web-content {
-    margin-top: calc(var(--navbar-height) + 10px);
+    margin-top: 20px;
+    position: sticky;
+    top: 80px;
+    align-self: start;
+}
+
+.active {
+    color: var(--color-accent-content);
+    font-weight: bold;
 }
 
 /* ----- Navbar ----- */
@@ -29,7 +37,7 @@ body {
     height: var(--navbar-height);
     z-index: 1000;
 
-    padding: 10px;
+    padding: 10px 40px 10px 40px;
     background-color: white;
 
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;

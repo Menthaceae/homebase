@@ -607,6 +607,9 @@
   .my-1 {
     margin-block: var(--spacing);
   }
+  .my-2 {
+    margin-block: calc(var(--spacing) * 2);
+  }
   .-mt-1 {
     margin-top: calc(var(--spacing) * -1);
   }
@@ -661,6 +664,9 @@
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
   }
+  .mb-3 {
+    margin-bottom: calc(var(--spacing) * 3);
+  }
   .mb-4 {
     margin-bottom: calc(var(--spacing) * 4);
   }
@@ -672,6 +678,9 @@
   }
   .-ml-1 {
     margin-left: calc(var(--spacing) * -1);
+  }
+  .ml-1 {
+    margin-left: var(--spacing);
   }
   .ml-1\.5 {
     margin-left: calc(var(--spacing) * 1.5);
@@ -818,6 +827,9 @@
   .h-\[1\.125rem\] {
     height: 1.125rem;
   }
+  .h-\[16px\] {
+    height: 16px;
+  }
   .h-auto {
     height: auto;
   }
@@ -932,6 +944,9 @@
   .w-36 {
     width: calc(var(--spacing) * 36);
   }
+  .w-50 {
+    width: calc(var(--spacing) * 50);
+  }
   .w-80 {
     width: calc(var(--spacing) * 80);
   }
@@ -940,6 +955,9 @@
   }
   .w-\[4\.5rem\] {
     width: 4.5rem;
+  }
+  .w-\[16px\] {
+    width: 16px;
   }
   .w-\[280px\] {
     width: 280px;
@@ -952,6 +970,9 @@
   }
   .w-max {
     width: max-content;
+  }
+  .w-md {
+    width: var(--container-md);
   }
   .w-screen {
     width: 100vw;
@@ -1204,9 +1225,6 @@
   .gap-4 {
     gap: calc(var(--spacing) * 4);
   }
-  .gap-15 {
-    gap: calc(var(--spacing) * 15);
-  }
   :where(.space-y-1 > :not(:last-child)) {
     --tw-space-y-reverse: 0;
     margin-block-start: calc(var(--spacing) * var(--tw-space-y-reverse));
@@ -1242,14 +1260,11 @@
     margin-block-start: calc(calc(var(--spacing) * 5) * var(--tw-space-y-reverse));
     margin-block-end: calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)));
   }
-<<<<<<< HEAD
-=======
   :where(.space-y-6 > :not(:last-child)) {
     --tw-space-y-reverse: 0;
     margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
     margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
   }
->>>>>>> dashboards
   :where(.space-y-8 > :not(:last-child)) {
     --tw-space-y-reverse: 0;
     margin-block-start: calc(calc(var(--spacing) * 8) * var(--tw-space-y-reverse));
@@ -1402,6 +1417,9 @@
   .border-blue-300 {
     border-color: var(--color-blue-300);
   }
+  .border-gray-200 {
+    border-color: var(--color-gray-200);
+  }
   .border-gray-300 {
     border-color: var(--color-gray-300);
   }
@@ -1434,6 +1452,9 @@
   }
   .border-red-500 {
     border-color: var(--color-red-500);
+  }
+  .border-stone-500 {
+    border-color: var(--color-stone-500);
   }
   .border-transparent {
     border-color: transparent;
@@ -2426,6 +2447,9 @@
   .text-amber-800 {
     color: var(--color-amber-800);
   }
+  .text-black {
+    color: var(--color-black);
+  }
   .text-blue-700 {
     color: var(--color-blue-700);
   }
@@ -2447,11 +2471,17 @@
   .text-gray-300 {
     color: var(--color-gray-300);
   }
+  .text-gray-400 {
+    color: var(--color-gray-400);
+  }
   .text-gray-500 {
     color: var(--color-gray-500);
   }
   .text-gray-700 {
     color: var(--color-gray-700);
+  }
+  .text-gray-800 {
+    color: var(--color-gray-800);
   }
   .text-gray-900 {
     color: var(--color-gray-900);
@@ -2609,6 +2639,10 @@
   }
   .shadow-lg {
     --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-md {
+    --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .shadow-sm {
@@ -2817,9 +2851,6 @@
         background-color: color-mix(in oklab, var(--color-accent) 10%, transparent);
       }
     }
-    .hover\:bg-blue-700:hover {
-      background-color: var(--color-blue-700);
-    }
     .hover\:bg-gray-100:hover {
       background-color: var(--color-gray-100);
     }
@@ -2855,9 +2886,6 @@
     .hover\:text-accent-content:hover {
       color: var(--color-accent-content);
     }
-    .hover\:text-gray-800:hover {
-      color: var(--color-gray-800);
-    }
     .hover\:text-ink-600:hover {
       color: var(--color-ink-600);
     }
@@ -2882,6 +2910,10 @@
     .hover\:opacity-100:hover {
       opacity: 100%;
     }
+    .hover\:brightness-95:hover {
+      --tw-brightness: brightness(95%);
+      filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+    }
   }
   .focus\:border-blue-500:focus {
     border-color: var(--color-blue-500);
@@ -2892,10 +2924,6 @@
   }
   .focus\:ring-1:focus {
     --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .focus\:ring-2:focus {
-    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .focus\:ring-blue-500:focus {
@@ -2910,6 +2938,13 @@
   }
   .focus-visible\:bg-red-50:focus-visible {
     background-color: var(--color-red-50);
+  }
+  .focus-visible\:ring-2:focus-visible {
+    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .focus-visible\:ring-blue-400:focus-visible {
+    --tw-ring-color: var(--color-blue-400);
   }
   .focus-visible\:outline-none:focus-visible {
     --tw-outline-style: none;
@@ -2933,6 +2968,9 @@
   @media (width >= 40rem) {
     .sm\:max-h-\[80vh\] {
       max-height: 80vh;
+    }
+    .sm\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     .sm\:flex-row {
       flex-direction: row;
@@ -3010,6 +3048,9 @@
   }
   .dark\:border-blue-900:where(.dark, .dark *) {
     border-color: var(--color-blue-900);
+  }
+  .dark\:border-gray-300:where(.dark, .dark *) {
+    border-color: var(--color-gray-300);
   }
   .dark\:border-green-800:where(.dark, .dark *) {
     border-color: var(--color-green-800);
@@ -4193,6 +4234,59 @@
   initial-value: "";
   inherits: false;
 }
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -4251,6 +4345,19 @@
       --tw-duration: initial;
       --tw-ease: initial;
       --tw-content: "";
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
     }
   }
 }
