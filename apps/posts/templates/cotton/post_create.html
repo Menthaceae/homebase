@@ -11,7 +11,7 @@
 >
     <div class="post-modal-content">
 
-        <form action="{% url 'create_post' %}" method="POST">
+        <form action="{% url 'create_post' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
             <!-- Author -->
@@ -66,7 +66,7 @@
             <div class="grid grid-columns-1">
                 <!-- Title -->
                 <input
-                    class="rounded-lg shadow-md border border-gray-200 p-6 block text-black text-sm mb-2 required"
+                    class="post-title rounded-lg shadow-md border border-gray-200 p-6 block text-black text-sm mb-2 required"
                     type="text" 
                     id="title" 
                     name="title" 
@@ -76,7 +76,7 @@
                 
                 <!-- Body -->
                 <textarea 
-                    class="rounded-lg shadow-md border border-gray-200 p-6 block text-black text-sm mb-2 required" 
+                    class="post-body rounded-lg shadow-md border border-gray-200 p-6 block text-black text-sm mb-2 required" 
                     id="body"
                     name="body"
                     rows="5" 
@@ -93,17 +93,15 @@
                 required
             >
 
-            <!-- Image -->
-            <input
-                type="file"
-                id="image"
-                name="image"
-                accept="image/*"
-                hidden
-            >
+            <!-- Preview images-->
+            <div id="image-preview-container" class="grid grid-cols-3 gap-3 mt-3">
+                {% for photo in post.images.all %}
+                    <img src="{{ photo.image.url }}" class="w-full h-full object-contain">
+                {% endfor %}
+            </div>
 
             <!-- Tags -->
-            <div class="">
+            <div>
                 <h3 class="mb-3 text-sm font-semibold text-gray-800">
                     Add tags
                     <span class="text-xs ml-1 font-normal text-gray-400">(Optional)</span>
@@ -129,15 +127,22 @@
             </div>
 
             <!-- Footer -->
-            <div class="post-footer">
-                <c-ui.button
-                    class="image-input" 
-                    type="button"
-                    onclick="document.getElementById('image').click()"
-                >
-                    <i class="icons ti ti-photo-search"></i>
-                </c-ui.button>
-
+            <div class="flex flex-row justify-between p-2">
+                <!-- Image -->
+                <div>
+                    <label class="custom-file-upload">
+                        <input
+                            type="file"
+                            id="image"
+                            class="image-input"
+                            name="images"
+                            accept="image/*"
+                            multiple
+                        >
+                        <i class="icons ti ti-photo-search"></i>
+                    </label>
+                </div>
+                
                 <c-ui.button 
                     class="more-options-btn"
                     type="button"
@@ -145,7 +150,6 @@
                 >
                     <i class="icons ti ti-layout-grid-remove"><span class="mb-2"> More </span></i>
                 </c-ui.button>
-
             </div>
 
             <!-- Additional options (sell on marketplace, create event) -->
@@ -198,7 +202,3 @@
 
 <!-- Components -->
 <c-post-to />
-
-{% block custom_js %}
-<script src="{% static 'posts/js/posts.js' %}"></script>
-{% endblock %}

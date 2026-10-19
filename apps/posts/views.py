@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.conf import settings
 
 from .models import Post, Tag
 from .forms import *
@@ -39,47 +40,81 @@ def get_by_id(request, id):
     post = Post.objects.get(id=id)
     return post
 
-# CRUD 
 
+# CRUD 
 @login_required
-def create(request):
+def create_post(request):
     """
     Create post
-
     endpoint: posts/create/
     """
-    form = PostCreationForm(request.POST)
 
-    if request.method == 'POST':
+    if request.method == "POST":
+        form = PostCreationForm(request.POST, request.FILES)
+
+        # Debug
+        print("MEDIA ROOT:", settings.MEDIA_ROOT)
+        print("UPLOADED FILES:", request.FILES)
+        print("IMAGE FILES:", request.FILES.getlist("images"))
+
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.save()
 
-            selected_tags = request.POST.getlist('tags')
+            # Save tags
+            selected_tags = request.POST.getlist("tags")
 
             if selected_tags:
                 post.tags.set(selected_tags)
             else:
-                general_tag = Tag.objects.get(slug='general')
-                post.tags.add(general_tag)            
+                general_tag = Tag.objects.get(slug="general")
+                post.tags.add(general_tag)
+
+            # Save images
+            for image in request.FILES.getlist("images"):
+                PostImage.objects.create(
+                    post=post,
+                    image=image
+                )
+
+            print("SAVED IMAGES:", post.images.count())
 
             messages.success(request, "Post creation successful")
-            return redirect('home')
+            return redirect("home")
+
         else:
-            print(form.errors)
-            messages.error(request, "Your post could not be created. Please check the form.")
-            return render(request, 'public/home.html', {"form": form})
+            print("FORM ERRORS:", form.errors)
+            messages.error(
+                request,
+                "Your post could not be created. Please check the form."
+            )
+
+            return render(
+                request,
+                "public/home.html",
+                {
+                    "form": form,
+                    "tags": Tag.objects.all(),
+                }
+            )
 
     else:
-        return render(request, 'home', {"form": form})
+        form = PostCreationForm()
+
+    return render(
+        request,
+        "public/home.html",
+        {
+            "form": form,
+            "tags": Tag.objects.all(),
+        }
+    )
 
 @login_required
-def update(request, post_id):
+def update_post(request, post_id):
     """
     Update post
-
-    endpoint: update/
     """
     post = get_object_or_404(
         Post,
@@ -87,44 +122,48 @@ def update(request, post_id):
         author=request.user
     )
 
-    if request.method == 'POST':
-        form = PostCreationForm(
-            request.POST,
-            request.FILES,
-            instance=post
-        )
-
-        if form.is_valid:   
+    if request.method == "POST":
+        form = PostUpdateForm(
+                    request.POST,
+                    request.FILES,
+                    instance=post
+                )
+        
+        if form.is_valid():
             post = form.save()
 
-            # Update tags
+            #Save updated tags
             selected_tags = request.POST.getlist("tags")
-
             if selected_tags:
                 post.tags.set(selected_tags)
             else:
-                general_tag = get_object_or_404(
-                    Tag,
-                    slug="general"
-                )
+                general_tag = get_object_or_404(Tag, slug="general")
                 post.tags.set([general_tag])
 
-                messages.success(request, "Post updated successfully.")
-                return redirect('home')
-    else:
-        form = PostCreationForm(instance=post)
+            # Save updated images
+            for image in request.FILES.getlist("images"):
+                PostImage.objects.create(
+                    post=post,
+                    image=image
+                )
 
-        return render(
-            request, "posts/partials/post_edit_modal.html",
-            {
-                "post": post,
-                "form": form,
-                "tags": Tag.objects.all(),
-            }
-        )
+            messages.success(request, "Post updated successfully.")
+            return redirect('home')
+        else:
+            print("FORM ERRORS:", form.errors)
+            messages.error(request, "Your post could not be updated. Please check the form.")
+            return redirect('home')
+        
+    else:
+        form = PostUpdateForm(instance=post)
+        return render(request, 'public/home.html', {
+            "post": post,
+            "form": form,
+            "tags": Tag.objects.all()
+            })
 
 @login_required
-def delete(request, post_id):
+def delete_post(request, post_id):
     """
     Delete post
     """
@@ -134,14 +173,30 @@ def delete(request, post_id):
         author=request.user
     )
 
+    print("POST ID", post_id)
+    print("ID", str(post.id))
+
+    post.delete()
+    return redirect('home')
+
+
+def delete_image(request, image_id):
+    """
+    Delete image
+    """
+    image = get_object_or_404(
+        PostImage,
+        id=image_id
+    )
+
     if request.method == "POST":
-        post.delete()
+        image.delete()
         return redirect('home')
 
     return render(request, 'home')
 
-# Comments / Likes / Share
 
+# Comments / Likes / Share
 @login_required
 def comment(request):
     """

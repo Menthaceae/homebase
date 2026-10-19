@@ -12,7 +12,6 @@ class PostCreationForm(ModelForm):
             'body',
             'post_to',
             'homebase',
-            'image'
             ]
 
 class PostUpdateForm(ModelForm):
@@ -22,7 +21,6 @@ class PostUpdateForm(ModelForm):
             'id', 
             'title',
             'body', 
-            'image',
             ] 
 
 # Parent comment and parent post need to be hidden. I think you should be able to insert the object in the front end in the form.
