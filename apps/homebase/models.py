@@ -48,3 +48,22 @@ class Rental(models.Model):
     tenant = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     occupied = models.BooleanField(default=False, blank=True)
     owned_property = models.ForeignKey(OwnedProperty, on_delete=models.SET_NULL, null=True, blank=True)
+
+
+class MaintenanceRequest(models.Model):
+    id = models.AutoField(primary_key=True)
+    rental = models.ForeignKey(Rental, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    status = models.CharField(choices=(
+        ("pending", "Pending"),
+        ("in_progress", "In Progress"),
+        ("complete", "Complete")
+    ), default="pending", max_length=20)
+    priority = models.CharField(choices=(
+        ("1", "Low"),
+        ("2", "Medium"),
+        ("3", "High")
+    ), default="3", max_length=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

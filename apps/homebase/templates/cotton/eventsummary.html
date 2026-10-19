@@ -1,0 +1,17 @@
+<c-vars event="event" />
+
+<div class="space-y-4">
+    <div class="flex items-center gap-3">
+        <div class="flex size-14 shrink-0 flex-col items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+            <span class="text-xs font-medium uppercase">{{ event.start_date|date:"M" }}</span>
+            <span class="text-lg font-bold leading-tight">{{ event.start_date|date:"d" }}</span>
+        </div>
+        <div class="min-w-0">
+            <p class="font-semibold">{{ event.title }}</p>
+            <p class="mt-1 text-sm opacity-70">
+                <c-heroicon.map-pin class="mr-1 inline size-4" />
+                {{ event.location }}
+            </p>
+        </div>
+    </div>
+</div>

@@ -11,4 +11,5 @@ urlpatterns = [
   path('join/', views.join_page, name='join_page'),
   path('dashboard/property-manager/', views.property_manager_dashboard, name='propertyManagerDashboard'),
   path('dashboard/owner/', views.owner_dashboard, name='owner_dashboard'),
+  path('dashboard/tenant/', views.tenant_dashboard, name='tenant_dashboard'),
 ]

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Homebase, OwnedProperty, Rental, SubProperty
+from .models import Homebase, MaintenanceRequest, OwnedProperty, Rental, SubProperty
 
 class HomebaseCreationForm(ModelForm):
     class Meta:
@@ -16,3 +16,8 @@ class RentalCreationForm(ModelForm):
     class Meta:
         model = Rental
         fields = ['rent', 'occupied', 'start_date', 'end_date']
+
+class MaintenanceRequestForm(ModelForm):
+    class Meta:
+        model = MaintenanceRequest
+        fields = ['title', 'description', 'priority', 'rental']

@@ -1,18 +1,18 @@
 <c-vars 
     label="Dashboard"
-    value="Welcome to your dashboard"
-    description="This is a simple dashboard card."
-    filled=True
+    value="0"
+    description=""
+    filled=False
 />
 
-<c-ui.card class="w-full {{ filled |yesno:'bg-accent-content text-accent-foreground,' }}">
+<c-ui.card class="w-full transition-all {{ filled|yesno:'bg-accent-content text-[#ffffff] border-transparent,border-base-200' }}">
     <div class="flex flex-col justify-between">
-        <p class=" font-semibold mb-2">{{ label }}</p>
-        <h2 class="text-3xl font-bold text-center {{ filled |yesno:',text-accent-content' }}">
+        <p class="text-xs uppercase tracking-wider font-semibold opacity-80 mb-1">{{ label }}</p>
+        <h2 class="text-3xl font-extrabold {{ filled|yesno:'text-[#ffffff]' }}">
             {{ value }}
         </h2>
     </div>
-    {% if description != '' %}
-        <p class="text-base mt-2">{{ description }}</p>   
+    {% if description %}
+        <p class="text-xs mt-2 opacity-75">{{ description }}</p> 
     {% endif %}
 </c-ui.card>

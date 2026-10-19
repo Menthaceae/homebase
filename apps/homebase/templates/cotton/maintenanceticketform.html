@@ -1,0 +1,91 @@
+<c-vars :rentals="rentals" :maintenance_form="maintenance_form" />
+
+<form 
+    id="ticket-form"
+    hx-post="/homebase/dashboard/tenant/" 
+    hx-target="#ticket-form" 
+    hx-swap="outerHTML"
+>
+    {% csrf_token %}
+
+    <div class="space-y-4">
+        <!-- Title Field -->
+        <div>
+            <c-ui.input 
+                name="title" 
+                label="Title" 
+                value="{{ maintenance_form.title.value|default:'' }}" 
+                placeholder="Brief summary of the issue"
+                :field="{{ maintenance_form.title }}"
+                required
+            />
+            {% if maintenance_form.title.errors %}
+                <p class="mt-1 text-xs text-error">{{ maintenance_form.title.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Description Field -->
+        <div>
+            <c-ui.textarea 
+                name="description" 
+                label="Description" 
+                value="{{ maintenance_form.description.value|default:'' }}" 
+                placeholder="Please describe the issue in detail..."
+                :field="{{ maintenance_form.description }}"
+                required
+            />
+            {% if maintenance_form.description.errors %}
+                <p class="mt-1 text-xs text-error">{{ maintenance_form.description.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Priority Field -->
+        <div>
+            <c-ui.select 
+                name="priority" 
+                label="Priority" 
+                value="{{ maintenance_form.priority.value|default:'medium' }}" 
+                :field="{{ maintenance_form.priority }}"
+                required
+            >
+                <c-ui.select.option value="1">Low</c-ui.select.option>
+                <c-ui.select.option value="2">Medium</c-ui.select.option>
+                <c-ui.select.option value="3">High</c-ui.select.option>
+            </c-ui.select>
+            {% if maintenance_form.priority.errors %}
+                <p class="mt-1 text-xs text-error">{{ maintenance_form.priority.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Property/Unit Selection -->
+        <div>
+            <c-ui.select 
+                name="rental" 
+                label="Property / Unit" 
+                value="{{ maintenance_form.rental.value|default:'' }}" 
+                :field="{{ maintenance_form.rental }}"
+                required
+            >
+                <option value="" disabled {% if not maintenance_form.rental.value %}selected{% endif %}>Select a unit...</option>
+                {% for rental in rentals %}
+                    <c-ui.select.option value="{{ rental.id }}">
+                        Unit {{ rental.subproperty.room_number|default:"N/A" }} — {{ rental.subproperty.homebase.name }}
+                    </c-ui.select.option>
+                {% endfor %}
+            </c-ui.select>
+            {% if maintenance_form.rental.errors %}
+                <p class="mt-1 text-xs text-error">{{ maintenance_form.rental.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Submission Button & Loading Indicator -->
+        <div class="flex items-center justify-between pt-2">
+            <c-ui.button type="submit" variant="primary">
+                Submit Ticket
+            </c-ui.button>
+            <span class="htmx-indicator text-xs opacity-60">
+                Submitting ticket...
+            </span>
+        </div>
+    </div>
+</form>
