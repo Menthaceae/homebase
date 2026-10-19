@@ -2,13 +2,13 @@
 
 <form   method="POST" 
         class="grid grid-cols-2 gap-4"
-        x-post="{% url 'manage_homebase' homebase.id %}"
-        x-target="#rentalform"
-        x-swap="outerHTML"
+        hx-post="{% url 'manage_homebase' homebase.id %}"
+        hx-target="#rentalform"
+        hx-swap="outerHTML"
         id="rentalform"
         >
     {% csrf_token %}
-{% if rental_form.non_field_errors %}
+        {% if rental_form.non_field_errors %}
             <c-ui.alert type="error" class="mb-4">
                 {{ rental_form.non_field_errors.0 }}
             </c-ui.alert>
