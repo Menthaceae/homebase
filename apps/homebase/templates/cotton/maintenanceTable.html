@@ -1,10 +1,10 @@
-
+<c-vars :ticket="ticket" />
 <tr>
-    <td><b>Unit 4A</b></td>
-    <td>Leaky faucet in apartment 3B</td>
-    <td>Open</td>
-    <td><c-ui.badge color="red">High</c-ui.badge></td>
-    <td>Oct 12, 2023</td>
+    <td><b>{{ ticket.rental.subproperty.room_number }}</b></td>
+    <td>{{ ticket.title }}</td>
+    <td>{{ ticket.created_at }}</td>
+    <td><c-ui.badge color="red">{{ ticket.priority|default:ticket.priority }}</c-ui.badge></td>
+    <td>{{ ticket.status }}</td>
 </tr>
                     
            

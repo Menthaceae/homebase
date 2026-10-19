@@ -8,7 +8,7 @@
 >
     {% csrf_token %}
 
-    <div class="space-y-4">
+    <div class="space-y-2">
         <!-- Title Field -->
         <div>
             <c-ui.input 
@@ -48,9 +48,9 @@
                 :field="{{ maintenance_form.priority }}"
                 required
             >
-                <c-ui.select.option value="1">Low</c-ui.select.option>
-                <c-ui.select.option value="2">Medium</c-ui.select.option>
-                <c-ui.select.option value="3">High</c-ui.select.option>
+                <c-ui.select.option value="low">Low</c-ui.select.option>
+                <c-ui.select.option value="medium">Medium</c-ui.select.option>
+                <c-ui.select.option value="high">High</c-ui.select.option>
             </c-ui.select>
             {% if maintenance_form.priority.errors %}
                 <p class="mt-1 text-xs text-error">{{ maintenance_form.priority.errors.0 }}</p>
@@ -89,3 +89,19 @@
         </div>
     </div>
 </form>
+
+<script>
+    document.addEventListener('closedialog', function (evt) {
+
+        // Only run when the subproperty form finishes with HTTP 204
+        if (evt.detail.elt.id === 'rentalform') {
+            evt.detail.elt.reset();
+
+            // 3. Close the modal
+            const closeBtn = document.querySelector('button[x-bind=closeButton]');
+            if (closeBtn) {
+                closeBtn.click();
+            }
+        }
+    });
+</script>

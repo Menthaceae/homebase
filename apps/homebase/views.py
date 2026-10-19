@@ -92,7 +92,7 @@ def manage_homebase(request, homebase_id):
     homebase = Homebase.objects.get(id=homebase_id)
     if (manages(logged_in_user, homebase))== False:
         return HttpResponse("You do not have permission to manage this homebase.", status=403)
-    subproperties = SubProperty.objects.filter(homebase=homebase)
+    subproperties = SubProperty.objects.filter(homebase=homebase, rentals__isnull=True)
     rented_subproperties = Rental.objects.filter(subproperty__homebase=homebase)
     owned_subproperties = OwnedProperty.objects.filter(subproperty__homebase=homebase)
 
@@ -159,6 +159,7 @@ def manage_homebase(request, homebase_id):
         "rental_subproperties": rented_subproperties,
         "owned_subproperties": owned_subproperties,
         "subproperties": subproperties,
+        "total_properties_count": len(subproperties) + len(rented_subproperties) + len(owned_subproperties),
     }
     return render(request, 'manage.html', context)
 
@@ -271,23 +272,32 @@ def tenant_dashboard(request):
         )
     total_rent = rentals.aggregate(total=Coalesce(Sum("rent"), Value(0.0)))["total"]
     upcoming_events = Event.objects.filter(homebase__subproperty__rentals__tenant=user, start_date__gte=timezone.now()).order_by('start_date')[:5]
+    maintenanceticket = MaintenanceRequest.objects.filter(rental__tenant=user)
     mainttenance_form = MaintenanceRequestForm()
     grouped_rentals = defaultdict(list)
 
     if request.method == 'POST':
-        mainttenance_form = MaintenanceRequestForm(request.POST)
-        if mainttenance_form.is_valid():
-            maintenance_request = mainttenance_form.save(commit=False)
-            maintenance_request.save()
+        try:
+            mainttenance_form = MaintenanceRequestForm(request.POST)
+            if mainttenance_form.is_valid():
+                maintenance_request = mainttenance_form.save(commit=False)
+                maintenance_request.save()
+                response = HttpResponse(status=204)
+                response['HX-Refresh'] = 'true'
+                return response
+            else:
+                return render(request, 'cotton/maintenanceticketform.html', {
+                    "maintenance_form": mainttenance_form,
+                    "rentals": rentals
+                }, status=422)
+        except Exception as e:
             response = HttpResponse(status=204)
-            response['HX-Refresh'] = 'true'
+            response["HX-Trigger"] = json.dumps({
+                "toast": {"message": f"Something went wrong", "variant": "error"},
+                "closedialog": {}
+            })
+            print(f"Error occurred: {e}")
             return response
-        else:
-            print("Maintenance form is not valid:", mainttenance_form.errors)
-            return render(request, 'cotton/maintenanceticketform.html', {
-                "maintenance_form": mainttenance_form,
-                "rentals": rentals
-            }, status=422)
 
     for rental in rentals:
         homebase = rental.subproperty.homebase
@@ -297,12 +307,13 @@ def tenant_dashboard(request):
         {'homebase': hb, 'rentals': r_list}
         for hb, r_list in grouped_rentals.items()
     ]
-
+    
     context = {
         "rentals": rentals,
         "total_rent": total_rent,
         "upcoming_events": upcoming_events,
         "homebase_groups": homebase_groups,
-        "maintenance_form": mainttenance_form
+        "maintenance_form": mainttenance_form,
+        "maintenancetickets": maintenanceticket
     }
     return render(request, 'tenantdb.html', context)

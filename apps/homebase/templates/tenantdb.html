@@ -61,14 +61,14 @@
 
                 <c-dbcard
                     label="Open Service Tickets"
-                    value="{{ open_tickets_count }}"
+                    value="{{ maintenancetickets|length }}"
                     description="Requests awaiting resolution"
                     filled=False
                 />
 
                 <c-dbcard
                     label="Upcoming Events"
-                    value="{{ upcoming_events_count }}"
+                    value="{{ upcoming_events|length }}"
                     description="Events in your community"
                     filled=True
                 />
@@ -232,13 +232,10 @@
                                         </span>
                                     </c-ui.button>
                                 </c-slot>
-
-                                <c-slot name="content">
-                                    <c-maintenanceticketform
-                                        :rental="rentals"
-                                        :maintenance_form="maintenance_form"
+                                <c-maintenanceticketform
+                                            :rentals="rentals"
+                                            :maintenance_form="maintenance_form"
                                     />
-                                </c-slot>   
                             </c-ui.dialog>
                         </div>
 
@@ -246,6 +243,7 @@
                             <c-ui.table class="w-full">
                                 <thead>
                                     <tr>
+                                        <th>Unit</th>
                                         <th>Issue</th>
                                         <th>Submitted</th>
                                         <th>Priority</th>
@@ -254,31 +252,10 @@
                                 </thead>
 
                                 <tbody>
-                                    {% for ticket in service_tickets %}
-                                        <tr>
-                                            <td>
-                                                <div class="font-semibold">
-                                                    {{ ticket.title }}
-                                                </div>
-                                                <p class="mt-1 max-w-xs truncate text-xs opacity-65">
-                                                    {{ ticket.description }}
-                                                </p>
-                                            </td>
-
-                                            <td class="whitespace-nowrap">
-                                                {{ ticket.created_at|date:"M j, Y" }}
-                                            </td>
-
-                                            <td>
-                                                {{ ticket.get_priority_display|default:ticket.priority }}
-                                            </td>
-
-                                            <td>
-                                                <span class="inline-flex rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent-content">
-                                                    {{ ticket.get_status_display|default:ticket.status }}
-                                                </span>
-                                            </td>
-                                        </tr>
+                                    {% for ticket in maintenancetickets %}
+                                        <c-maintenanceTable 
+                                            :ticket="ticket"
+                                        />
                                     {% empty %}
                                         <tr>
                                             <td colspan="4" class="py-10 text-center">
@@ -491,10 +468,8 @@
                         </div>
                     </div>
                 </c-ui.card>
-
             </div>
         </div>
-
     </div>
 
     <c-ui.toast.container position="top-right" />

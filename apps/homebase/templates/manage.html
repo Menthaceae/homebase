@@ -109,7 +109,7 @@
             <div class="flex items-center justify-between gap-4">
                 <div>
                     <p class="text-sm opacity-70">Total units</p>
-                    <p class="mt-2 text-3xl font-bold">{{ total_subproperties_count }}</p>
+                    <p class="mt-2 text-3xl font-bold">{{ total_properties_count }}</p>
                     <p class="mt-1 text-xs opacity-60">All registered properties</p>
                 </div>
                 <div class="flex size-12 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
@@ -122,24 +122,11 @@
             <div class="flex items-center justify-between gap-4">
                 <div>
                     <p class="text-sm opacity-70">Rented units</p>
-                    <p class="mt-2 text-3xl font-bold">{{ rental_subproperties_count }}</p>
+                    <p class="mt-2 text-3xl font-bold">{{ rental_subproperties | length }}</p>
                     <p class="mt-1 text-xs opacity-60">Units with rental records</p>
                 </div>
                 <div class="flex size-12 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
                     <c-heroicon.key class="size-6" />
-                </div>
-            </div>
-        </c-ui.card>
-
-        <c-ui.card>
-            <div class="flex items-center justify-between gap-4">
-                <div>
-                    <p class="text-sm opacity-70">Owned units</p>
-                    <p class="mt-2 text-3xl font-bold">{{ owned_subproperties_count }}</p>
-                    <p class="mt-1 text-xs opacity-60">Owner-occupied or owned units</p>
-                </div>
-                <div class="flex size-12 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
-                    <c-heroicon.home-modern class="size-6" />
                 </div>
             </div>
         </c-ui.card>

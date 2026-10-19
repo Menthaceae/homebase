@@ -52,7 +52,7 @@ class Rental(models.Model):
 
 class MaintenanceRequest(models.Model):
     id = models.AutoField(primary_key=True)
-    rental = models.ForeignKey(Rental, on_delete=models.CASCADE)
+    rental = models.ForeignKey(Rental, on_delete=models.CASCADE, related_name='maintenance_requests')
     title = models.CharField(max_length=100)
     description = models.TextField()
     status = models.CharField(choices=(
@@ -61,9 +61,9 @@ class MaintenanceRequest(models.Model):
         ("complete", "Complete")
     ), default="pending", max_length=20)
     priority = models.CharField(choices=(
-        ("1", "Low"),
-        ("2", "Medium"),
-        ("3", "High")
-    ), default="3", max_length=1)
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High")
+    ), default="high", max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
