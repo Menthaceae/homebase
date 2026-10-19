@@ -38,7 +38,7 @@
 
         <!-- Center panel -->
         <div class="col-span-2">
-            <div class="filters">
+            <div class="flex justify-center items-center p-2 gap-2">
                 <c-ui.button type="button" class="filter-button" data-post-filter="all">All</c-ui.button>
                 {% for tag in tags %}    
                 <c-ui.button type="button" class="filter-button" data-post-filter="{{ tag.slug }}">{{ tag.name }}</c-ui.button>
