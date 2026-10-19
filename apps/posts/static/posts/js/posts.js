@@ -165,7 +165,7 @@ Array.from(imageInputs).forEach(imageInput => {
         const newImages = Array.from(this.files);
 
         selectedImages.push(...newImages);
-        console.log("Added photo")
+        console.log(newImages)
         renderImagePreviews();
 
         // Clear the input so the same file can be selected again
@@ -187,6 +187,8 @@ function renderImagePreviews() {
         const imageURL = URL.createObjectURL(file);
         img.src = imageURL;
 
+        console.log(img);
+
         const removeButton = document.createElement("button");
         removeButton.type = "button";
         removeButton.textContent = "×";
@@ -202,8 +204,10 @@ function renderImagePreviews() {
         wrapper.appendChild(img);
         wrapper.appendChild(removeButton);
         previewContainer.appendChild(wrapper);
+        console.log(wrapper);
         console.log("Image appended");
     });
+    console.log("Container:", previewContainer, "Children:", previewContainer.children.length);
 }
 
 document.querySelectorAll("form").forEach(postForm => {

@@ -93,13 +93,6 @@
                 required
             >
 
-            <!-- Preview images-->
-            <div id="image-preview-container" class="grid grid-cols-3 gap-3 mt-3">
-                {% for photo in post.images.all %}
-                    <img src="{{ photo.image.url }}" class="w-full h-full object-contain">
-                {% endfor %}
-            </div>
-
             <!-- Tags -->
             <div>
                 <h3 class="mb-3 text-sm font-semibold text-gray-800">
@@ -142,6 +135,11 @@
                         <i class="icons ti ti-photo-search"></i>
                     </label>
                 </div>
+
+                <!-- Preview images-->
+                <div id="image-preview-container" class=" h-full w-full grid grid-cols-3 gap-3 mt-3">
+                    
+                </div>
                 
                 <c-ui.button 
                     class="more-options-btn"
@@ -177,8 +175,6 @@
                     </c-ui.button>
                 </div>
             </div>
-
-     
 
             <!-- Form error handling -->
             {% if form.errors %}

@@ -871,6 +871,9 @@
   .h-80 {
     height: calc(var(--spacing) * 80);
   }
+  .h-96 {
+    height: calc(var(--spacing) * 96);
+  }
   .h-\[1\.125rem\] {
     height: 1.125rem;
   }
@@ -1003,9 +1006,6 @@
   .w-36 {
     width: calc(var(--spacing) * 36);
   }
-  .w-50 {
-    width: calc(var(--spacing) * 50);
-  }
   .w-64 {
     width: calc(var(--spacing) * 64);
   }
@@ -1033,11 +1033,14 @@
   .w-max {
     width: max-content;
   }
-  .w-md {
-    width: var(--container-md);
-  }
   .w-screen {
     width: 100vw;
+  }
+  .w-sm {
+    width: var(--container-sm);
+  }
+  .w-xs {
+    width: var(--container-xs);
   }
   .max-w-2xl {
     max-width: var(--container-2xl);
@@ -1077,6 +1080,9 @@
   }
   .min-w-\[var\(--dd-min\)\] {
     min-width: var(--dd-min);
+  }
+  .flex-0 {
+    flex: 0;
   }
   .flex-1 {
     flex: 1;
@@ -1229,6 +1235,9 @@
   }
   .grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
   .grid-cols-7 {
     grid-template-columns: repeat(7, minmax(0, 1fr));
