@@ -54,6 +54,21 @@
     line-height: 1.5;
 }
 
+/* ----- Custom file upload ----- */
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
 /* =======================
     EVENT DETAILS GRID
    ======================= */
@@ -247,12 +262,6 @@
 /* ------ Load events ----- */
 
 /* Responsive event card grid */
-.events-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
-    align-items: stretch;
-}
 
 /* Card */
 .event-card {
