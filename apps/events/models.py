@@ -20,5 +20,5 @@ class Event(models.Model):
     end_time = models.TimeField(null=True, blank=True)
     location = models.CharField()
     body = models.TextField()
-    image = models.ImageField(blank=True, upload_to='events')   # /static/images/
+    image = models.ImageField(upload_to="events/coverphoto/", blank=True)
     post_to = models.CharField(choices=post_to_choices) 
