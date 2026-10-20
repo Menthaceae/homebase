@@ -80,11 +80,19 @@ function openUpdatePostModal(button) {
     const modal = document.getElementById("update-post-modal");
     const form = modal.querySelector(".update-post-form");
     const postId = button.dataset.postId;
+    removedImageIds = [];
     const title = button.dataset.postTitle;
     const body = button.dataset.postBody;
+    const images = JSON.parse(button.dataset.postImages || "[]");
+
+    const previewContainer = modal.querySelector("#image-preview-container");
+    console.log(images);
 
     console.log(title)
     console.log(body)
+
+    // Render images
+    renderImagePreviews(previewContainer, images, true);
 
     // Store the ID of the post being edited
     modal.dataset.postId = postId;
@@ -96,6 +104,8 @@ function openUpdatePostModal(button) {
 
     form.action = `/posts/${postId}/update/`;
     console.log(postId);
+
+    form.querySelector("#removed-image-ids").value = JSON.stringify(removedImageIds);
 
     modal.showModal();
 }
@@ -159,6 +169,8 @@ const imageInputs = document.getElementsByClassName("image-input");
 const previewContainer = document.getElementById("image-preview-container");
 
 let selectedImages = [];
+let existingImages = [];
+let removedImageIds = [];
 
 Array.from(imageInputs).forEach(imageInput => {
     imageInput.addEventListener("change", function () {
@@ -166,25 +178,28 @@ Array.from(imageInputs).forEach(imageInput => {
 
         selectedImages.push(...newImages);
         console.log(newImages)
-        renderImagePreviews();
+        renderImagePreviews(previewContainer, selectedImages);
 
         // Clear the input so the same file can be selected again
         this.value = "";
     });
 });
 
-function renderImagePreviews() {
+function renderImagePreviews(previewContainer, images, isExisting = false) {
     console.log("Rendering image...")
     previewContainer.innerHTML = "";
 
-    selectedImages.forEach((file, index) => {
+    images.forEach((image, index) => {
         const wrapper = document.createElement("div");
         wrapper.className = "relative";
 
         const img = document.createElement("img");
         img.className = "h-32 w-full rounded-lg object-cover";
 
-        const imageURL = URL.createObjectURL(file);
+        const imageURL = isExisting
+            ? image
+            : URL.createObjectURL(image);
+
         img.src = imageURL;
 
         console.log(img);
@@ -196,9 +211,15 @@ function renderImagePreviews() {
             "absolute right-1 top-1 rounded-full bg-white px-2 py-1 shadow";
 
         removeButton.addEventListener("click", function () {
-            URL.revokeObjectURL(imageURL);
-            selectedImages.splice(index, 1);
-            renderImagePreviews();
+            if (isExisting) {
+                removedImageIds.push(image.id);
+                images.splice(index, 1);
+            } else {
+                URL.revokeObjectURL(imageURL);
+                images.splice(index, 1);
+            }
+
+            renderImagePreviews(previewContainer, images, isExisting);
         });
 
         wrapper.appendChild(img);

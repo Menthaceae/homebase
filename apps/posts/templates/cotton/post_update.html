@@ -14,8 +14,8 @@
         <!-- Form action is handled by javascript -->
         <form 
             method="POST" 
-            class="update-post-form"
             enctype="multipart/form-data"
+            class="update-post-form"
             action=""
         >
             {% csrf_token %}
@@ -71,13 +71,8 @@
             </div>
 
             <!-- Preview images-->
-            <div id="image-preview-container" class="grid grid-cols-3 gap-3 mt-3">
-                {% for post_image in post.images.all %}
-                <div class="w-64 h-64">
-                    <img src="{{ post_image.image.url }}" class="w-full h-full object-contain">
-                </div>
-                {% endfor %}
-            </div>
+            <div id="image-preview-container" class="grid grid-cols-3 gap-3 mt-3"></div>
+            <input type="hidden" id="removed-image-ids" name="removed_image_ids">
 
             {% if photo in post.image.all %}
             <div id="default-carousel" class="relative w-full" data-carousel="slide">

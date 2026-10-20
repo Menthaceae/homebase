@@ -1,3 +1,120 @@
-{% load static %}
-<!-- View individual post-->
+{% for post in posts %}
+<dialog
+    id="post-{{ post.id }}"
+    class="post_view m-auto max-h-[90vh] w-[95%] max-w-4xl overflow-y-auto rounded-2xl bg-white p-0 text-gray-800 shadow-2xl backdrop:bg-gray-950/60"
+>
+    <div class="flex flex-col">
 
+        <!-- Header -->
+        <div class="flex items-start h-m-md justify-between gap-4 border-b border-gray-100 px-6 py-5">
+
+            <!-- Author -->
+            <div class="flex min-w-0 items-center gap-3">
+                <c-ui.avatar name="{{ post.author }}" size="sm" />
+
+                <div class="min-w-0">
+                    <p class="truncate font-semibold text-gray-900">
+                        {{ post.author.first_name }} {{ post.author.last_name }}
+                    </p>
+
+                    {% if post.created_at %}
+                        <p class="text-xs text-gray-500">
+                            {{ post.created_at|date:"M j, Y" }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Menu, and close button -->
+            <div class="flex shrink-0 items-start gap-3">
+
+                <!-- Post menu -->
+                {% if post.author == request.user %}
+                    <c-ui.dropdown position="bottom" align="end">
+                        <c-slot name="trigger">
+                            <button
+                                type="button"
+                                aria-label="Post options"
+                                class="rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-900"
+                            >
+                                <i class="ti ti-dots text-xl"></i>
+                            </button>
+                        </c-slot>
+
+                        <!-- Edit -->
+                        <c-ui.dropdown.item
+                            onclick="openUpdatePostModal(this)"
+                            data-post-id="{{ post.id }}"
+                            data-post-title="{{ post.title }}"
+                            data-post-body="{{ post.body }}"
+                            data-post-images='[{% for photo in post.images.all %}{% if photo.image %}"{{ photo.image.url|escapejs }}"{% if not forloop.last %},{% endif %}{% endif %}{% endfor %}]'
+                        >
+                            <c-slot name="icon">
+                                <i class="ti ti-edit text-lg"></i>
+                            </c-slot>
+                            Edit
+                        </c-ui.dropdown.item>
+
+                        <!-- Delete -->
+                        <c-ui.dropdown.item
+                            onclick="deletePost(this)"
+                            data-post-id="{{ post.id }}"
+                        >
+                            <c-slot name="icon">
+                                <i class="ti ti-trash text-lg"></i>
+                            </c-slot>
+                            Delete
+                        </c-ui.dropdown.item>
+                    </c-ui.dropdown>
+                {% endif %}
+
+                <!-- Close icon -->
+                <button
+                    type="button"
+                    onclick="this.closest('dialog').close()"
+                    aria-label="Close post"
+                    class="rounded-full p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-900"
+                >
+                    <i class="ti ti-x text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        {% with photos=post.images.all %}
+            <div class="flex flex-col gap-2 p-6 {% if photos %}sm:flex-row sm:items-start{% endif %}">
+
+                <!-- Left: Images -->
+                {% if photos %}
+                    <div class="grid w-sm grid-cols-2 gap-3 sm:w-1/2 sm:shrink-0">
+                        {% for photo in photos %}
+                            {% if photo.image %}
+                                <div class="overflow-hidden rounded-xl bg-gray-100 w-sm {% if forloop.first %}col-span-2{% endif %}">
+                                    <img
+                                        src="{{ photo.image.url }}"
+                                        alt="{{ post.title }}"
+                                        class="max-h-96 w-sm object-cover"
+                                    >
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Right: Post text -->
+                <div class="min-w-md flex-1">
+                    <h2 class="mb-3 text-2xl font-bold leading-tight tracking-tight text-gray-900">
+                        {{ post.title }}
+                    </h2>
+
+                    <p class="break-words text-sm leading-7 text-gray-600">
+                        {{ post.body }}
+                    </p>
+                </div>
+
+            </div>
+        {% endwith %}
+
+    </div>
+</dialog>
+{% endfor %}

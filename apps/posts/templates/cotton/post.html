@@ -1,5 +1,5 @@
 {% for post in posts %}
-  <c-ui.card class="p-4 flex-1 w-full">
+  <c-ui.card class="p-4 flex-0 w-full">
     <!-- Header -->
     <div class="flex flex-row justify-between items-center gap-2 mb-4">
       <div class="flex flex-row gap-2">
@@ -19,6 +19,7 @@
         </div>
         <div class="flex justify-end">
           <!-- Post menu button (horizontal dots)-->
+          {% if post.author == request.user %}
           <c-ui.dropdown position="bottom" align="end">
             <c-slot name="trigger" >
                 <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -26,13 +27,13 @@
                 </svg>
             </c-slot>
   
-              {% if post.author == request.user %}
               <!-- Edit post-->
               <c-ui.dropdown.item
                   onclick="openUpdatePostModal(this)"
                   data-post-id="{{ post.id }}"
                   data-post-title="{{ post.title }}"
                   data-post-body="{{ post.body }}"
+                  data-post-images='[{% for photo in post.images.all %}"{{ photo.image.url }}"{% if not forloop.last %},{% endif %}{% endfor %}]'
               >
                 <c-slot name="icon">
                   <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -49,10 +50,8 @@
                   <span class="text-sm">Delete</span>
                 </div>
               </c-ui.dropdown.item>
-              {% else %}
-              <p>No options</p>
-              {% endif %}
-          </c-ui.dropdown>          
+          </c-ui.dropdown>     
+          {% endif %}    
         </div>
       </div>
 
@@ -132,21 +131,19 @@
         </c-ui.button>
       </div>
 
-      <c-ui.button 
+      <button
         type="button"
-        style="all: unset; cursor: pointer;"
+        onclick="document.getElementById('post-{{ post.id }}').showModal()"
+        class="cursor-pointer text-blue-600 hover:text-blue-800 hover:underline"
       >
-        <div class="flex flex-row items-center gap-2">
-          View Details
-          <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4"/>
-          </svg>
-        </div>
-      </c-ui.button>
+        View Post
+        <i class="ti ti-arrow-up-right"></i>
+      </button>
+
 
     </div>
 
-   
+    
   </c-ui.card>
 
   <div class="div p-1"></div>
@@ -155,3 +152,5 @@
 {% empty %}
   <p class="text-gray-500 text-center py-4">No posts available</p>
 {% endfor %}
+
+<c-post_view :post="{{ post }}" />
