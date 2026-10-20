@@ -2,7 +2,7 @@ from collections import defaultdict
 import json
 
 from django.db import transaction
-from django.db.models import Count, Sum, Value
+from django.db.models import Q, Count, Sum, Value
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -239,6 +239,7 @@ def dashboard(request):
 def property_manager_dashboard(request):
     user = request.user
     manager_name = user.first_name + " " + user.last_name
+    events = Event.objects.filter(homebase__managers=user, start_date__gte=timezone.now()).order_by('start_date')[:5]
     total_rent_revenue = Rental.objects.filter(
     subproperty__homebase__managers=user
     ).aggregate(
@@ -249,7 +250,8 @@ def property_manager_dashboard(request):
     subproperties_count = SubProperty.objects.filter(homebase__managers=user).count()
     tenants_count = count_all_managed_tenants(user)
     managed_homebases = Homebase.objects.filter(managers=user).annotate(
-        properties_count=Count('subproperty')
+        properties_count=Count('subproperty'),
+        rental_count=Count('subproperty__rentals', filter=Q(subproperty__rentals__isnull=False)),
     )
     properties_count = managed_homebases.count()
     
@@ -260,7 +262,8 @@ def property_manager_dashboard(request):
         "total_rent_revenue": total_rent_revenue,
         "subproperties_count": subproperties_count,
         "manager_name": manager_name,
-        "maintenance_requests": maintenance_requests
+        "maintenance_requests": maintenance_requests,
+        "events": events
 
     }
     return render(request, 'propertyManagerDb.html', context)

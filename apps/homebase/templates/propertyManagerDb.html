@@ -141,7 +141,7 @@
 
                   <div>
                     <p class="text-sm opacity-65">Active tenants</p>
-                    <p class="mt-1 text-2xl font-bold tracking-tight">12</p>
+                    <p class="mt-1 text-2xl font-bold tracking-tight">{{ homebase.rental_count }}</p>
                     <p class="mt-1 text-xs opacity-55">Current residents</p>
                   </div>
 
@@ -330,13 +330,16 @@
 
             </div>
 
-            <c-event
-              title="Community BBQ"
-              image="{% static 'images/bbq.jpeg' %}"
-              description="Enjoy food, games, and time with your neighbors."
-              date="June 15th, 2024"
-              location="Community Park"
-            />
+            {% for event in events %}
+              <c-event :event="event" />
+            {% empty %}
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-base-200">
+              <c-heroicon.calendar class="size-6" />
+            </div>
+              <p class="py-4 text-center text-sm opacity-65">
+                No upcoming events found.
+              </p>
+            {% endfor %}
 
           </c-ui.card>
 
