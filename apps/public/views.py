@@ -5,7 +5,6 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render
 from apps.homebase.models import Homebase, Rental, SubProperty
-from apps.posts import views as Posts
 from django.shortcuts import redirect, render
 from django.contrib.auth import login as django_login
 from django.contrib import messages
@@ -15,11 +14,11 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
-from apps.posts.models import Tag
+from apps.posts.models import Post, Tag
 
 # Landing page
 def home(request):
-    public_posts = Posts.get_public_posts()
+    public_posts = Post.objects.all().order_by('-created_at')
     tags = Tag.objects.all()
 
     context = {
