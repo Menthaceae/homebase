@@ -1,0 +1,21 @@
+<html>
+    <p>ID: {{id}}</p>
+    <p>Members:</p>
+    {% for member in members %}
+        {{member}}
+    {% endfor %}
+
+
+    <p>Messages:</p>
+    {% for message in messages %}
+    <hr>
+        <p>Author: {{message.author}}</p>
+        <p>Body: {{message.body}}</p>
+        <p>Time: {{message.timestamp}}</p>
+        <img src="/static/images/{{message.image}}/" alt="{{message.image.name}}" height="50" width="50">
+    {% endfor %}
+
+    <br>
+    <a href=/messages/groups/{{id}}/send/>Create Message</a>
+
+</html>

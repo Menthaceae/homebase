@@ -48,7 +48,7 @@ def create(request):
 
     endpoint: posts/create/
     """
-    form = PostCreationForm(request.POST)
+    form = PostCreationForm(request.POST, request.FILES)
 
     if request.method == 'POST':
         if form.is_valid():

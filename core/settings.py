@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'apps.homebase',
     'apps.posts',
     'apps.events',
+    'apps.dms',
 ]
 
 TAILWIND_CLI_SRC_CSS = "tailwind.input.css"
