@@ -272,8 +272,9 @@
                 </thead>
 
                 <tbody>
-                  {% for request in maintenance_requests %}
-                    <c-maintenaceTable :ticket="request" />
+              
+                   {% for request in maintenance_requests %}
+                    <c-maintenanceTable :ticket="request" />
                   {% empty %}
                     <tr>
                       <td colspan="4" class="py-4 text-center text-sm opacity-65">
@@ -281,6 +282,7 @@
                       </td>
                     </tr>
                   {% endfor %}
+                 
                 </tbody>
 
               </c-ui.table>
