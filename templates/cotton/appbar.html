@@ -28,7 +28,6 @@
         <div class="flex flex-1 justify-end flex-row items-center gap-2">
             {% if user.is_authenticated %}
             <c-ui.nav.item href="{% url 'home' %}" class="rounded-full {% if active_page == 'home' %}active{% else %}inactive{% endif %}" current>Feed</c-ui.nav.item>
-            <c-ui.nav.item href="#" class="{% if active_page == 'homebase' %}active{% else %}inactive{% endif %}" current>Homebase</c-ui.nav.item>
             <c-ui.button class="rounded-full {% if active_page == 'notifications' %}active{% else %}inactive{% endif %}">
                 <i class="ti ti-bell"></i>
             </c-ui.button>
@@ -42,7 +41,7 @@
                         <span class="text-sm font-medium">{{ user.first_name }} {{ user.last_name }}</span>
                     </button>
                 </c-slot>
-                <c-ui.dropdown.item href="/profile">
+                <c-ui.dropdown.item href="{% url 'profile' %}">
                     <c-slot name="icon">
                         <i class="ti ti-user-circle"></i>
                     </c-slot>
