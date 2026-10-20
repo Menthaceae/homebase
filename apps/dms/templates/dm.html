@@ -11,7 +11,9 @@
         <p>Author: {{message.author}}</p>
         <p>Body: {{message.body}}</p>
         <p>Time: {{message.timestamp}}</p>
-        <img src="/static/images/{{message.image}}/" alt="{{message.image.name}}" height="50" width="50">
+        {% if message.image %}
+        <img src="/media/{{message.image}}/" alt="{{message.image.name}}" height="300vh" width="300vw">
+        {% endif %}
     <hr>    
     {% endfor %}
 

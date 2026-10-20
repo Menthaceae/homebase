@@ -21,7 +21,7 @@ def create_message_group(request):
             return redirect('get_all_message_groups')
     else:
         form = MessageGroupCreationForm()
-    return render(request, 'cotton/create-group.html', {'form': form})
+    return render(request, 'create-group.html', {'form': form})
 
 
 def get_all_message_groups(request):
@@ -32,7 +32,7 @@ def get_all_message_groups(request):
         'groups': message_groups,
     }
 
-    return render(request, 'cotton/dms.html', context)
+    return render(request, 'dms.html', context)
     
     
 def get_all_messages(request, message_group_id):
@@ -59,7 +59,7 @@ def get_all_messages(request, message_group_id):
         'form': form,
     }
 
-    return render(request, 'cotton/dm.html', context)
+    return render(request, 'dm.html', context)
 
 
 def invite(request, message_group_id):
@@ -80,4 +80,4 @@ def invite(request, message_group_id):
         'form': form,
         'id': message_group_id,
     }
-    return render(request, 'cotton/invite.html', context)
+    return render(request, 'invite.html', context)
