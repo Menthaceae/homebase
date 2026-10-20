@@ -1,0 +1,42 @@
+<c-vars 
+    announcement_form=announcement_form homebase=homebase
+/>
+<form method="post"
+      hx-post="{% url 'create_announcement' homebase.id %}"
+      hx-target="#announcement-form"
+      hx-swap="outerHTML"
+      id="announcement-form"  
+      >
+    {% csrf_token %}
+    <div class="space-y-4">
+        <c-ui.input 
+            name="title" 
+            label="Title" 
+            placeholder="Enter the announcement title" 
+            :field="announcement_form.title"
+            required
+        />
+        {% if announcement_form.title.errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ announcement_form.title.errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+
+        <c-ui.textarea 
+            name="content" 
+            label="Content" 
+            placeholder="Enter the announcement content" 
+            :field="announcement_form.content"
+            required
+        />
+        {% if announcement_form.content.errors %}
+            <c-ui.alert type="error" class="mb-4">
+                {{ announcement_form.content.errors.0 }}
+            </c-ui.alert>
+        {% endif %}
+
+        <div class="flex justify-end">
+            <c-ui.button type="submit" variant="primary">Create Announcement</c-ui.button>
+        </div>
+    </div>
+</form>

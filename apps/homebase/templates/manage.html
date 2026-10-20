@@ -78,8 +78,7 @@
                                 </span>
                             </c-ui.button>
                         </c-slot>
-
-                        {% comment %} <c-announcementform :homebase="homebase" /> {% endcomment %}
+                        <c-announcementform :homebase="homebase" />
                     </c-ui.dialog>
                 </div>
             </div>
@@ -127,6 +126,19 @@
                 </div>
                 <div class="flex size-12 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
                     <c-heroicon.key class="size-6" />
+                </div>
+            </div>
+        </c-ui.card>
+
+        <c-ui.card>
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm opacity-70">Unassigned units</p>
+                    <p class="mt-2 text-3xl font-bold">{{ subproperties | length }}</p>
+                    <p class="mt-1 text-xs opacity-60">Units with rental records</p>
+                </div>
+                <div class="flex size-12 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                    <c-heroicon.home-modern class="size-6" />
                 </div>
             </div>
         </c-ui.card>
@@ -294,7 +306,7 @@
                         </c-ui.button>
                     </c-slot>
 
-                    {% comment %} <c-announcementform :homebase="homebase" /> {% endcomment %}
+                    <c-announcementform :homebase="homebase" />
                 </c-ui.dialog>
             </div>
         </c-ui.card>

@@ -265,8 +265,6 @@
                 <thead>
                   <tr class="text-left text-xs uppercase tracking-wide opacity-60">
                     <th class="whitespace-nowrap py-3 pr-4">Unit</th>
-                    <th class="whitespace-nowrap py-3 pr-4">Tenant</th>
-                    <th class="whitespace-nowrap py-3 pr-4">Rent</th>
                     <th class="whitespace-nowrap py-3 pr-4">Start Date</th>
                     <th class="whitespace-nowrap py-3 pr-4">End Date</th>
                     <th class="whitespace-nowrap py-3">Status</th>
@@ -274,8 +272,15 @@
                 </thead>
 
                 <tbody>
-                  <c-maintenanceTable />
-                  <c-maintenanceTable />
+                  {% for request in maintenance_requests %}
+                    <c-maintenaceTable :ticket="request" />
+                  {% empty %}
+                    <tr>
+                      <td colspan="4" class="py-4 text-center text-sm opacity-65">
+                        No maintenance requests found.
+                      </td>
+                    </tr>
+                  {% endfor %}
                 </tbody>
 
               </c-ui.table>

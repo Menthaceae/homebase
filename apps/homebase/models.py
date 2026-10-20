@@ -67,3 +67,13 @@ class MaintenanceRequest(models.Model):
     ), default="high", max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Announcement(models.Model):
+    id = models.AutoField(primary_key=True)
+    homebase = models.ForeignKey(Homebase, on_delete=models.CASCADE, related_name='announcements')
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)

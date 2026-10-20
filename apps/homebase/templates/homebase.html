@@ -29,15 +29,6 @@
                     and build stronger relationships with your neighbors.
                 </p>
 
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <c-ui.button
-                        href="#community-feed"
-                        variant="default"
-                    >
-                    <span class="flex flex-row gap-2">Explore community <c-heroicon.arrow-right class="size-4" /></span>
-                    </c-ui.button>
-                        
-                </div>
             </div>
         </section>
 
@@ -237,12 +228,15 @@
                             </p>
                         </div>
                     </div>
-
+                    {% for announcement in announcements %}
                     <c-announcement
-                        title="Community Meeting"
-                        description="We will be holding a community meeting to discuss upcoming projects and initiatives."
-                        date="June 20th, 2024"
+                        title="{{ announcement.title }}"
+                        description="{{ announcement.content }}"
+                        date="{{ announcement.created_at|date:'F j, Y' }}"
                     />
+                    {% empty %}
+                    <p class="text-gray-500 text-center py-4">No announcements</p>
+                    {% endfor %}
                 </c-ui.card>
             </div>
         </div>

@@ -57,6 +57,7 @@ def home(request, homebase_id):
     users = homebase.users.all().count()
     posts = Posts.get_homebase_posts(homebase_id)
     managers = homebase.managers.all()
+    announcements = Announcement.objects.filter(homebase=homebase).order_by('-created_at')[:5]
     events = Event.objects.filter(homebase=homebase).order_by('start_date')[:5]
     occupied = Rental.objects.filter(subproperty__homebase=homebase, occupied=True).count()
     authorized = in_homebase(request.user, homebase)
@@ -69,6 +70,7 @@ def home(request, homebase_id):
             "occupied_count": occupied,
             "managers": managers,
             "events": events,
+            "announcements": announcements,
             "posts": posts
         }
         return render(request, 'homebase.html', context)
@@ -107,6 +109,17 @@ def manage_homebase(request, homebase_id):
         try:
             if rental_form.is_valid():
                 with transaction.atomic():
+                    if classification == 'rental' and subproperty is None and sub_form.is_valid():
+                        subproperty = sub_form.save(commit=False)
+                        subproperty.homebase = homebase
+                        if SubProperty.objects.filter(homebase=homebase, room_number=subproperty.room_number).exists():
+                            response = HttpResponse(status=204)
+                            response["HX-Trigger"] = json.dumps({
+                                "toast": {"message": f"Subproperty with room number {subproperty.room_number} already exists in this homebase.", "variant": "error"},
+                                "closedialog": {}
+                            })
+                            return response
+                        subproperty.save()
                     subproperty = SubProperty.objects.get(id=subproperty)
                     rental = rental_form.save(commit=False)
                     rental.subproperty = subproperty
@@ -212,16 +225,27 @@ def count_all_managed_tenants(user):
     return tenant_count
 
 
+@login_required
+def dashboard(request):
+    user = request.user
+    if Homebase.objects.filter(managers=user).exists():
+        return redirect('property-manager/')
+    if Rental.objects.filter(tenant=user).exists():
+        return redirect('tenant/')
+
+
 # GET homebase/dashboard/property-manager/
 @login_required
 def property_manager_dashboard(request):
     user = request.user
     manager_name = user.first_name + " " + user.last_name
     total_rent_revenue = Rental.objects.filter(
-    subproperty__homebase__managers=request.user
+    subproperty__homebase__managers=user
     ).aggregate(
         total=Coalesce(Sum("rent"), Value(0.0))
     )["total"]
+    maintenance_requests = MaintenanceRequest.objects.filter(rental__subproperty__homebase__managers=user)
+    print(f"Maintenance requests for manager {manager_name}: {Rental.objects.filter(subproperty__homebase__managers=user)}")
     subproperties_count = SubProperty.objects.filter(homebase__managers=user).count()
     tenants_count = count_all_managed_tenants(user)
     managed_homebases = Homebase.objects.filter(managers=user).annotate(
@@ -235,7 +259,8 @@ def property_manager_dashboard(request):
         "managed_homebases": managed_homebases,
         "total_rent_revenue": total_rent_revenue,
         "subproperties_count": subproperties_count,
-        "manager_name": manager_name
+        "manager_name": manager_name,
+        "maintenance_requests": maintenance_requests
 
     }
     return render(request, 'propertyManagerDb.html', context)
@@ -317,3 +342,27 @@ def tenant_dashboard(request):
         "maintenancetickets": maintenanceticket
     }
     return render(request, 'tenantdb.html', context)
+
+def create_announcement(request, homebase_id):
+    homebase = Homebase.objects.get(id=homebase_id)
+    if request.method == 'POST':
+        form = AnnouncementForm(request.POST)
+        if form.is_valid():
+            announcement = form.save(commit=False)
+            announcement.homebase = homebase
+            announcement.created_by = request.user
+            announcement.save()
+            response = HttpResponse(status=204)
+            response['HX-Refresh'] = 'true'
+            return response
+        else:
+            return render(request, 'cotton/announcementform.html', {
+                "form": form,
+                "homebase": homebase
+            }, status=422)
+    else:
+        form = AnnouncementForm()
+    return render(request, 'cotton/announcementform.html', {
+        "form": form,
+        "homebase": homebase
+    })
