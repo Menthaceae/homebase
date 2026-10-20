@@ -6,10 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
->>>>>>>> main:apps/events/migrations/0004_alter_event_image.py
-=======
         ('events', '0001_initial'),
->>>>>>> main
     ]
 
     operations = [
