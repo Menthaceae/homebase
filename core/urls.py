@@ -27,6 +27,7 @@ urlpatterns = [
     path('posts/', include('apps.posts.urls')),
     path('users/', include('apps.users.urls')),
     path('events/', include('apps.events.urls')),
+    path('messages/', include ('apps.dms.urls'))
 ]
 
 if settings.DEBUG:
