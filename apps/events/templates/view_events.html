@@ -11,9 +11,9 @@
     <div class="flex flex-row gap-4 items-start">
 
         <!-- Left Panel -->
-        <div class="flex-0 w-sm">
+        <div class="flex-0 w-sm gap-y-2">
             <!-- Create Post-->
-            <c-ui.card class="p-4 w-sm bg-accent-content text-accent-foreground">
+            <c-ui.card class="w-sm bg-accent-content text-accent-foreground">
                 <p class="text-lg font-semibold mb-2">Create a New Post</p>
                 <p class="text-sm mb-4">Start sharing your thoughts and ideas with the community by creating a new post.</p>
                 <c-ui.button
@@ -24,8 +24,9 @@
                 Create Post
                 </c-ui.button>
             </c-ui.card>
+            <div class="p-2"></div>
             <!-- Quick Resources-->
-            <c-ui.card class="p-4 w-sm bg-white text-accent-foreground">
+            <c-ui.card class="w-sm bg-white text-accent-foreground">
                 <p class="text-lg font-semibold mb-2" style="color: black">Quick Resources</i></span></p>
                 <div class="resource">
                     <p style="color: black"><i class="ti ti-book-2"></i> Building Rules & Bylaws </p>
@@ -61,15 +62,16 @@
                 </select>
             </div>
 
-            <div class="grid sm:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2">
+            <div class="grid grid-cols-3 gap-x-2 gap-y-2">
                 <c-event :events="events" />
             </div>
         </div>
     </div>
 
     <!-- Components -->
-    <c-post-create />
+    <c-post-create :tags="tags"/>
     <c-event-create />
+    <c-event_view event="{{ event }}" />
     
 </c-layout>
 {% endblock %}

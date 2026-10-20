@@ -1,0 +1,173 @@
+{% load static %}
+<!-- Form: Update event-->
+<dialog
+    id="event-edit-{{ event.id }}"
+    class="event_edit w-full max-w-lg rounded-xl p-0 shadow-xl"
+>
+    <div class="event-modal-content">
+        <form method="POST" action="{% url 'update_event' event.id %}" enctype="multipart/form-data" class="event-form">
+            {% csrf_token %}
+
+            <!-- Cover image -->
+            <div class="image-uploader">
+                <div class="image-uploader-icon">
+                    <i class="icons ti ti-photo-search"></i>
+                </div>
+
+                <div class="image-uploader-text">
+                    <label for="image">Add a cover photo</label>
+                    <p>Make your event stand out with a cover photo.</p>
+                </div>
+
+                <div>
+                    <label class="custom-file-upload">
+                        <input
+                            type="file"
+                            class="event-input"
+                            id="image"
+                            name="image"
+                            accept="image/*"
+                        >
+                        Upload image
+                    </label>
+                </div>
+            </div>
+
+            <!-- Preview image -->
+            <div id="event-preview-container" class="mt-3">
+            </div>
+
+            <div class="event-logistics">
+                <h3 class="event-section-title">Event information</h3>
+
+                <div class="event-fields-grid">
+                    <!-- Event name -->
+                    <div class="logistic">
+                        <label for="name" class="required">Event name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value="{{ event.name }}"
+                            required
+                        >
+                    </div>
+
+                    <!-- Event dates -->
+                    <div class="event-date-fields">
+                        <!-- Start date -->
+                        <div class="logistic">
+                            <label for="start_date" class="required">Start date</label>
+                            <input
+                                type="date"
+                                id="start_date"
+                                name="start_date"
+                                value="{{ event.start_date|date:'Y-m-d' }}"
+                                required
+                            >
+                        </div>
+                        <!-- End date -->
+                        <div class="end-date logistic" hidden>
+                            <label for="end_date" class="required">End date</label>
+                            <input 
+                                type="date"
+                                id="end_date"
+                                name="end_date"
+                                {% if event.end_date %} value="{{ event.end_date|date:'Y-m-d' }}" {% else %} {% endif %}
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- Event duration -->
+                    <div class="event-time-fields">
+                        <!-- Start time-->
+                        <div class="logistic">
+                            <label for="start_time" class="required">Start time</label>
+                            <input
+                                type="time"
+                                id="start_time"
+                                name="start_time"
+                                value="{{ event.start_time|time:'H:i' }}"
+                                required
+                            >
+                        </div>
+
+                        <!-- End time -->
+                        <div class="end-time logistic" hidden>
+                            <label for="end_time" class="required">End time</label>
+                            <input
+                                type="time"
+                                id="end_time"
+                                name="end_time"
+                                {% if event.end_time %} value="{{ event.end_time|time:'H:i' }}" {% else %} {% endif %}
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <c-ui.switch
+                        type="button"
+                        id="add-end-time"
+                    />
+                    <span class="text-sm text-ink-700 dark:text-ink-300">Add end time</span>
+                </div>
+
+                <!-- Location -->
+                <div class="logistic event-location">
+                    <label for="location" class="required">Location</label>
+                    <input
+                        class="logistic-input"
+                        type="text"
+                        id="location"
+                        name="location"
+                        value="{{ event.location }}"
+                    >
+                </div>
+
+                <!-- Post to -->
+                <div class="logistic event-post-to">
+                    <label for="post_to" class="required">Post to</label>
+                    <select id="post_to" name="post_to">
+                        <option value="public">Public</option>
+                        <!-- TODO: Check if user has homebase -->
+                        <!-- TODO: Select which homebase to post to -->
+                        <option value="public">Homebase</option>
+                    </select>
+                </div>
+
+                <!-- Additional details -->
+                <div class="logistic event-details">
+                    <label for="body">Additional details</label>
+                    <textarea
+                        id="body"
+                        name="body"
+                        rows="5"
+                    >{{ event.body }}</textarea>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="event-form-footer">
+                <button
+                    type="button"
+                    onclick="this.closest('dialog').close()"
+                    class="rounded-lg px-4 py-2"
+                >
+                    Cancel
+                </button>
+
+                <c-ui.button type="submit">
+                    Save changes event
+                </c-ui.button>
+            </div>
+        </form>
+    </div>
+
+</dialog>
+
+<c-post-create :tags="tags"/>
+
+{% block custom_js %}
+<script src="{% static 'events/js/events.js' %}"></script>
+{% endblock %}
