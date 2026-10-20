@@ -7,7 +7,7 @@
             
             manager: {
                 name: '',
-                banner: '',
+                banner: null,
                 bio: '',
                 num_units: 10,
                 start_unit_num: 101,
@@ -59,6 +59,27 @@
                     this.renterError = 'Connection error. Please try again.';
                 } finally {
                     this.checkingRenter = false;
+                }
+            },
+            async submitManagerForm(event) {
+                event.preventDefault();
+
+                const form = event.target;
+                const formData = new FormData(form);
+
+                if (this.manager.banner) {
+                    formData.set('banner', this.manager.banner);
+                }
+
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else if (!response.ok) {
+                    console.error('Submission failed:', await response.text());
                 }
             }
         }"
@@ -156,13 +177,13 @@
                         />
                     </div>
                     <div>
-                        <c-ui.input 
-                            label="Banner Image URL" 
-                            name="banner" 
-                            type="url" 
-                            placeholder="https://example.com/images/complex-banner.jpg"
-                            x-model="manager.banner"
-                            required 
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Banner Image</label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            @change="manager.banner = $event.target.files[0] || null"
+                            style="display: block !important;"
+                            class="w-full rounded-md border border-gray-300 p-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent"
                         />
                     </div>
                     <div>
@@ -298,11 +319,10 @@
                     <button type="button" @click="step = 'landing'" class="text-gray-400 hover:text-gray-600 text-sm">Cancel</button>
                 </div>
 
-                <form method="POST" action="{% url 'onboarding_manager_submit' %}" class="space-y-3 mt-4">
+                <form method="POST" action="{% url 'onboarding_manager_submit' %}" @submit="submitManagerForm($event)" class="space-y-3 mt-4">
                     {% csrf_token %}
                     <!-- Hidden inputs forwarding data from steps 1-3 -->
                     <input type="hidden" name="name" :value="manager.name">
-                    <input type="hidden" name="banner" :value="manager.banner">
                     <input type="hidden" name="bio" :value="manager.bio">
                     <input type="hidden" name="num_units" :value="manager.num_units">
                     <input type="hidden" name="start_unit_num" :value="manager.start_unit_num">
