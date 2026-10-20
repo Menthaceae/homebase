@@ -4,18 +4,25 @@
     {% for member in members %}
         {{member}}
     {% endfor %}
-
+    <hr>
 
     <p>Messages:</p>
     {% for message in messages %}
-    <hr>
         <p>Author: {{message.author}}</p>
         <p>Body: {{message.body}}</p>
         <p>Time: {{message.timestamp}}</p>
         <img src="/static/images/{{message.image}}/" alt="{{message.image.name}}" height="50" width="50">
+    <hr>    
     {% endfor %}
 
     <br>
-    <a href=/messages/groups/{{id}}/send/>Create Message</a>
+
+    <form action='/messages/groups/{{id}}/' method="post" enctype='multipart/form-data'>
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Send">
+    </form>
+
+    <a href=/messages/groups/{{id}}/invite/>Invite Others</a>
 
 </html>

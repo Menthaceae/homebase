@@ -19,3 +19,10 @@ class MessageCreationForm(ModelForm):
             'body',
             'image',
         ]
+
+class InviteForm(ModelForm):
+    class Meta:
+        model = Message_Group
+        fields = [
+            'members', 
+        ]

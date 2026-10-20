@@ -24,28 +24,6 @@ def create_message_group(request):
     return render(request, 'cotton/create-group.html', {'form': form})
 
 
-def send_message(request, message_group_id):
-    user = request.user
-    group = Message_Group.objects.get(id=message_group_id)
-    if request.method == 'POST':
-        form = MessageCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.message_group = group
-            message.author = user
-            message.save()
-            return redirect('/messages/groups/' +str(message_group_id) + '/')
-    else:
-        form = MessageCreationForm()
-
-    context = {
-        'form': form,
-        'id': message_group_id,
-    }
-
-    return render(request, 'cotton/create-message.html', context)
-
-
 def get_all_message_groups(request):
     user = request.user
     message_groups = user.message_group_set.all()
@@ -62,11 +40,44 @@ def get_all_messages(request, message_group_id):
     group = Message_Group.objects.get(id=message_group_id)
     messages = group.message_set.all()
     members = group.members.all()
+
+    if request.method == 'POST':
+        form = MessageCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.message_group = group
+            message.author = user
+            message.save()
+            return redirect('/messages/groups/' +str(message_group_id) + '/')
+    else:
+        form = MessageCreationForm()
    
     context = {
         'messages': messages,
         'members': members,
-        'id': message_group_id
+        'id': message_group_id,
+        'form': form,
     }
 
     return render(request, 'cotton/dm.html', context)
+
+
+def invite(request, message_group_id):
+    user = request.user
+    group = Message_Group.objects.get(id=message_group_id)
+
+    if request.method == 'POST':
+        form = InviteForm(request.POST)
+        if form.is_valid():
+            new_members = form.cleaned_data['members']
+            for member in new_members:
+                group.members.add(member)
+            return redirect('/messages/groups/' +str(message_group_id) + '/')
+    else:
+        form = InviteForm()
+
+    context = {
+        'form': form,
+        'id': message_group_id,
+    }
+    return render(request, 'cotton/invite.html', context)
