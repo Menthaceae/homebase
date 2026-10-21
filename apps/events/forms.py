@@ -15,3 +15,19 @@ class EventCreationForm(ModelForm):
             'image',
             'post_to',
         ]
+
+class EventUpdateForm(ModelForm):
+
+    class Meta:
+        model = Event
+        fields = [
+            'name',
+            'start_date',
+            'end_date',
+            'start_time',
+            'end_time',
+            'location',
+            'body',
+            'image'
+
+        ]

@@ -1,6 +1,8 @@
 from django.db import models
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.shortcuts import redirect, render
+
 
 from .models import * 
 
@@ -14,7 +16,7 @@ def set_owner(user):
     new_owner.save()
 
 def set_tenant(user):
-    new_tenant = Tentant(tenant=user)
+    new_tenant = Tenant(tenant=user)
     new_tenant.save()
 
 def remove_manager(user):
@@ -37,3 +39,10 @@ def is_owner(user):
 
 def is_tenant(user):
     return hasattr(user, 'tenant')
+
+def profile(request):
+    """
+    Renders user's profile page
+    """
+
+    return render(request, 'users/profile.html')

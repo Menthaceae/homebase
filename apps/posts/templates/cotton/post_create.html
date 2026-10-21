@@ -11,7 +11,11 @@
 >
     <div class="post-modal-content">
 
-        <form action="{% url 'create_post' %}" method="POST" enctype="multipart/form-data">
+        <form 
+            method="POST"
+            action="{% url 'create_post' %}" 
+            enctype="multipart/form-data"
+        >
             {% csrf_token %}
 
             <!-- Author -->
@@ -93,6 +97,9 @@
                 required
             >
 
+            <!-- Preview images-->
+            <div id="image-preview-container" class="grid grid-cols-3 gap-3 mt-3"></div>
+
             <!-- Tags -->
             <div>
                 <h3 class="mb-3 text-sm font-semibold text-gray-800">
@@ -136,11 +143,6 @@
                     </label>
                 </div>
 
-                <!-- Preview images-->
-                <div id="image-preview-container" class=" h-full w-full grid grid-cols-3 gap-3 mt-3">
-                    
-                </div>
-                
                 <c-ui.button 
                     class="more-options-btn"
                     type="button"

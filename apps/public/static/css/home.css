@@ -227,7 +227,9 @@
 }
 
 
-#create-post-modal, #post-to-modal, #create-event-modal {
+#create-post-modal, 
+#post-to-modal, 
+#create-event-modal {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -240,7 +242,8 @@
     overflow-y: auto;
 }
 
-#create-post-modal::backdrop, #create-event-modal::backdrop {
+#create-post-modal::backdrop, 
+#create-event-modal::backdrop {
     background: rgb(0 0 0 / 30%);
 }
 

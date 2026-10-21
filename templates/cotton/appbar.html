@@ -41,7 +41,7 @@
                         <span class="text-sm font-medium">{{ user.first_name }} {{ user.last_name }}</span>
                     </button>
                 </c-slot>
-                <c-ui.dropdown.item href="/profile">
+                <c-ui.dropdown.item href="{% url 'profile' %}">
                     <c-slot name="icon">
                         <i class="ti ti-user-circle"></i>
                     </c-slot>

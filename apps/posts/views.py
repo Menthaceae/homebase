@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -131,6 +133,14 @@ def update_post(request, post_id):
         
         if form.is_valid():
             post = form.save()
+
+            # Remove images removed by user
+            removed_image_ids = json.loads(request.POST.get("removed_image_ids", "[]"))
+
+            PostImage.objects.filter(
+                post=post,
+                id__in=removed_image_ids
+            ).delete()
 
             #Save updated tags
             selected_tags = request.POST.getlist("tags")

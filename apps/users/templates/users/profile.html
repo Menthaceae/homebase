@@ -1,0 +1,139 @@
+{% load static %}
+
+{% block content %}
+<c-layout>
+
+    <div class="flex flex-row gap-4 items-start">
+
+        <!-- Left Panel -->
+        <div class="flex-0 w-sm gap-y-2">
+            <!-- Create Post-->
+            <c-ui.card class="w-sm bg-accent-content text-accent-foreground">
+                <p class="text-lg font-semibold mb-2">Create a New Post</p>
+                <p class="text-sm mb-4">Start sharing your thoughts and ideas with the community by creating a new post.</p>
+                <c-ui.button
+                    class="w-full"
+                    type="button"
+                    onclick="document.getElementById('create-post-modal').showModal()"
+                >
+                Create Post
+                </c-ui.button>
+            </c-ui.card>
+            <div class="p-2"></div>
+            <!-- Quick Resources-->
+            <c-ui.card class="w-sm bg-white text-accent-foreground">
+                <p class="text-lg font-semibold mb-2" style="color: black">Quick Resources</i></span></p>
+                <div class="resource">
+                    <p style="color: black"><i class="ti ti-book-2"></i> Building Rules & Bylaws </p>
+                </div>
+                <p style="color: black"><i class="ti ti-credit-card"></i> Pay Dues</p>
+                <p style="color: black"><i class="ti ti-phone"></i> Contact Management</p>
+            </c-ui.card>
+        </div>
+
+        <!-- Right panel -->
+        <div class="flex bg-white rounded border-gray-200 h-full w-full">
+
+            <div class="mx-auto max-w-4xl px-4 py-8">
+                <!-- Profile header -->
+                <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                    <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+                        {% if user.photo %}
+                            <img
+                                src="{{ user.photo }}"
+                                alt="Profile photo"
+                                class="h-24 w-24 rounded-full object-cover"
+                            >
+                        {% else %}
+                            <img
+                                src="{% static 'posts/img/default-pfp.png' %}"
+                                alt="Default profile photo"
+                                class="h-24 w-24 rounded-full object-cover"
+                            >
+                        {% endif %}
+
+                        <div class="min-w-0 flex-1">
+                            <h1 class="text-2xl font-bold text-gray-900">
+                                {{ user.get_full_name|default:"Username" }}
+                            </h1>
+                            <p class="mt-1 text-sm text-gray-500">
+                                @{{ user.username }}
+                            </p>
+                            <p class="mt-3 text-sm text-gray-600">
+                                Tell the community a little about yourself
+                            </p>
+                        </div>
+
+                        <a
+                            href="#"
+                            class="inline-flex items-center justify-center rounded-lg
+                                bg-blue-600 px-4 py-2 text-sm font-medium
+                                text-white hover:bg-blue-700"
+                        >
+                            Edit Profile
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Profile stats -->
+                <section class="mt-4 grid grid-cols-3 gap-3">
+                    <div class="rounded-xl border bg-white p-4 text-center">
+                        <p class="text-2xl font-bold text-gray-900">#</p>
+                        <p class="text-sm text-gray-500">Posts</p>
+                    </div>
+
+                    <div class="rounded-xl border bg-white p-4 text-center">
+                        <p class="text-2xl font-bold text-gray-900">#</p>
+                        <p class="text-sm text-gray-500">Likes</p>
+                    </div>
+
+                    <div class="rounded-xl border bg-white p-4 text-center">
+                        <p class="text-2xl font-bold text-gray-900">{{ event_count }}</p>
+                        <p class="text-sm text-gray-500">Events</p>
+                    </div>
+                </section>
+
+                <!-- Recent posts -->
+                <section class="mt-8">
+                    <h2 class="mb-4 text-xl font-semibold text-gray-900">
+                        Recent Posts
+                    </h2>
+
+                    <div class="space-y-4">
+                        {% for post in posts %}
+                            <article class="rounded-xl border border-gray-200
+                                            bg-white p-5 shadow-sm">
+                                <h3 class="font-semibold text-gray-900">
+                                    {{ post.title }}
+                                </h3>
+                                <p class="mt-2 whitespace-pre-line text-sm text-gray-600">
+                                    {{ post.body }}
+                                </p>
+                                <p class="mt-3 text-xs text-gray-400">
+                                    {{ post.created_at }}
+                                </p>
+                            </article>
+                        {% empty %}
+                            <div class="rounded-xl border border-dashed
+                                        border-gray-300 p-8 text-center">
+                                <p class="text-sm text-gray-500">
+                                    No posts yet.
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+
+        </div>
+
+    </div>
+
+</c-layout>
+{% endblock %}
+
+<!-- Components -->
+<c-post-create :tags="tags"/>
+<c-event-create />
+
+

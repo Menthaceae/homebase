@@ -66,11 +66,14 @@
                     {{ event.author }}
                 </span>
 
-                <a href="#"
-                    class="event-card-link">
-                    View event
+                <button
+                    type="button"
+                    onclick="document.getElementById('event-{{ event.id }}').showModal()"
+                    class="cursor-pointer text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                    View Event
                     <i class="ti ti-arrow-up-right"></i>
-                </a>
+                </button>
             </div>
         </div>
     </c-ui.card>
