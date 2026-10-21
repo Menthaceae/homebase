@@ -13,6 +13,8 @@
             </h2>
 
             <div class="flex flex-row gap-2">
+
+                {% if event.author == request.user %}
                 <button
                     type="button"
                     onclick="document.getElementById('event-edit-{{ event.id }}').showModal()"
@@ -22,9 +24,10 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 12h.01m6 0h.01m5.99 0h.01"/>
                     </svg>
                 </button>
+                {% endif %}
 
                 <c-event_update :event="event" />
-                                
+                
 
                 <button
                     type="button"
