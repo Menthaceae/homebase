@@ -263,28 +263,38 @@ images.forEach((img) => {
  * TAGS 
    ================= */
 
-const tags = document.querySelectorAll(".tag-option");
+document.querySelectorAll("form").forEach(form => {
+    const tags = form.querySelectorAll(".tag-option");
+    const selectedTags = form.querySelector(".selected-tags");
 
-tags.forEach((button) => {
-    button.addEventListener("click", () => {
-        const selected = button.getAttribute("aria-pressed") === "true";
-        const tagId = button.dataset.tagId;
-        const selectedTags = document.getElementById("selected-tags");
+    if (!selectedTags || !tags.length) return;
 
-        button.setAttribute("aria-pressed", String(!selected));
+    tags.forEach(button => {
+        button.addEventListener("click", () => {
+            const selected = button.getAttribute("aria-pressed") === "true";
+            const tagId = button.dataset.tagId;
 
-        if (!selected) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = "tags";
-            input.value = tagId;
-            input.dataset.tagId = tagId;
+            button.setAttribute("aria-pressed", String(!selected));
 
-            selectedTags.appendChild(input);
-        } else {
-            selectedTags
-                .querySelector(`input[data-tag-id="${tagId}"]`)
-                ?.remove();
-        }
+            if (!selected) {
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "tags";
+                input.value = tagId;
+                input.dataset.tagId = tagId;
+
+                selectedTags.appendChild(input);
+            } else {
+                selectedTags
+                    .querySelector(`input[data-tag-id="${tagId}"]`)
+                    ?.remove();
+            }
+
+            console.log(
+                "Selected tag IDs:",
+                Array.from(selectedTags.querySelectorAll('input[name="tags"]'))
+                    .map(input => input.value)
+            );
+        });
     });
 });

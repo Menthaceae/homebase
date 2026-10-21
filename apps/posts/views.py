@@ -69,6 +69,7 @@ def create_post(request):
 
             if selected_tags:
                 post.tags.set(selected_tags)
+                print("Submitted tags:", request.POST.getlist("tags"))
             else:
                 general_tag = Tag.objects.get(slug="general")
                 post.tags.add(general_tag)
