@@ -18,6 +18,9 @@ from apps.posts.models import Post, Tag
 
 # Landing page
 def home(request):
+    if not request.user.is_authenticated:
+        return redirect('onboarding/')
+      
     public_posts = Post.objects.all().order_by('-created_at')
     tags = Tag.objects.all()
 
