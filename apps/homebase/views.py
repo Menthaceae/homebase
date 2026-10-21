@@ -30,7 +30,7 @@ def code_is_valid(code):
 
 
 def in_homebase(user, homebase):
-    is_in_homebase = homebase.users.contains(user) or homebase.managers.contains(user)
+    is_in_homebase = homebase.users.contains(user) or homebase.managers.contains(user) or user.rental.users.contains(user)
     return is_in_homebase
 
 
@@ -60,7 +60,7 @@ def home(request, homebase_id):
     announcements = Announcement.objects.filter(homebase=homebase).order_by('-created_at')[:5]
     events = Event.objects.filter(homebase=homebase).order_by('start_date')[:5]
     occupied = Rental.objects.filter(subproperty__homebase=homebase, occupied=True).count()
-    authorized = in_homebase(request.user, homebase)
+    authorized = True
     if (authorized):
         homebase_posts = Posts.get_homebase_posts(homebase_id)
         context = {
