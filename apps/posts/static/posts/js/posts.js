@@ -85,7 +85,7 @@ function openUpdatePostModal(button) {
     const body = button.dataset.postBody;
     const images = JSON.parse(button.dataset.postImages || "[]");
 
-    const previewContainer = modal.querySelector("#image-preview-container");
+    const previewContainer = form.querySelector(".image-preview-container");
     console.log(images);
 
     console.log(title)
@@ -131,57 +131,53 @@ function deletePost(button) {
     form.submit();
 }
 
-/* =================
- * TAGS 
-   ================= */
-
-const tags = document.querySelectorAll(".tag-option");
-
-tags.forEach((button) => {
-    button.addEventListener("click", () => {
-        const selected = button.getAttribute("aria-pressed") === "true";
-        const tagId = button.dataset.tagId;
-        const selectedTags = document.getElementById("selected-tags");
-
-        button.setAttribute("aria-pressed", String(!selected));
-
-        if (!selected) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = "tags";
-            input.value = tagId;
-            input.dataset.tagId = tagId;
-
-            selectedTags.appendChild(input);
-        } else {
-            selectedTags
-                .querySelector(`input[data-tag-id="${tagId}"]`)
-                ?.remove();
-        }
-    });
-});
 
 /* =================
  * IMAGES 
    ================= */
 
-const imageInputs = document.getElementsByClassName("image-input");
-const previewContainer = document.getElementById("image-preview-container");
 
 let selectedImages = [];
 let existingImages = [];
 let removedImageIds = [];
 
+const imageInputs = document.getElementsByClassName("image-input");
+
+const formImageState = new Map();
+
 Array.from(imageInputs).forEach(imageInput => {
+    const form = imageInput.closest("form");
+    const previewContainer = form.querySelector(".image-preview-container");
+
+    const state = {
+        selectedImages: [],
+        existingImages: [],
+        removedImageIds: []
+    };
+
+    formImageState.set(form, state);
+
     imageInput.addEventListener("change", function () {
         const newImages = Array.from(this.files);
 
-        selectedImages.push(...newImages);
-        console.log(newImages)
-        renderImagePreviews(previewContainer, selectedImages);
+        state.selectedImages.push(...newImages);
 
-        // Clear the input so the same file can be selected again
+        renderImagePreviews(
+            previewContainer,
+            state.selectedImages
+        );
+
         this.value = "";
+    });
+
+    form.addEventListener("submit", function () {
+        const dataTransfer = new DataTransfer();
+
+        state.selectedImages.forEach(file => {
+            dataTransfer.items.add(file);
+        });
+
+        imageInput.files = dataTransfer.files;
     });
 });
 
@@ -243,6 +239,9 @@ document.querySelectorAll("form").forEach(postForm => {
             dataTransfer.items.add(file);
         });
 
+        console.log("Images being submitted:", state.selectedImages);
+        console.log("Files attached:", dataTransfer.files.length);
+
         imageInput.files = dataTransfer.files;
     });
 });
@@ -257,5 +256,35 @@ images.forEach((img) => {
         });
 
         img.setAttribute("aria-current", "true");
+    });
+});
+
+/* =================
+ * TAGS 
+   ================= */
+
+const tags = document.querySelectorAll(".tag-option");
+
+tags.forEach((button) => {
+    button.addEventListener("click", () => {
+        const selected = button.getAttribute("aria-pressed") === "true";
+        const tagId = button.dataset.tagId;
+        const selectedTags = document.getElementById("selected-tags");
+
+        button.setAttribute("aria-pressed", String(!selected));
+
+        if (!selected) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "tags";
+            input.value = tagId;
+            input.dataset.tagId = tagId;
+
+            selectedTags.appendChild(input);
+        } else {
+            selectedTags
+                .querySelector(`input[data-tag-id="${tagId}"]`)
+                ?.remove();
+        }
     });
 });

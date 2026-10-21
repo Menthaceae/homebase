@@ -147,10 +147,10 @@
   </c-ui.card>
 
   <div class="div p-1"></div>
-
+  
+  <c-post-update />
 {% empty %}
   <p class="text-gray-500 text-center py-4">No posts available</p>
 {% endfor %}
 
 <c-post_view :post="posts" />
-<c-post-update />

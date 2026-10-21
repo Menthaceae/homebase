@@ -18,7 +18,7 @@ from apps.posts.models import Post, Tag
 
 # Landing page
 def home(request):
-    public_posts = Post.objects.all().order_by('-created_at')
+    public_posts = Post.objects.all().order_by('-id')
     tags = Tag.objects.all()
 
     context = {

@@ -1133,9 +1133,6 @@
   .min-w-\[var\(--dd-min\)\] {
     min-width: var(--dd-min);
   }
-  .min-w-md {
-    min-width: var(--container-md);
-  }
   .flex-0 {
     flex: 0;
   }
@@ -2763,6 +2760,9 @@
   .tracking-widest {
     --tw-tracking: var(--tracking-widest);
     letter-spacing: var(--tracking-widest);
+  }
+  .\[overflow-wrap\:anywhere\] {
+    overflow-wrap: anywhere;
   }
   .break-words {
     overflow-wrap: break-word;
