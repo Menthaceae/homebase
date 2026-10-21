@@ -62,8 +62,8 @@
                 </select>
             </div>
 
-            <div class="grid grid-cols-3 gap-x-2 gap-y-2">
-                <c-event :events="events" />
+            <div class="grid sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-2">
+                <c-event :events="event" />
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
     <!-- Components -->
     <c-post-create :tags="tags"/>
     <c-event-create />
-    <c-event_view event="{{ event }}" />
+    <c-event_view event="event" />
     
 </c-layout>
 {% endblock %}
