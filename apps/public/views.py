@@ -18,7 +18,10 @@ from apps.posts.models import Post, Tag
 
 # Landing page
 def home(request):
-    public_posts = Post.objects.all().order_by('-id')
+    if not request.user.is_authenticated:
+        return redirect('onboarding/')
+      
+    public_posts = Post.objects.all().order_by('-created_at')
     tags = Tag.objects.all()
 
     context = {
@@ -120,7 +123,6 @@ def onboarding_manager_submit(request):
         if pwd1 != pwd2:
             return redirect('/onboarding')
 
-        print(f"Banner file: {post.get('banner')}")
         # 2. Create Manager User
         user = User.objects.create_user(
             username=post.get('username'),

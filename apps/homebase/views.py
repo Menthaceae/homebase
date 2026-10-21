@@ -369,3 +369,18 @@ def create_announcement(request, homebase_id):
         "form": form,
         "homebase": homebase
     })
+
+def update_ticket_status(request, ticket_id):
+    ticket = MaintenanceRequest.objects.get(id=ticket_id)
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status in ['Open', 'In Progress', 'Closed']:
+            ticket.status = new_status
+            ticket.save()
+            return redirect('propertyManagerDashboard')
+        else:
+            return HttpResponse("Invalid status", status=400)
+    else:
+        return render(request, 'cotton/updateticketstatusform.html', {
+            "ticket": ticket
+    })

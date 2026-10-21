@@ -1,10 +1,41 @@
-<c-vars :ticket="ticket" />
+<c-vars :ticket="ticket" :manager=False />
 <tr>
-    <td><b>{{ ticket.rental.subproperty.room_number }}</b></td>
+    <td><b>{{ ticket.rental.subproperty.room_number }} - {{ ticket.rental.subproperty.homebase.name }}</b></td>
     <td>{{ ticket.title }}</td>
     <td>{{ ticket.created_at }}</td>
-    <td><c-ui.badge color="red">{{ ticket.priority|default:ticket.priority }}</c-ui.badge></td>
+    <td><c-ui.badge color="{% if ticket.priority == 'High' %}red{% elif ticket.priority == 'Medium' %}yellow{% elif ticket.priority == 'Low' %}green{% else %}gray{% endif %}"> {{ ticket.priority|default:ticket.priority }}</c-ui.badge></td>
     <td>{{ ticket.status }}</td>
+    <td><c-ui.dialog>
+        <c-slot name="trigger">
+            <c-ui.button variant="primary">View Details</c-ui.button>
+        </c-slot>
+            <h3 class="text-lg font-bold">{{ ticket.title }}</h3>
+            <br />
+            <p class="mt-2">{{ ticket.description }}</p>
+        </c-ui.dialog>
+    </td>
+    {% if manager %}
+    <td>
+        <c-ui.dialog>
+            <c-slot name="trigger">
+                <c-ui.button variant="primary">Update Status</c-ui.button>
+            </c-slot>
+            <h3 class="text-lg font-bold">Update Status for {{ ticket.title }}</h3>
+            <br />
+            <form method="POST" action="{% url 'update_ticket_status' ticket.id %}">
+                {% csrf_token %}
+                <label class="block text-sm font-medium text-gray-700">Status</label>
+                <c-ui.select name="status">
+                    <c-ui.select.option value="Open">Open</c-ui.select.option>
+                    <c-ui.select.option value="In Progress">In Progress</c-ui.select.option>
+                    <c-ui.select.option value="Closed">Closed</c-ui.select.option>
+                </c-ui.select>
+                <br />
+                <c-ui.button type="submit" class="mt-2" variant="primary">Update Status</c-ui.button>
+            </form>
+        </c-ui.dialog>
+    </td>
+    {% endif %}
 </tr>
                     
            
