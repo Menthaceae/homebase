@@ -1,4 +1,4 @@
-<c-vars :ticket="ticket" />
+<c-vars :ticket="ticket" :manager=False />
 <tr>
     <td><b>{{ ticket.rental.subproperty.room_number }} - {{ ticket.rental.subproperty.homebase.name }}</b></td>
     <td>{{ ticket.title }}</td>
@@ -14,6 +14,7 @@
             <p class="mt-2">{{ ticket.description }}</p>
         </c-ui.dialog>
     </td>
+    {% if manager %}
     <td>
         <c-ui.dialog>
             <c-slot name="trigger">
@@ -34,6 +35,7 @@
             </form>
         </c-ui.dialog>
     </td>
+    {% endif %}
 </tr>
                     
            

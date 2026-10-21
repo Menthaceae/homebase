@@ -268,7 +268,7 @@
 
                 <tbody>
                   {% for request in maintenance_requests %}
-                    <c-maintenanceTable :ticket="request" />
+                    <c-maintenanceTable :ticket="request" :manager="True" />
                   {% empty %}
                     <tr>
                       <td colspan="4" class="py-4 text-center text-sm opacity-65">
