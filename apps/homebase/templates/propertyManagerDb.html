@@ -249,13 +249,6 @@
                 </p>
               </div>
 
-              <a
-                href="/tickets"
-                class="shrink-0 text-sm font-semibold text-accent-content hover:underline"
-              >
-                View all &rarr;
-              </a>
-
             </div>
 
             <div class="overflow-x-auto">
@@ -265,15 +258,17 @@
                 <thead>
                   <tr class="text-left text-xs uppercase tracking-wide opacity-60">
                     <th class="whitespace-nowrap py-3 pr-4">Unit</th>
-                    <th class="whitespace-nowrap py-3 pr-4">Start Date</th>
-                    <th class="whitespace-nowrap py-3 pr-4">End Date</th>
+                    <th class="whitespace-nowrap py-3 pr-4">Description</th>
+                    <th class="whitespace-nowrap py-3 pr-4">Date submitted</th>
+                    <th class="whitespace-nowrap py-3">Priority</th>
                     <th class="whitespace-nowrap py-3">Status</th>
+                    <th></th>
                   </tr>
                 </thead>
 
                 <tbody>
                   {% for request in maintenance_requests %}
-                    <c-maintenaceTable :ticket="request" />
+                    <c-maintenanceTable :ticket="request" />
                   {% empty %}
                     <tr>
                       <td colspan="4" class="py-4 text-center text-sm opacity-65">
