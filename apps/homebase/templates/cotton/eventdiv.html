@@ -1,0 +1,16 @@
+<c-vars :event= 'event'
+/>
+<div class="mb-2">
+  <c-ui.card>
+    <div class="flex flex-col md:flex-row gap-4">
+      <div class="md:w-1/3">
+        <img src="{{ event.image.url }}" alt="Event Image" class="w-full h-35 object-contain rounded">
+      </div>
+      <div class="md:w-2/3">
+        <h2 class="text-xl font-bold mb-2">{{ event.name }}</h2>
+        <p class="text-sm text-gray-500 mb-2">{{ event.start_date }} | {{ event.location }}</p>
+        <p class="text-base">{{ event.body }}</p>
+      </div>
+    </div>
+  </c-ui.card>
+</div>

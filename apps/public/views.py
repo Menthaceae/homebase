@@ -123,7 +123,6 @@ def onboarding_manager_submit(request):
         if pwd1 != pwd2:
             return redirect('/onboarding')
 
-        print(f"Banner file: {post.get('banner')}")
         # 2. Create Manager User
         user = User.objects.create_user(
             username=post.get('username'),
