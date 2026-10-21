@@ -27,7 +27,7 @@
 
     <!--Reusable Cotton components -->
     {% if not hide_content_container %}
-    <c-appbar :is-logged-in="False" username="" avatar-url="" />
+        <c-appbar :is-logged-in="False" username="" avatar-url="" />
     {% endif %}
 
     {% if isfull_page %}
@@ -37,22 +37,19 @@
     {% endif %}
 
     {% if is_banner and not isfull_page %}
-    <div class='web-content'>
-        {{banner}}
-    </div>
+        <div class='web-content' style="position: static;">
+            {{banner}}
+        </div>
 
-    <div class="p-4">
-        {{ slot }}
-    </div>
+        <div class="p-4">
+            {{ slot }}
+        </div>
     {% else %}
         {% if not hide_content_container and not isfull_page %}
             <!-- Webpage content -->
             <div class="web-content p-4">
                 {{ slot }}
             </div>
-    
-   
-
             <main>
                 {% block content %}
                 {% endblock %}

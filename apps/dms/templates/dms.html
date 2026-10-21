@@ -1,0 +1,22 @@
+<html>
+
+<style>
+    .dm-card {
+        display: flex;
+        border: 1px solid black;
+        width: 20vw;
+    }
+</style>
+
+<body>
+    <a href='http://127.0.0.1:8000/'>Home</a>
+    {% for group in groups %}
+        <div class="dm-card">
+            <a href=/messages/groups/{{group.id}}/>{{group.name}}</a>
+        </div>
+    {% endfor %}
+
+    <br>
+    <a href=/messages/groups/create/>Create Group</a>
+</body>    
+</html>

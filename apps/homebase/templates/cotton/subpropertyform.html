@@ -35,8 +35,10 @@
         {% endif %}
     </div>
 
+    
+    <input type="hidden" name="classification" value="rental" />
     <!-- Classification Radio Switcher -->
-    <div>
+    {% comment %} <div>
         <div class="flex gap-4"> 
             <label class="flex items-center space-x-2 cursor-pointer">
                 <input type="radio" name="classification" value="rental" x-model="classification">
@@ -47,7 +49,7 @@
                 <span class="text-sm font-medium text-slate-700">Owned</span>
             </label>
         </div>
-    </div>
+    </div> {% endcomment %}
 
     <!-- Rental Fields -->
     <div x-show="classification === 'rental'" class="grid grid-cols-2 gap-2">

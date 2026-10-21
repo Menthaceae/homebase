@@ -1,97 +1,317 @@
+<c-layout :is_banner="True" :isfull_page="False" :hide_content_container="False">
 
-<c-layout :is_banner="True">
+    {% load static %}
+
     <c-slot name="banner">
-        <div class="w-full bg-cover bg-center p-4 h-20" style="background-image:url({{ homebase.banner }});">
-            
-                <h1 class="text-2xl font-bold text-white">Manage Your Homebase</h1>
-                <p class="text-sm text-gray-300">Manage your homebase settings and members.</p>
-        </div>
-    </c-slot>
-    <div class="flex flex-row justify-between">
-        <div>
-            <h1 class="text-2xl font-bold mb-4">{{ homebase.name }}</h1>
-            <p class="mb-4">{{ homebase.street_address }} {{ homebase.city }}, {{ homebase.state }} {{ homebase.zip }}</p>
-        </div>
-        <div>
-            <c-ui.dialog size="lg">
-                <c-slot name="trigger">
-                    <c-ui.button variant="primary"><span class="inline-flex gap-2"><c-heroicon.plus class="size-5 text-accent-foreground"/>Add Subproperty</span></c-ui.button>
-                </c-slot>
-                <c-subpropertyform :sub_form="sub_form" :rental_form="rental_form" :owned_form="owned_form" />
-            </c-ui.dialog>
-        </div>
-    </div>
-    <br />
-    <div class="flex flex-col sm:flex-row gap-2">
-    <c-dbcard 
-        label="Total Units"
-        value="{{ 5 }}"
-        description=""
-        filled=False
-    />
-    <c-dbcard 
-        label="Rented Units"
-        value="{{ rental_subproperties_count }}"
-        description=""
-        filled=True
-    />
-    <c-dbcard 
-        label="Owned Units"
-        value="{{ owned_subproperties_count }}"
-        description=""
-        filled=False
-    />
-    </div>
-    <br />
-    <div class="flex flex-col w-full md:flex-row gap-2">
-        <c-ui.card class="w-full">
-            <h2 class="text-xl font-bold mb-4">Rented Units</h2>
-            <c-ui.table>
-                <theader>
-                        <tr>
-                            <th><b>Room Number</b></th>
-                            <th><b>Tenant</b></th>
-                            <th><b>Rent</b></th>
-                            <th><b>Start Date</b></th>
-                            <th><b>End Date</b></th>
-                            <th><b>Occupied</b></th>
-                            <th></th>
-                        </tr>
-                </theader>
-                <tbody>
-                    {% for rental in rental_subproperties %}
-                        <c-rentedpropertytable :rental="rental" />
-                    {% endfor %}
-                </tbody>
-            </c-ui.table>
-        </c-ui.card>
-        <c-ui.card class="w-full">
-            <h2 class="text-xl font-bold mb-4 mt-8">Properties not assigned to a tenant</h2>
-            <c-ui.table>
-                <theader>
-                        <tr>
-                            <th><b>Room Number</b></th>
-                            <th></th>
-                        </tr>
-                </theader>
-                <tbody>
-                    {% for property in subproperties %}
-                        <tr>
-                            <td>{{ property.room_number }}</td>
-                            <td>
-                                <c-ui.dialog size="lg">
-                                    <c-slot name="trigger">
-                                        <c-ui.button variant="primary"><span class="inline-flex gap-2"><c-heroicon.plus class="size-5 text-accent-foreground"/>Assign Tenant</span></c-ui.button>
-                                    </c-slot>
-                                    <c-rentalform :subproperty="property.id" :rental-form="rental_form" :homebase="homebase" />
-                                </c-ui.dialog>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </c-ui.table>
-        </c-ui.card>
-    </div>
+        <!-- Management hero -->
+        <section class="relative isolate overflow-hidden bg-accent text-[#ffffff]">
+            {% if homebase.banner %}
+                <div
+                    class="absolute inset-0 -z-10 bg-cover bg-center opacity-30"
+                    style="background-image: url('{{ homebase.banner }}');"
+                ></div>
+                <div class="absolute inset-0 -z-10 bg-linear-to-r from-accent via-accent/90 to-accent/60"></div>
+            {% else %}
+                <div class="absolute inset-0 -z-10 bg-linear-to-br from-accent via-accent/90 to-accent/70"></div>
+            {% endif %}
+            {% if homebase.banner %}
+                <div
+                    class="absolute inset-0 -z-10 bg-cover bg-center opacity-30"
+                    style="background-image: url('{{ homebase.banner }}');"
+                ></div>
+                <div class="absolute inset-0 -z-10 bg-linear-to-r from-accent via-accent/90 to-accent/60"></div>
+            {% else %}
+                <div class="absolute inset-0 -z-10 bg-linear-to-br from-accent via-accent/90 to-accent/70"></div>
+            {% endif %}
 
-<c-ui.toast.container position="top-right" />
+            <div class="flex flex-col gap-5 p-6 sm:p-8 lg:flex-row lg:items-end lg:justify-between">
+                <div class="max-w-2xl">
+                    <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-accent-content/20 bg-accent-content/10 px-3 py-1.5 text-sm">
+                        <c-heroicon.squares-2x2 class="size-4" />
+                        Property management
+                    </div>
+
+                    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">
+                        Manage your HomeBase
+                    </h1>
+
+                    <p class="mt-3 text-sm leading-6 opacity-80 sm:text-base">
+                        Manage your properties, track occupancy, coordinate tenants,
+                        and keep your community informed.
+                    </p>
+
+                    <div class="mt-5 flex items-start gap-2 text-sm opacity-90">
+                        <c-heroicon.map-pin class="mt-0.5 size-5 shrink-0" />
+                        <p>
+                            {{ homebase.street_address }},
+                            {{ homebase.city }}, {{ homebase.state }} {{ homebase.zip }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                    <!-- Add subproperty -->
+                    <c-ui.dialog size="lg">
+                        <c-slot name="trigger">
+                            <c-ui.button variant="primary">
+                                <span class="inline-flex items-center gap-2">
+                                    <c-heroicon.plus class="size-5" />
+                                    Add property
+                                </span>
+                            </c-ui.button>
+                        </c-slot>
+
+                        <c-subpropertyform
+                            :sub_form="sub_form"
+                            :rental_form="rental_form"
+                            :owned_form="owned_form"
+                        />
+                    </c-ui.dialog>
+
+                    <!-- Create announcement -->
+                    <c-ui.dialog size="lg">
+                        <c-slot name="trigger">
+                            <c-ui.button>
+                                <span class="inline-flex items-center gap-2">
+                                    <c-heroicon.megaphone class="size-5" />
+                                    Create announcement
+                                </span>
+                            </c-ui.button>
+                        </c-slot>
+                        <c-announcementform :homebase="homebase" />
+                    </c-ui.dialog>
+                </div>
+            </div>
+        </section>
+    </c-slot>
+
+    <!-- Page heading -->
+    <section class="mb-6 mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h2 class="text-2xl font-bold tracking-tight">
+                Property overview
+            </h2>
+            <p class="mt-1 text-sm opacity-70">
+                An overview of your units and tenant assignments.
+            </p>
+        </div>
+
+        <div class="inline-flex items-center gap-2 self-start rounded-full bg-accent/10 px-3 py-2 text-sm font-medium text-accent-content sm:self-auto">
+            <c-heroicon.building-office-2 class="size-5" />
+            HomeBase: {{ homebase.name }}
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <c-ui.card>
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm opacity-70">Total units</p>
+                    <p class="mt-2 text-3xl font-bold">{{ total_properties_count }}</p>
+                    <p class="mt-1 text-xs opacity-60">All registered properties</p>
+                </div>
+                <div class="flex size-12 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                    <c-heroicon.building-office-2 class="size-6" />
+                </div>
+            </div>
+        </c-ui.card>
+
+        <c-ui.card>
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm opacity-70">Rented units</p>
+                    <p class="mt-2 text-3xl font-bold">{{ rental_subproperties | length }}</p>
+                    <p class="mt-1 text-xs opacity-60">Units with rental records</p>
+                </div>
+                <div class="flex size-12 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                    <c-heroicon.key class="size-6" />
+                </div>
+            </div>
+        </c-ui.card>
+
+        <c-ui.card>
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm opacity-70">Unassigned units</p>
+                    <p class="mt-2 text-3xl font-bold">{{ subproperties | length }}</p>
+                    <p class="mt-1 text-xs opacity-60">Units with rental records</p>
+                </div>
+                <div class="flex size-12 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                    <c-heroicon.home-modern class="size-6" />
+                </div>
+            </div>
+        </c-ui.card>
+    </section>
+
+    <!-- Property tables -->
+    <section class="mt-8 grid grid-cols-1 items-start gap-6 xl:grid-cols-2">
+
+        <!-- Rented units -->
+        <c-ui.card>
+            <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="flex size-11 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                        <c-heroicon.key class="size-5" />
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold">Rented units</h2>
+                        <p class="text-sm opacity-70">
+                            Current and recorded rental details.
+                        </p>
+                    </div>
+                </div>
+
+                <span class="inline-flex w-fit items-center rounded-full bg-accent/10 px-3 py-1 text-sm font-semibold text-accent-content">
+                    {{ rental_subproperties_count }} units
+                </span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <c-ui.table>
+                    <thead>
+                        <tr>
+                            <th>Room</th>
+                            <th>Tenant</th>
+                            <th>Rent</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rental in rental_subproperties %}
+                            <c-rentedpropertytable :rental="rental" />
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="py-10 text-center">
+                                    <div class="flex flex-col items-center gap-2">
+                                        <c-heroicon.home-modern class="size-8 opacity-40" />
+                                        <p class="font-medium">No rental records yet</p>
+                                        <p class="text-sm opacity-60">
+                                            Rental details will appear here when available.
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </c-ui.table>
+            </div>
+        </c-ui.card>
+
+        <!-- Unassigned units -->
+        <c-ui.card>
+            <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="flex size-11 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                        <c-heroicon.home class="size-5" />
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold">Available units</h2>
+                        <p class="text-sm opacity-70">
+                            Assign tenants to unassigned properties.
+                        </p>
+                    </div>
+                </div>
+
+                <span class="inline-flex w-fit items-center rounded-full bg-accent/10 px-3 py-1 text-sm font-semibold text-accent-content">
+                    {{ subproperties|length }} available
+                </span>
+            </div>
+
+            <div class="overflow-x-auto">
+                <c-ui.table>
+                    <thead>
+                        <tr>
+                            <th>Room number</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for property in subproperties %}
+                            <tr>
+                                <td>
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex size-9 items-center justify-center rounded-lg bg-accent/10 text-accent-content">
+                                            <c-heroicon.home class="size-5" />
+                                        </div>
+                                        <span class="font-medium">{{ property.room_number }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="flex justify-end">
+                                        <c-ui.dialog size="lg">
+                                            <c-slot name="trigger">
+                                                <c-ui.button variant="primary">
+                                                    <span class="inline-flex items-center gap-2">
+                                                        <c-heroicon.user-plus class="size-4" />
+                                                        Assign tenant
+                                                    </span>
+                                                </c-ui.button>
+                                            </c-slot>
+
+                                            <c-rentalform
+                                                :subproperty="property.id"
+                                                :rental-form="rental_form"
+                                                :homebase="homebase"
+                                            />
+                                        </c-ui.dialog>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="2" class="py-10 text-center">
+                                    <div class="flex flex-col items-center gap-2">
+                                        <c-heroicon.check-circle class="size-8 opacity-40" />
+                                        <p class="font-medium">All units are assigned</p>
+                                        <p class="text-sm opacity-60">
+                                            There are no available units to assign.
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </c-ui.table>
+            </div>
+        </c-ui.card>
+    </section>
+
+    <!-- Quick actions -->
+    <section class="mt-6">
+        <c-ui.card>
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-start gap-3">
+                    <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-content">
+                        <c-heroicon.megaphone class="size-5" />
+                    </div>
+                    <div>
+                        <h2 class="font-bold">Keep everyone informed</h2>
+                        <p class="mt-1 text-sm opacity-70">
+                            Share maintenance notices, upcoming meetings, and
+                            important updates with your community.
+                        </p>
+                    </div>
+                </div>
+
+                <c-ui.dialog size="lg">
+                    <c-slot name="trigger">
+                        <c-ui.button variant="primary">
+                            <span class="inline-flex items-center gap-2">
+                                <c-heroicon.plus class="size-5" />
+                                New announcement
+                            </span>
+                        </c-ui.button>
+                    </c-slot>
+
+                    <c-announcementform :homebase="homebase" />
+                </c-ui.dialog>
+            </div>
+        </c-ui.card>
+    </section>
+
+    <c-ui.toast.container position="top-right" />
+
 </c-layout>

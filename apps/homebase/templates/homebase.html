@@ -1,71 +1,327 @@
 {% load static %}
-<c-layout>
-  <c-slot name="banner">
-    <div class="background-image w-full bg-cover bg-center min-h-75 flex flex-col p-8 items-start justify-end text-white" style="background-image: url('{% static "images/homebase-bg.png" %}');">
-      <h1 class="text-4xl font-bold mb-4">Welcome to HomeBase</h1>
-      <p class="text-lg mb-6">Your one-stop platform for community engagement and collaboration.</p>
-    </div>
-    <div class="flex flex-col justify-between items-center align-center md:flex-row p-4 bg-gray-100">
-        <div class="flex gap-2 items-center">
-            <h1 class="text-accent-content text-2xl font-bold">88</h1>
-            <p class="text-lg">Active Users</p>
+
+<c-layout
+    :is_banner="True"
+    :isfull_page="False"
+    :hide_content_container="False"
+>
+    <c-slot name="banner">
+        <!-- Hero -->
+        <section class="relative isolate overflow-hidden bg-accent text-[#ffffff]">
+            <div
+                class="absolute inset-0 z-10 bg-cover bg-center opacity-30"
+                style="background-image: url('{{ homebase.banner }}');"
+            ></div>
+
+            <div class="absolute inset-0 -z-10 bg-linear-to-r from-accent via-accent/90 to-accent/50"></div>
+
+            <div class="flex min-h-72 flex-col justify-end p-6 sm:p-10">
+                <div class="mb-5 flex size-12 items-center justify-center rounded-2xl border border-accent-content/20 bg-accent-content/10">
+                    <c-heroicon.home class="size-6" />
+                </div>
+
+                <h1 class="max-w-2xl text-3xl font-bold tracking-tight sm:text-5xl">
+                    Welcome to {{ homebase.name|default:"HomeBase" }}
+                </h1>
+
+                <p class="mt-4 max-w-xl text-sm leading-6 opacity-80 sm:text-base">
+                    Your community, connected. Discover events, stay informed,
+                    and build stronger relationships with your neighbors.
+                </p>
+
+            </div>
+        </section>
+
+        <!-- Community statistics -->
+        <section class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <c-ui.card>
+                <div class="flex items-center gap-4">
+                    <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                        <c-heroicon.users class="size-6" />
+                    </div>
+                    <div>
+                        <p class="text-sm opacity-70">Active users</p>
+                        <p class="mt-1 text-2xl font-bold">{{ users_count }}</p>
+                        <p class="mt-1 text-xs opacity-60">Community members</p>
+                    </div>
+                </div>
+            </c-ui.card>
+
+            <c-ui.card>
+                <div class="flex items-center gap-4">
+                    <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                        <c-heroicon.home-modern class="size-6" />
+                    </div>
+                    <div>
+                        <p class="text-sm opacity-70">Occupied units</p>
+                        <p class="mt-1 text-2xl font-bold">{{ occupied_count }}</p>
+                        <p class="mt-1 text-xs opacity-60">Homes in the community</p>
+                    </div>
+                </div>
+            </c-ui.card>
+
+            <c-ui.card>
+                <div class="flex items-center gap-4">
+                    <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                        <c-heroicon.calendar-days class="size-6" />
+                    </div>
+                    <div>
+                        <p class="text-sm opacity-70">Upcoming events</p>
+                        <p class="mt-1 text-2xl font-bold">{{ events|length }}</p>
+                        <p class="mt-1 text-xs opacity-60">Community activities</p>
+                    </div>
+                </div>
+            </c-ui.card>
+        </section>
+    </c-slot>
+
+    <!-- Dashboard -->
+    <section class="mt-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-3">
+
+        <!-- Main content -->
+        <div
+            id="community-feed"
+            class="min-w-0 lg:col-span-2"
+            x-data="{ activeTab: 'feed' }"
+        >
+            <div class="mb-5 flex items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-2xl font-bold tracking-tight">
+                        Community board
+                    </h2>
+                    <p class="mt-1 text-sm opacity-70">
+                        Everything happening around your community.
+                    </p>
+                </div>
+
+                <div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                    <c-heroicon.squares-2x2 class="size-5" />
+                </div>
+            </div>
+
+            <!-- Navigation tabs -->
+            <div
+                class="flex flex-wrap gap-2 rounded-2xl bg-base-200/50 p-2"
+                role="tablist"
+                aria-label="Community sections"
+            >
+                <button
+                    type="button"
+                    role="tab"
+                    id="feed-tab"
+                    :aria-selected="activeTab === 'feed'"
+                    @click="activeTab = 'feed'"
+                    :class="activeTab === 'feed'
+                        ? 'bg-accent text-accent-content shadow-sm'
+                        : 'text-base-content hover:bg-accent/10'"
+                    class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold transition sm:flex-none"
+                >
+                    <c-heroicon.chat-bubble-left-right class="size-5" />
+                    Feed
+                </button>
+
+                <button
+                    type="button"
+                    role="tab"
+                    id="events-tab"
+                    :aria-selected="activeTab === 'events'"
+                    @click="activeTab = 'events'"
+                    :class="activeTab === 'events'
+                        ? 'bg-accent text-accent-content shadow-sm'
+                        : 'text-base-content hover:bg-accent/10'"
+                    class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold transition sm:flex-none"
+                >
+                    <c-heroicon.calendar-days class="size-5" />
+                    Events
+                </button>
+
+                <button
+                    type="button"
+                    role="tab"
+                    id="announcements-tab"
+                    :aria-selected="activeTab === 'announcements'"
+                    @click="activeTab = 'announcements'"
+                    :class="activeTab === 'announcements'
+                        ? 'bg-accent text-accent-content shadow-sm'
+                        : 'text-base-content hover:bg-accent/10'"
+                    class="inline-flex flex-1 items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold transition sm:flex-none"
+                >
+                    <c-heroicon.megaphone class="size-5" />
+                    Announcements
+                </button>
+            </div>
+
+            <!-- Feed -->
+            <div
+                x-show="activeTab === 'feed'"
+                role="tabpanel"
+                aria-labelledby="feed-tab"
+                class="mt-5 min-w-0"
+            >
+                <c-ui.card>
+                    <div class="mb-4 flex items-center gap-3">
+                        <div class="flex size-10 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                            <c-heroicon.chat-bubble-left-right class="size-5" />
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Community feed</h3>
+                            <p class="text-sm opacity-70">
+                                Updates and conversations from your neighbors.
+                            </p>
+                        </div>
+                    </div>
+                    <c-post :posts="posts" />
+                </c-ui.card>
+            </div>
+
+            <!-- Events -->
+            <div
+                x-show="activeTab === 'events'"
+                role="tabpanel"
+                aria-labelledby="events-tab"
+                class="mt-5"
+                x-cloak
+            >
+                <c-ui.card>
+                    <div class="mb-4 flex items-center gap-3">
+                        <div class="flex size-10 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                            <c-heroicon.calendar-days class="size-5" />
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Community events</h3>
+                            <p class="text-sm opacity-70">
+                                Meet your neighbors and get involved.
+                            </p>
+                        </div>
+                    </div>
+                    {% for event in events %}
+                    <c-event
+                        title="{{ event.title }}"
+                        image="{{ event.image }}"
+                        description="{{ event.body }}"
+                        date="{{ event.start_date }}"
+                        location="{{ event.location }}"
+                    />
+                    {% empty %}
+                    <p class="text-gray-500 text-center py-4">No upcoming events</p>
+                    {% endfor %}  
+                </c-ui.card>
+            </div>
+
+            <!-- Announcements -->
+            <div
+                x-show="activeTab === 'announcements'"
+                role="tabpanel"
+                aria-labelledby="announcements-tab"
+                class="mt-5"
+                x-cloak
+            >
+                <c-ui.card>
+                    <div class="mb-4 flex items-center gap-3">
+                        <div class="flex size-10 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                            <c-heroicon.megaphone class="size-5" />
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Community announcements</h3>
+                            <p class="text-sm opacity-70">
+                                Important news and updates for residents.
+                            </p>
+                        </div>
+                    </div>
+                    {% for announcement in announcements %}
+                    <c-announcement
+                        title="{{ announcement.title }}"
+                        description="{{ announcement.content }}"
+                        date="{{ announcement.created_at|date:'F j, Y' }}"
+                    />
+                    {% empty %}
+                    <p class="text-gray-500 text-center py-4">No announcements</p>
+                    {% endfor %}
+                </c-ui.card>
+            </div>
         </div>
-        <div class=" flex gap-2 items-center">
-            <h1 class="text-accent-content text-2xl font-bold">80</h1>
-            <p class="text-lg">Occupied Units</p>
-        </div>
-        <div class="flex gap-2 items-center">
-            <h1 class="text-accent-content text-2xl font-bold">3</h1>
-            <p class="text-lg">Upcoming Events</p>
-        </div>
-    </div>
-  </c-slot>
-  <div class="flex flex-col-reverse gap-2 md:flex-row">
-    <div class="w-full" x-data="{ activeTab: 'feed' }">
-      <div class="flex gap-2 items-center" >
-        <c-ui.button x-bind:class="activeTab === 'feed' ? 'bg-accent-content! text-accent-foreground!' : 'bg-accent-content'" @click="activeTab = 'feed'" size="md">Feed</c-ui.button>
-        <c-ui.button x-bind:class="activeTab === 'events' ? 'bg-accent-content! text-accent-foreground!' : 'bg-accent-content'" class="cursor-pointer" @click="activeTab = 'events'" size="md">Events</c-ui.button>
-        <c-ui.button x-bind:class="activeTab === 'announcements' ? 'bg-accent-content! text-accent-foreground!' : 'bg-accent-content'" class="cursor-pointer" @click="activeTab = 'announcements'" size="md">Announcements</c-ui.button>
-      </div>
-      <br>
-      <div>
-        <div id="feed-content" x-show="activeTab === 'feed'" class="w-full">
-            <c-post :posts="posts" />
-        </div>
-        <div x-show="activeTab === 'events'" class="w-full">
-            <c-event title="Community BBQ" image="{% static 'images/bbq.jpeg' %}" description="Join us for a fun-filled community BBQ event! Enjoy delicious food, games, and great company." date="June 15th, 2024" location="Community Park" />
-        </div>
-      </div>
-      <div x-show="activeTab === 'announcements'" class="w-full">
-          <c-announcement title="Community Meeting" description="We will be holding a community meeting to discuss upcoming projects and initiatives." date="June 20th, 2024" />
-      </div>
-    </div>
-    <div class="w-full flex flex-col gap-4 md:w-1/3">
-      <c-ui.card>
-        <h2 class="text-xl font-bold mb-4">Community Leaders</h2>
-        <div class="flex flex-row justify-start items-center gap-4">
-          <c-ui.avatar name="John Doe" size="md" />
-          <div class="flex flex-col">
-            <p class="text-lg">John Doe</p>
-            <p class="text-sm text-gray-500">Community Manager</p>
-          </div>
-        </div>
-        <div class="flex flex-row justify-start items-center gap-4">
-          <c-ui.avatar name="Alina Smith" size="md" />
-          <div class="flex flex-col">
-            <p class="text-lg">Alina Smith</p>
-            <p class="text-sm text-gray-500">Community Leader</p>
-          </div>
-        </div>
-      </c-ui.card>
-      <c-ui.card>
-        <h2 class="text-xl font-bold mb-4">Upcoming Events</h2>
-        <ul class="list-disc pl-5">
-          <li>Community BBQ - June 15th</li>
-          <li>Neighborhood Cleanup - July 10th</li>
-          <li>Annual Block Party - August 20th</li>
-        </ul>
-      </c-ui.card>
-    </div>
-  </div>
+
+        <!-- Sidebar -->
+        <aside class="flex min-w-0 flex-col gap-5">
+
+            <!-- Community leaders -->
+            <c-ui.card>
+                <div class="mb-5 flex items-center gap-3">
+                    <div class="flex size-10 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                        <c-heroicon.user-group class="size-5" />
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold">Community leaders</h2>
+                        <p class="text-sm opacity-70">
+                            Meet your community team.
+                        </p>
+                    </div>
+                </div>
+
+                {% for manager in managers %}
+                <div class="flex items-center gap-3 rounded-xl p-3 transition hover:bg-accent/5">
+                    <c-ui.avatar name="{{ manager.get_full_name }}" size="md" />
+                    <div class="min-w-0 flex-1">
+                        <p class="font-semibold">{{ manager.get_full_name }}</p>
+                        <p class="mt-1 text-sm opacity-70">Community Manager</p>
+                        <span class="mt-2 inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent-content">
+                            <c-heroicon.shield-check class="size-3.5" />
+                            Management
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </c-ui.card>
+            <!-- Upcoming events -->
+            <c-ui.card>
+                <div class="mb-5 flex items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-lg font-bold">Upcoming events</h2>
+                        <p class="mt-1 text-sm opacity-70">
+                            Save the dates.
+                        </p>
+                    </div>
+                    <div class="flex size-10 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                        <c-heroicon.calendar class="size-5" />
+                    </div>
+                </div>
+                {% for event in events %}
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="flex size-14 shrink-0 flex-col items-center justify-center rounded-xl bg-accent/10 text-accent-content">
+                            <span class="text-xs font-medium uppercase">{{ event.start_date|date:"M" }}</span>
+                            <span class="text-lg font-bold leading-tight">{{ event.start_date|date:"d" }}</span>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="font-semibold">{{ event.title }}</p>
+                            <p class="mt-1 text-sm opacity-70">
+                                <c-heroicon.map-pin class="mr-1 inline size-4" />
+                                {{ event.location }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+              
+            </c-ui.card>
+
+            <!-- Community message -->
+            <c-ui.card>
+                <div class="flex items-start gap-3">
+                    <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-content">
+                        <c-heroicon.heart class="size-6" />
+                    </div>
+                    <div>
+                        <h2 class="font-bold">Stronger together</h2>
+                        <p class="mt-2 text-sm leading-6 opacity-70">
+                            Great communities start with people who care.
+                            Join an event, share an update, or lend a hand
+                            to a neighbor.
+                        </p>
+                    </div>
+                </div>
+            </c-ui.card>
+
+        </aside>
+    </section>
 </c-layout>

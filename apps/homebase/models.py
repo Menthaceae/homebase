@@ -48,3 +48,32 @@ class Rental(models.Model):
     tenant = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     occupied = models.BooleanField(default=False, blank=True)
     owned_property = models.ForeignKey(OwnedProperty, on_delete=models.SET_NULL, null=True, blank=True)
+
+
+class MaintenanceRequest(models.Model):
+    id = models.AutoField(primary_key=True)
+    rental = models.ForeignKey(Rental, on_delete=models.CASCADE, related_name='maintenance_requests')
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    status = models.CharField(choices=(
+        ("pending", "Pending"),
+        ("in_progress", "In Progress"),
+        ("complete", "Complete")
+    ), default="pending", max_length=20)
+    priority = models.CharField(choices=(
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High")
+    ), default="high", max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Announcement(models.Model):
+    id = models.AutoField(primary_key=True)
+    homebase = models.ForeignKey(Homebase, on_delete=models.CASCADE, related_name='announcements')
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)

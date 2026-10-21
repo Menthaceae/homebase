@@ -120,6 +120,7 @@ def onboarding_manager_submit(request):
         if pwd1 != pwd2:
             return redirect('/onboarding')
 
+        print(f"Banner file: {post.get('banner')}")
         # 2. Create Manager User
         user = User.objects.create_user(
             username=post.get('username'),
@@ -129,10 +130,11 @@ def onboarding_manager_submit(request):
             password=pwd1
         )
 
+        print(f"{request.FILES.get('banner')}")
         # 3. Create Homebase Complex
         homebase = Homebase.objects.create(
             name=post.get('name'),
-            banner=post.get('banner'),
+            banner=request.FILES.get('banner'),
             bio=post.get('bio'),
             street_address=post.get('street_address'),
             city=post.get('city'),
@@ -140,6 +142,7 @@ def onboarding_manager_submit(request):
             zipcode=post.get('zipcode'),
             country=post.get('country'),
         )
+        print(f"Created Homebase: {homebase.name} with ID: {homebase.banner.url if homebase.banner else 'No Banner'}")
         homebase.managers.add(user)
 
         # 4. Batch Create Sub-Properties
