@@ -32,7 +32,7 @@
                 <span>
                     {{ event.start_date|date:"M j, Y" }}
                     {% if event.end_date and event.end_date != event.start_date %}
-                        – {{ event.end_date|date:"M j, Y" }}
+                        {{ event.end_date|date:"M j, Y" }}
                     {% endif %}
                 </span>
             </div>
@@ -42,7 +42,7 @@
                 <span>
                     {{ event.start_time|time:"g:i A" }}
                     {% if event.end_time %}
-                        – {{ event.end_time|time:"g:i A" }}
+                        {{ event.end_time|time:"g:i A" }}
                     {% endif %}
                 </span>
             </div>

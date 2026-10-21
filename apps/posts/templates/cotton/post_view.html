@@ -3,7 +3,7 @@
     id="post-{{ post.id }}"
     class="post_view m-auto max-h-[90vh] w-[95%] max-w-4xl overflow-y-auto rounded-2xl bg-white p-0 text-gray-800 shadow-2xl backdrop:bg-gray-950/60"
 >
-    <div class="flex flex-col">
+    <div class="flex flex-col w-m-lg w-[95%] max-w-4xl">
 
         <!-- Header -->
         <div class="flex items-start h-m-md justify-between gap-4 border-b border-gray-100 px-6 py-5">
@@ -86,14 +86,14 @@
 
                 <!-- Left: Images -->
                 {% if photos %}
-                    <div class="grid w-sm grid-cols-2 gap-3 sm:w-1/2 sm:shrink-0">
+                    <div class="flex sm:w-1/2 sm:shrink-0">
                         {% for photo in photos %}
                             {% if photo.image %}
                                 <div class="overflow-hidden rounded-xl bg-gray-100 w-sm {% if forloop.first %}col-span-2{% endif %}">
                                     <img
                                         src="{{ photo.image.url }}"
                                         alt="{{ post.title }}"
-                                        class="max-h-96 w-sm object-cover"
+                                        class="max-h-96 w-sm object-fit"
                                     >
                                 </div>
                             {% endif %}
@@ -101,13 +101,15 @@
                     </div>
                 {% endif %}
 
+                <div class="p-2"></div>
+
                 <!-- Right: Post text -->
-                <div class="min-w-md flex-1">
-                    <h2 class="mb-3 text-2xl font-bold leading-tight tracking-tight text-gray-900">
+                <div class="min-w-0 flex-1">
+                        <h2 class="mb-3 text-2xl font-bold leading-tight tracking-tight text-gray-900">
                         {{ post.title }}
                     </h2>
 
-                    <p class="break-words text-sm leading-7 text-gray-600">
+                    <p class="min-w-0 whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-sm leading-7 text-gray-600">
                         {{ post.body }}
                     </p>
                 </div>
