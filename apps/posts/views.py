@@ -25,7 +25,7 @@ def get_public_posts():
     """
     Get all public posts
     """
-    public_posts = Post.objects.all().filter(post_to="public")
+    public_posts= Post.objects.order_by('-id').filter(post_to="public").prefetch_related('tags', 'images',).select_related('author', 'homebase',)
     return public_posts
 
 def get_homebase_posts(homebase_id):

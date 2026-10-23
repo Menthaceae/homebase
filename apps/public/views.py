@@ -15,13 +15,15 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
 from apps.posts.models import Post, Tag
+from apps.posts.views import get_public_posts
 
 # Landing page
 def home(request):
     if not request.user.is_authenticated:
         return redirect('onboarding/')
-      
-    public_posts = Post.objects.order_by('-id').prefetch_related('tags', 'images',).select_related('author', 'homebase',)
+
+    # public_posts = Post.objects.order_by('-id').prefetch_related('tags', 'images',).select_related('author', 'homebase',)
+    public_posts = Post.get_public_posts()
     tags = Tag.objects.all()
 
     context = {
