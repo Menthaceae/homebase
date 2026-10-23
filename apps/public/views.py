@@ -21,7 +21,7 @@ def home(request):
     if not request.user.is_authenticated:
         return redirect('onboarding/')
       
-    public_posts = Post.objects.all().order_by('-id')
+    public_posts = Post.objects.order_by('-id').prefetch_related('tags', 'images')
     tags = Tag.objects.all()
 
     context = {
