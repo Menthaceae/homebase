@@ -22,12 +22,11 @@ def home(request):
         return redirect('onboarding/')
       
     public_posts = Post.objects.order_by('-id').prefetch_related('tags', 'images',).select_related('author', 'homebase',)
-    tags = Tag.objects.all()
-
+   
     context = {
         "active_page": "home",
         "public_posts": public_posts,
-        "tags": tags,
+      
     }
 
     return render(request, 'public/home.html', context)
