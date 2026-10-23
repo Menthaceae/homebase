@@ -41,6 +41,12 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
 
 # Application definition
 
@@ -63,6 +69,7 @@ INSTALLED_APPS = [
     'apps.posts',
     'apps.events',
     'apps.dms',
+    "debug_toolbar",
 ]
 
 TAILWIND_CLI_SRC_CSS = "tailwind.input.css"
@@ -71,6 +78,7 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
