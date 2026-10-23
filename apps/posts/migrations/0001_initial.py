@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('homebase', '0003_alter_homebase_banner'),
+        # ('homebase', '0003_alter_homebase_banner'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
