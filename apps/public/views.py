@@ -23,7 +23,7 @@ def home(request):
         return redirect('onboarding/')
 
     # public_posts = Post.objects.order_by('-id').prefetch_related('tags', 'images',).select_related('author', 'homebase',)
-    public_posts = Post.get_public_posts()
+    public_posts = get_public_posts()
     tags = Tag.objects.all()
 
     context = {
