@@ -1,6 +1,6 @@
 from logging import exception
 
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render
@@ -121,7 +121,9 @@ def onboarding_manager_submit(request):
         pwd1 = post.get('password1')
         pwd2 = post.get('password2')
         if pwd1 != pwd2:
-            return redirect('/onboarding')
+            response = JsonResponse({'error': "Passwords do not match."})
+            response.status_code = 400
+            return response
 
         # 2. Create Manager User
         user = User.objects.create_user(
@@ -132,7 +134,6 @@ def onboarding_manager_submit(request):
             password=pwd1
         )
 
-        print(f"{request.FILES.get('banner')}")
         # 3. Create Homebase Complex
         homebase = Homebase.objects.create(
             name=post.get('name'),
@@ -144,7 +145,6 @@ def onboarding_manager_submit(request):
             zipcode=post.get('zipcode'),
             country=post.get('country'),
         )
-        print(f"Created Homebase: {homebase.name} with ID: {homebase.banner.url if homebase.banner else 'No Banner'}")
         homebase.managers.add(user)
 
         # 4. Batch Create Sub-Properties
@@ -163,8 +163,9 @@ def onboarding_manager_submit(request):
         django_login(request, user)
         return redirect('/homebase/dashboard/property-manager/') 
     except Exception as e:
-        messages.error(request, f"something went wrong during onboarding please try again")
-        return redirect('/onboarding/')  
+        return JsonResponse({
+            "error": str(e).split("DETAIL:")[-1].strip()
+        }, status=400)
 
 
 @require_POST
@@ -177,7 +178,9 @@ def onboarding_renter_submit(request):
         pwd1 = post.get('password1')
         pwd2 = post.get('password2')
         if pwd1 != pwd2:
-            return redirect('onboarding')
+            response = JsonResponse({'error': "Passwords do not match."})
+            response.status_code = 400
+            return response
 
         user = User.objects.get(email=email)
 
@@ -188,7 +191,8 @@ def onboarding_renter_submit(request):
         user.save()
 
         django_login(request, user)
-        return redirect('renter_dashboard')
+        return redirect('/homebase/dashboard/tenant/')
     except Exception as e:
-        messages.error(request, f"something went wrong during onboarding please try again")
-        return redirect('/onboarding/')  
+        return JsonResponse({
+            "error": str(e).split("DETAIL:")[-1].strip()
+        }, status=400)
