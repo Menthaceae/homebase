@@ -38,7 +38,7 @@ def get_all_message_groups(request):
 def get_all_messages(request, message_group_id):
     user = request.user
     group = Message_Group.objects.get(id=message_group_id)
-    messages = group.message_set.all()
+    messages = group.message_set.select_related('author')
     members = group.members.all()
 
     if request.method == 'POST':
