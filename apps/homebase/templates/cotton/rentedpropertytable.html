@@ -1,9 +1,22 @@
 <c-vars rental />
 <tr>
     <td><b>{{ rental.subproperty.room_number }}</b></td>
-    <td>{% if rental.tenant %}{{ rental.tenant.user.first_name }} {{ rental.tenant.user.last_name }}{% else %}-{% endif %}</td>
+    <td><b>{% if rental.tenant %}{{ rental.tenant.first_name }} {{ rental.tenant.last_name }}{% else %}-{% endif %}</b></td>
     <td><b>${{ rental.rent }}</b></td>
     <td>{{ rental.start_date }}</td>
     <td>{{ rental.end_date }}</td>
     <td>{{ rental.occupied }}</td>
+    <td>
+        <c-ui.dialog>
+            <c-slot name="trigger">
+                <c-ui.button variant="primary" size="sm">Edit</c-ui.button>
+            </c-slot>
+                <div class="max-h-[90vh]">
+                <c-rentaleditform
+                    :rental="rental"
+                />
+                </div>
+        </c-ui.dialog>
+    </td>
+    
 </tr>

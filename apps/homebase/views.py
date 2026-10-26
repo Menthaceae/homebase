@@ -104,12 +104,12 @@ def manage_homebase(request, homebase_id):
         owned_email = request.POST.get('owners_email')
         tenant_email = request.POST.get('tenant_email')
         classification = request.POST.get('classification')
-        subproperty = request.POST.get('subproperty_id')
+        subproperty_id = request.POST.get('subproperty_id')
         saved_successfully = False
         try:
             if rental_form.is_valid():
                 with transaction.atomic():
-                    if classification == 'rental' and subproperty is None and sub_form.is_valid():
+                    if classification == 'rental' and subproperty_id is None and sub_form.is_valid():
                         subproperty = sub_form.save(commit=False)
                         subproperty.homebase = homebase
                         if SubProperty.objects.filter(homebase=homebase, room_number=subproperty.room_number).exists():
@@ -120,7 +120,8 @@ def manage_homebase(request, homebase_id):
                             })
                             return response
                         subproperty.save()
-                    subproperty = SubProperty.objects.get(id=subproperty)
+                    if subproperty_id is not None and subproperty_id != '':
+                        subproperty = SubProperty.objects.get(id=subproperty_id)
                     rental = rental_form.save(commit=False)
                     rental.subproperty = subproperty
                     if tenant_email is not None and tenant_email != '':
@@ -383,4 +384,34 @@ def update_ticket_status(request, ticket_id):
     else:
         return render(request, 'cotton/updateticketstatusform.html', {
             "ticket": ticket
+    })
+
+
+def edit_rental(request, rental_id):
+    rental = Rental.objects.get(id=rental_id)
+    tenant_email = request.POST.get('tenant_email')
+    if request.method == 'POST':
+        form = RentalCreationForm(request.POST, instance=rental)
+        if tenant_email:
+            user = invite_user(tenant_email, request)
+            if rental.tenant != user:
+                rental.tenant = user
+                rental.save()
+        else:
+            rental.tenant = user
+        if form.is_valid():
+            form.save()
+            response = HttpResponse(status=204)
+            response['HX-Refresh'] = 'true'
+            return response
+        else:
+            return render(request, 'cotton/rentalform.html', {
+                "form": form,
+                "rental": rental
+            }, status=422)
+    else:
+        form = RentalCreationForm(instance=rental)
+    return render(request, 'cotton/rentalform.html', {
+        "form": form,
+        "rental": rental
     })

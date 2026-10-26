@@ -1,4 +1,6 @@
 {% load static %}
+
+<c-vars homebase="" />
 <!-- Form: Create event-->
 <dialog
     id="create-event-modal"
@@ -129,6 +131,7 @@
                     >
                 </div>
 
+                {% if not homebase %}
                 <!-- Post to -->
                 <div class="logistic event-post-to">
                     <label for="post_to" class="required">Post to</label>
@@ -139,7 +142,7 @@
                         <option value="public">Homebase</option>
                     </select>
                 </div>
-
+                {% endif %}
                 <!-- Additional details -->
                 <div class="logistic event-details">
                     <label for="body" class="required">Additional details</label>
@@ -152,6 +155,11 @@
                     ></textarea>
                 </div>
             </div>
+
+            {% if homebase %}
+                <input type="hidden" name="homebase" value="{{ homebase }}">
+                <input type="hidden" name="post_to" value="homebase">
+            {% endif %}
 
             <!-- Footer -->
             <div class="event-form-footer">
@@ -168,7 +176,6 @@
             </div>
         </form>
     </div>
-
 </dialog>
 
-<c-post-create :tags="tags"/>
+<c-post-create homebase="homebase" />

@@ -37,7 +37,6 @@
                 placeholder="Enter the rent amount" 
                 value ="{{ rental_form.rent.value|default:'' }}"
                 :field="rental_form.rent"
-                ::required="classification === 'rental'"
             />
             {% if rental_form.rent.errors %}
                 <c-ui.alert type="error" class="mb-4">

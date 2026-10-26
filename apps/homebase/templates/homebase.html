@@ -8,11 +8,16 @@
     <c-slot name="banner">
         <!-- Hero -->
         <section class="relative isolate overflow-hidden bg-accent text-[#ffffff]">
+            {% if homebase.banner %}
             <div
                 class="absolute inset-0 z-10 bg-cover bg-center opacity-30"
-                style="background-image: url('{{ homebase.banner }}');"
+                style="background-image: url('{{ homebase.banner.url }}');"
             ></div>
-
+            {% else %}
+            <div class="absolute inset-0 z-10 bg-cover bg-center opacity-30"
+                style="background-image: url('{% static 'images/banner.jpg' %}');"
+            ></div>
+            {% endif %}
             <div class="absolute inset-0 -z-10 bg-linear-to-r from-accent via-accent/90 to-accent/50"></div>
 
             <div class="flex min-h-72 flex-col justify-end p-6 sm:p-10">
@@ -170,6 +175,13 @@
                             </p>
                         </div>
                     </div>
+                    <c-ui.button onclick="document.getElementById('create-post-modal').showModal()" variant="primary" class="mb-2">
+                        <span class="flex items-center gap-2">
+                            <c-heroicon.plus class="size-4" />
+                            Create Post
+                        </span>
+                    </c-ui.button>
+                    <br>
                     <c-post :posts="posts" />
                 </c-ui.card>
             </div>
@@ -194,6 +206,13 @@
                             </p>
                         </div>
                     </div>
+                    <c-ui.button onclick="document.getElementById('create-event-modal').showModal()" variant="primary" class="mb-2">
+                        <span class="flex items-center gap-2">
+                            <c-heroicon.plus class="size-4" />
+                            Create Event
+                        </span>
+                    </c-ui.button>
+                    <br>
                     {% for event in events %}
                       <c-eventdiv :event="event" />
                     {% empty %}
@@ -237,8 +256,7 @@
 
         <!-- Sidebar -->
         <aside class="flex min-w-0 flex-col gap-5">
-
-            <!-- Community leaders -->
+            <!-- SubProperty Range -->
             <c-ui.card>
                 <div class="mb-5 flex items-center gap-3">
                     <div class="flex size-10 items-center justify-center rounded-xl bg-accent/10 text-accent-content">
@@ -303,7 +321,8 @@
                     </div>
                 </div>
             </c-ui.card>
-
         </aside>
     </section>
+
+    <c-event-create homebase="{{ homebase.id }}" />
 </c-layout>
