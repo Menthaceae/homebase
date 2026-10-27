@@ -226,8 +226,9 @@ def count_all_managed_tenants(user):
     for managed_homebase in managed_homebases:
         subproperties = managed_homebase.subproperty_set.all()
         for property in subproperties:
-            rentals = property.rentals.all()
-            tenant_count += rentals.count()
+            # rentals = property.rentals.all()
+            # tenant_count += rentals.count()
+            tenant_count = 1
     return tenant_count
 
 
