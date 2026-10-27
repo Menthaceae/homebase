@@ -1,5 +1,29 @@
 {% load static %}
-<!-- Form: Create event-->
+<div x-data="{
+    start_date: '',
+    start_time: '',
+    showEndTime: false,
+    end_date: '',
+    end_time: '',
+
+    updateEndDateTime() {
+        if (!this.start_date || !this.start_time) return;
+
+        const start = new Date(`${this.start_date}T${this.start_time}`);
+        const end = new Date(start.getTime() + 60 * 60 * 1000);
+
+        this.end_date = [
+            end.getFullYear(),
+            String(end.getMonth() + 1).padStart(2, '0'),
+            String(end.getDate()).padStart(2, '0')
+        ].join('-');
+
+        this.end_time =
+            String(end.getHours()).padStart(2, '0') + ':' +
+            String(end.getMinutes()).padStart(2, '0');
+    }
+}">
+
 <dialog
     id="create-event-modal"
     class="w-full max-w-lg rounded-xl p-0 shadow-xl"
@@ -70,6 +94,7 @@
                                 type="date"
                                 id="start_date"
                                 name="start_date"
+                                x-model="start_date"
                                 required
                             >
                         </div>
@@ -80,6 +105,7 @@
                                 type="date"
                                 id="end_date"
                                 name="end_date"
+                                x-model="end_date"
                             >
                         </div>
                     </div>
@@ -93,6 +119,7 @@
                                 type="time"
                                 id="start_time"
                                 name="start_time"
+                                x-model="start_time"
                                 required
                             >
                         </div>
@@ -104,6 +131,7 @@
                                 type="time"
                                 id="end_time"
                                 name="end_time"
+                                x-model="end_time"
                             >
                         </div>
                     </div>
@@ -113,6 +141,9 @@
                     <c-ui.switch
                         type="button"
                         id="add-end-time"
+                        x-model="showEndTime"
+                        @change="if (showEndTime) updateEndDateTime();
+                                else { end_date = ''; end_time = ''}"
                     />
                     <span class="text-sm text-ink-700 dark:text-ink-300">Add end time</span>
                 </div>
