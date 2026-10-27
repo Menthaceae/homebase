@@ -221,15 +221,7 @@ def join_page(request):
 
 
 def count_all_managed_tenants(user):
-    managed_homebases = Homebase.objects.filter(managers=user)
-    tenant_count = 0
-    for managed_homebase in managed_homebases:
-        subproperties = managed_homebase.subproperty_set.all()
-        for property in subproperties:
-            # rentals = property.rentals.all()
-            # tenant_count += rentals.count()
-            tenant_count = 1
-    return tenant_count
+    return Rental.objects.filter(subproperty__homebase__managers=user).count()
 
 
 @login_required
