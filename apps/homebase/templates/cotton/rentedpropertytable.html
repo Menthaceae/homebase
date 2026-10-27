@@ -1,9 +1,38 @@
 <c-vars rental />
+
 <tr>
     <td><b>{{ rental.subproperty.room_number }}</b></td>
-    <td>{% if rental.tenant %}{{ rental.tenant.user.first_name }} {{ rental.tenant.user.last_name }}{% else %}-{% endif %}</td>
+    <td><b>{% if rental.tenant %}{{ rental.tenant.first_name }} {{ rental.tenant.last_name }}{% else %}-{% endif %}</b></td>
     <td><b>${{ rental.rent }}</b></td>
     <td>{{ rental.start_date }}</td>
     <td>{{ rental.end_date }}</td>
-    <td>{{ rental.occupied }}</td>
+    <td>
+        <c-ui.dialog>
+            <c-slot name="trigger">
+                <c-ui.button variant="primary" size="sm">Edit</c-ui.button>
+            </c-slot>
+                <div class="max-h-[90vh]">
+                <c-rentaleditform
+                    :rental="rental"
+                />
+                </div>
+        </c-ui.dialog>
+    </td>
+    <td>
+        <c-ui.dialog>
+            <c-slot name="trigger">
+                <c-ui.button variant="danger" size="sm">unassign</c-ui.button>
+            </c-slot>
+            <div class="max-h-[90vh]">
+                <form method="POST" hx-post="{% url 'unassign_rental' rental.id %}">
+                    {% csrf_token %}
+                    <p class="mb-4">Are you sure you want to unassign this rental?</p>
+                    <div class="flex justify-end gap-2">
+                        <c-ui.button type="submit" variant="danger">Yes, unassign</c-ui.button>
+                        <c-ui.button type="button" variant="secondary" @click="$dispatch('closedialog')">Cancel</c-ui.button>
+                    </div>
+                </form>
+            </div>
+        </c-ui.dialog>
+    </td>
 </tr>

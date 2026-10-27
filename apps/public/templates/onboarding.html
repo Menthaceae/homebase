@@ -55,6 +55,11 @@
                     if (res.ok && data.found) {
                         this.renter.homebase_name = data.homebase_name || '';
                         this.renter.unit_number = data.unit_number || '';
+                        if (data.tenant) {
+                            this.renter.first_name = data.tenant.first_name || '';
+                            this.renter.last_name = data.tenant.last_name || '';
+                            this.renter.username = data.tenant.username || '';
+                        }
                         this.step = 'renter_account';
                     } else {
                         this.renterError = data.error || 'No active lease or invitation found for this email.';
