@@ -53,10 +53,14 @@ End Homebase authentication logic and stuff
 
 # GET homebase/<id>/
 def home(request, homebase_id):
+    isManager = False
+    current_user = request.user
     homebase = Homebase.objects.get(id=homebase_id)
     users = homebase.users.all().count()
     posts = Posts.get_homebase_posts(homebase_id)
     managers = homebase.managers.all()
+    if current_user in managers:
+        isManager = True    
     announcements = Announcement.objects.filter(homebase=homebase).order_by('-created_at')[:5]
     events = Event.objects.filter(homebase=homebase).order_by('start_date')[:5]
     occupied = Rental.objects.filter(subproperty__homebase=homebase, occupied=True).count()
@@ -71,7 +75,8 @@ def home(request, homebase_id):
             "managers": managers,
             "events": events,
             "announcements": announcements,
-            "posts": posts
+            "posts": posts,
+            "isManager": isManager
         }
         return render(request, 'homebase.html', context)
     else:
@@ -415,3 +420,15 @@ def edit_rental(request, rental_id):
         "form": form,
         "rental": rental
     })
+
+def unassign_rental(request, rental_id):
+    rental = Rental.objects.get(id=rental_id)
+    if request.method == 'POST':
+        rental.delete()
+        response = HttpResponse(status=204)
+        response['HX-Refresh'] = 'true'
+        return response
+    else:
+        return render(request, 'cotton/unassignrentalform.html', {
+            "rental": rental
+        })

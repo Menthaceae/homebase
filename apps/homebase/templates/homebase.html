@@ -175,13 +175,6 @@
                             </p>
                         </div>
                     </div>
-                    <c-ui.button onclick="document.getElementById('create-post-modal').showModal()" variant="primary" class="mb-2">
-                        <span class="flex items-center gap-2">
-                            <c-heroicon.plus class="size-4" />
-                            Create Post
-                        </span>
-                    </c-ui.button>
-                    <br>
                     <c-post :posts="posts" />
                 </c-ui.card>
             </div>
@@ -241,6 +234,20 @@
                             </p>
                         </div>
                     </div>
+                    {% if isManager %}
+                    <c-ui.dialog size="lg">
+                        <c-slot name="trigger">
+                            <c-ui.button variant="primary">
+                                <span class="inline-flex items-center gap-2">
+                                    <c-heroicon.megaphone class="size-5" />
+                                    Create announcement
+                                </span>
+                            </c-ui.button>
+                        </c-slot>
+                        <c-announcementform :homebase="homebase" />
+                    </c-ui.dialog>
+                    {% endif %}
+                    <br>
                     {% for announcement in announcements %}
                     <c-announcement
                         title="{{ announcement.title }}"
