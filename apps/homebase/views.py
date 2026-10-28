@@ -53,10 +53,14 @@ End Homebase authentication logic and stuff
 
 # GET homebase/<id>/
 def home(request, homebase_id):
+    isManager = False
+    current_user = request.user
     homebase = Homebase.objects.get(id=homebase_id)
     users = homebase.users.all().count()
     posts = Posts.get_homebase_posts(homebase_id)
     managers = homebase.managers.all()
+    if current_user in managers:
+        isManager = True    
     announcements = Announcement.objects.filter(homebase=homebase).order_by('-created_at')[:5]
     events = Event.objects.filter(homebase=homebase).order_by('start_date')[:5]
     occupied = Rental.objects.filter(subproperty__homebase=homebase, occupied=True).count()
@@ -71,7 +75,8 @@ def home(request, homebase_id):
             "managers": managers,
             "events": events,
             "announcements": announcements,
-            "posts": posts
+            "posts": posts,
+            "isManager": isManager
         }
         return render(request, 'homebase.html', context)
     else:
@@ -104,12 +109,12 @@ def manage_homebase(request, homebase_id):
         owned_email = request.POST.get('owners_email')
         tenant_email = request.POST.get('tenant_email')
         classification = request.POST.get('classification')
-        subproperty = request.POST.get('subproperty_id')
+        subproperty_id = request.POST.get('subproperty_id')
         saved_successfully = False
         try:
             if rental_form.is_valid():
                 with transaction.atomic():
-                    if classification == 'rental' and subproperty is None and sub_form.is_valid():
+                    if classification == 'rental' and subproperty_id is None and sub_form.is_valid():
                         subproperty = sub_form.save(commit=False)
                         subproperty.homebase = homebase
                         if SubProperty.objects.filter(homebase=homebase, room_number=subproperty.room_number).exists():
@@ -120,7 +125,8 @@ def manage_homebase(request, homebase_id):
                             })
                             return response
                         subproperty.save()
-                    subproperty = SubProperty.objects.get(id=subproperty)
+                    if subproperty_id is not None and subproperty_id != '':
+                        subproperty = SubProperty.objects.get(id=subproperty_id)
                     rental = rental_form.save(commit=False)
                     rental.subproperty = subproperty
                     if tenant_email is not None and tenant_email != '':
@@ -215,14 +221,7 @@ def join_page(request):
 
 
 def count_all_managed_tenants(user):
-    managed_homebases = Homebase.objects.filter(managers=user)
-    tenant_count = 0
-    for managed_homebase in managed_homebases:
-        subproperties = managed_homebase.subproperty_set.all()
-        for property in subproperties:
-            rentals = property.rentals.all()
-            tenant_count += rentals.count()
-    return tenant_count
+    return Rental.objects.filter(subproperty__homebase__managers=user).count()
 
 
 @login_required
@@ -384,3 +383,45 @@ def update_ticket_status(request, ticket_id):
         return render(request, 'cotton/updateticketstatusform.html', {
             "ticket": ticket
     })
+
+
+def edit_rental(request, rental_id):
+    rental = Rental.objects.get(id=rental_id)
+    tenant_email = request.POST.get('tenant_email')
+    if request.method == 'POST':
+        form = RentalCreationForm(request.POST, instance=rental)
+        if tenant_email:
+            user = invite_user(tenant_email, request)
+            if rental.tenant != user:
+                rental.tenant = user
+                rental.save()
+        else:
+            rental.tenant = user
+        if form.is_valid():
+            form.save()
+            response = HttpResponse(status=204)
+            response['HX-Refresh'] = 'true'
+            return response
+        else:
+            return render(request, 'cotton/rentalform.html', {
+                "form": form,
+                "rental": rental
+            }, status=422)
+    else:
+        form = RentalCreationForm(instance=rental)
+    return render(request, 'cotton/rentalform.html', {
+        "form": form,
+        "rental": rental
+    })
+
+def unassign_rental(request, rental_id):
+    rental = Rental.objects.get(id=rental_id)
+    if request.method == 'POST':
+        rental.delete()
+        response = HttpResponse(status=204)
+        response['HX-Refresh'] = 'true'
+        return response
+    else:
+        return render(request, 'cotton/unassignrentalform.html', {
+            "rental": rental
+        })
