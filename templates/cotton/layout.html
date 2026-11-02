@@ -28,6 +28,10 @@
     <!--Reusable Cotton components -->
     {% if not hide_content_container %}
         <c-appbar :is-logged-in="False" username="" avatar-url="" />
+        <div class="absolute">
+            <c-chat-window />
+            <c-search-users />
+        </div>
     {% endif %}
 
     {% if isfull_page %}
@@ -70,13 +74,15 @@
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.11/dist/htmx.min.js" integrity="sha384-2OatzQy1H+Zd/IIrjr1TcuDGqLXeHhbooAyJY1KdQMKnr4LZ22k31GBLdYKHmVjg" crossorigin="anonymous"></script>
     
     <!-- Global js -->
+    <script defer src="{% static 'js/modal.js' %}"></script>
     <script defer src="{% static 'posts/js/posts.js' %}"></script>
     <script defer src="{% static 'events/js/events.js' %}"></script>
+    <script defer src="{% static 'dms/js/dms.js' %}"></script>
 
     <!-- Custom js -->
     {% block custom_js %}
     {% endblock %}
 
-</body>
+</body> 
 </html>
 

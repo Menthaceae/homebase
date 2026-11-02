@@ -16,7 +16,6 @@ dialog.addEventListener("click", function (event) {
 });
 
 /** Post to logic */
-
 function openPostTo() {
     const button = document.getElementById("post-to-button");
 
@@ -181,6 +180,7 @@ Array.from(imageInputs).forEach(imageInput => {
     });
 });
 
+/** Image preview */
 function renderImagePreviews(previewContainer, images, isExisting = false) {
     console.log("Rendering image...")
     previewContainer.innerHTML = "";

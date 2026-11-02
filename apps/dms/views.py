@@ -1,10 +1,31 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
 from .models import *
 from .forms import *
 
+@login_required
+def list_all_users(request):
+    """
+    Return list of all users
+    """
+    UserList = get_user_model()
+    users = UserList.objects.exclude(
+        id=request.user.id
+    ).values(
+        'id',
+        'username',
+        'first_name',
+        'last_name'
+    )
+
+    return JsonResponse({
+        'users': list(users)
+    })
 
 def add_member(Message_Group, User):
     Message_Group.members.add(User)

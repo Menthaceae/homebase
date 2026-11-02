@@ -1,0 +1,128 @@
+<dialog
+        id="chat-window"
+        x-ref="dialog"
+        @click.self="close()"
+        @close="resetView()"
+        style="left: 90%; top: 50%; max-width: 300px;"
+        class="chat-window absolute h-full left-4 inset-s-0 top-0 rounded-xl p-0"
+
+    >
+    <!-- Header -->
+    <header class="flex items-center justify-end border-b border-gray-200 px-5 py-4">
+        <div>
+            <h2 class="text-xl font-semibold text-gray-900"
+                x-text="activeConversation ? activeConversation.name : 'Messages'">
+            </h2>
+            <p class="text-sm text-gray-500"
+            x-text="activeConversation ? 'Conversation' : 'Your conversations'">
+            </p>
+        </div>
+
+        <button
+            class="cursor-pointer"
+            type="button"
+            onclick = "const modal = document.getElementById('search-users');
+                modal.showModal();
+                Alpine.$data(modal).loadUsers();"
+        >
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.089 2.089 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0Z"/>
+            </svg>
+
+        </button> 
+    </header>
+
+    <!-- Filters -->
+    <section class="flex flex-row p-2 gap-2">
+        <button type="button" class="font-medium cursor-pointer active">All</button>
+        <button type="button" class="font-medium cursor-pointer">Unread</button>
+        <button type="button" class="font-medium cursor-pointer">Groups</button>
+    </section>
+
+    <!-- Conversation list -->
+    <section x-show="!activeConversation"
+            class="flex min-h-0 flex-1 flex-col">
+
+        <!-- Search -->
+        <div class="border-b border-gray-200 p-4">
+            <input
+                type="search"
+                x-model="search"
+                placeholder="Search conversations..."
+                class="w-full rounded-lg border-0 bg-gray-100 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+            >
+        </div>
+
+        <!-- Conversations -->
+        <div class="flex-1 overflow-y-auto">
+            {% for group in groups %}
+                <div class="dm-card">
+                    <a href=/messages/groups/{{group.id}}/>{{group.name}}</a>
+                </div>
+            {% empty %}
+            <p class="p-6 text-center text-sm text-gray-500">
+                No conversations found.
+            </p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Individual chat -->
+    <section x-cloak
+            x-show="activeConversation"
+            class="min-h-0 flex-1 flex-col"
+            :class="{ 'flex': activeConversation }">
+
+        <!-- Chat toolbar -->
+        <div class="border-b border-gray-200 px-4 py-3">
+            <button type="button"
+                    @click="activeConversation = null"
+                    class="flex items-center gap-2 text-sm text-gray-600
+                        hover:text-gray-900">
+                <i class="ti ti-arrow-left text-lg"></i>
+                Back to conversations
+            </button>
+        </div>
+
+        <!-- Message history -->
+        <div x-ref="chatMessages"
+            class="flex flex-1 flex-col gap-3 overflow-y-auto
+                    bg-gray-50 p-4">
+
+            <template x-for="item in activeConversation?.messages || []"
+                    :key="item.id">
+                <p class="max-w-[85%] rounded-2xl p-3 text-sm"
+                :class="item.mine
+                    ? 'self-end rounded-br-sm bg-blue-600 text-white'
+                    : 'self-start rounded-bl-sm bg-white text-gray-700 shadow-sm'"
+                x-text="item.text">
+                </p>
+            </template>
+        </div>
+
+        <!-- Send message -->
+        <form @submit.prevent="sendMessage()"
+            class="flex items-center gap-2 border-t border-gray-200
+                    bg-white p-3">
+
+            <input
+                type="text"
+                x-model="message"
+                placeholder="Write a message..."
+                autocomplete="off"
+                class="min-w-0 flex-1 rounded-full border border-gray-200
+                    px-4 py-2.5 text-sm focus:border-blue-500
+                    focus:outline-none"
+            >
+
+            <button type="submit"
+                    class="flex h-10 w-10 shrink-0 items-center
+                        justify-center rounded-full bg-blue-600
+                        text-white hover:bg-blue-700"
+                    aria-label="Send message">
+                <i class="ti ti-send text-lg"></i>
+            </button>
+        </form>
+    </section>
+</dialog>
+
