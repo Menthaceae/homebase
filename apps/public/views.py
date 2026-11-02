@@ -22,17 +22,23 @@ def home(request):
     if not request.user.is_authenticated:
         return redirect('onboarding/')
 
-    # public_posts = Post.objects.order_by('-id').prefetch_related('tags', 'images',).select_related('author', 'homebase',)
-    public_posts = get_public_posts()
-    tags = Tag.objects.all()
+    query = request.GET.get('query')
 
+    if query is None:
+        public_posts = get_public_posts()
+    else:
+        public_posts_search_title = get_public_posts().filter(title__icontains=query)
+        public_posts_search_body = get_public_posts().filter(body__icontains=query)
+        public_posts = public_posts_search_title | public_posts_search_body
+
+    tags = Tag.objects.all()
     context = {
         "active_page": "home",
         "public_posts": public_posts,
         "tags": tags,
     }
-
     return render(request, 'public/home.html', context)
+
 
 def layout(request):
     return render(request, 'layout.html')
