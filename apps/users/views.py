@@ -6,7 +6,6 @@ from django.shortcuts import redirect, render
 
 from .models import * 
 
-
 def set_manager(user):
     new_manager = Manager(manager=user)
     new_manager.save()
