@@ -18,4 +18,4 @@ class Owner(models.Model):
 
 class Tenant(models.Model):
     id = models.AutoField(primary_key=True)
-    tenant = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # This is an IS-A relationship   
+    tenant = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True) # This is an IS-A relationship
