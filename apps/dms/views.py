@@ -35,6 +35,48 @@ def add_member(Message_Group, User):
 @login_required
 def create_chat_group(request):
     """
+    Create chat group with member(s)
+
+    endpoint: chat/create/
+    """
+
+    if request.method == 'POST':
+        member_ids = request.POST.getlist('members')
+
+        # Validate that at least one participant was selected
+        if not member_ids:
+            messages.error(
+                request,
+                "Please select at least one participant.",
+                extra_tags="reopen_chat"
+            )
+            return redirect('view_all_messages')
+
+        # Retrieve selected members, excluding the current user
+        members = User.objects.filter(
+            id__in=member_ids
+        ).exclude(
+            id=request.user.id
+        )
+
+        form = MessageGroupCreationForm(request.POST)
+
+        if form.is_valid():
+            chat = form.save()
+
+            # Add the current user to the group
+            chat.members.add(request.user)
+
+            # Add the selected members
+            chat.members.add(*members)
+
+            return redirect('view_all_messages')
+
+    else:
+        form = MessageGroupCreationForm()
+
+    return render(request, 'view_all_messages.html', {'form': form})
+    """
     Create chat group with participant(s)
 
     endpoint: chat/create/
