@@ -1,5 +1,4 @@
 <c-vars :subproperty="None" :rental-form="None" :homebase="None" />
-
 <form   method="POST" 
         class="grid grid-cols-2 gap-4"
         hx-post="{% url 'manage_homebase' homebase.id %}"
@@ -37,7 +36,6 @@
                 placeholder="Enter the rent amount" 
                 value ="{{ rental_form.rent.value|default:'' }}"
                 :field="rental_form.rent"
-                ::required="classification === 'rental'"
             />
             {% if rental_form.rent.errors %}
                 <c-ui.alert type="error" class="mb-4">
@@ -45,43 +43,41 @@
                 </c-ui.alert>
             {% endif %}
         </div>
-        <c-ui.input 
-            name="start_date" 
-            label="Start Date" 
-            type="date"
-            value ="{{ rental_form.start_date.value|default:'' }}"
-            :field="rental_form.start_date"
-        />
+        <div x-data="{ today: new Date().toLocaleDateString('en-CA') }">
+            <c-ui.input
+                name="start_date"
+                label="Start Date"
+                type="date"
+                x-bind:value="today"
+                :field="rental_form.start_date"
+            />
+        </div>
 
         {% if rental_form.start_date.errors %}
             <c-ui.alert type="error" class="mb-4">
                 {{ rental_form.start_date.errors.0 }}
             </c-ui.alert>
         {% endif %}
-
-        <c-ui.input 
-            name="end_date" 
-            label="End Date" 
-            type="date"
-            value ="{{ rental_form.end_date.value|default:'' }}"
-            :field="rental_form.end_date"
-        />
+        <div x-data="{
+            oneyearfromtoday: (() => {
+                const date = new Date();
+                date.setFullYear(date.getFullYear() + 1);
+                return date.toLocaleDateString('en-CA');
+            })()
+        }">
+            <c-ui.input
+                name="end_date"
+                label="End Date"
+                type="date"
+                x-bind:value="oneyearfromtoday"
+                :field="rental_form.end_date"
+            />
+        </div>
         {% if rental_form.end_date.errors %}
             <c-ui.alert type="error" class="mb-4">
                 {{ rental_form.end_date.errors.0 }}
             </c-ui.alert>
         {% endif %}
-        <div class="col-span-2 mt-2">
-            <label class="flex items-center space-x-2 cursor-pointer">
-                <input type="checkbox" name="occupied" value="true" {% if rental_form.occupied.value %}checked{% endif %}>
-                <span class="text-sm font-medium text-slate-700">Occupied</span>
-            </label>
-            {% if rental_form.occupied.errors %}
-                    <c-ui.alert type="error" class="mb-4">
-                        {{ rental_form.occupied.errors.0 }}
-                    </c-ui.alert>
-                {% endif %}
-        </div>
 
         <c-ui.input 
             name="subproperty_id" 
@@ -93,7 +89,6 @@
         <c-ui.button type="submit" variant="primary">Submit</c-ui.button>
     </div>
 </form>
-
 <script>
     document.addEventListener('closedialog', function (evt) {
 

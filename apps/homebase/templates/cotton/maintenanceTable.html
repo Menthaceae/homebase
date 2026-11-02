@@ -12,6 +12,10 @@
             <h3 class="text-lg font-bold">{{ ticket.title }}</h3>
             <br />
             <p class="mt-2">{{ ticket.description }}</p>
+            <br />
+            {% if ticket.notes %}
+                <p class="mt-2"><b>Notes:</b> {{ ticket.notes }}</p>
+            {% endif %}
         </c-ui.dialog>
     </td>
     {% if manager %}
@@ -30,6 +34,8 @@
                     <c-ui.select.option value="In Progress">In Progress</c-ui.select.option>
                     <c-ui.select.option value="Closed">Closed</c-ui.select.option>
                 </c-ui.select>
+                <br />
+                <c-ui.input name="notes" label="Notes" type="text" placeholder="Add notes (optional)" value="{{ ticket.notes|default:'' }}" />
                 <br />
                 <c-ui.button type="submit" class="mt-2" variant="primary">Update Status</c-ui.button>
             </form>

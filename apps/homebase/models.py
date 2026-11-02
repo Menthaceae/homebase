@@ -54,7 +54,7 @@ class MaintenanceRequest(models.Model):
     id = models.AutoField(primary_key=True)
     rental = models.ForeignKey(Rental, on_delete=models.CASCADE, related_name='maintenance_requests')
     title = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     status = models.CharField(choices=(
         ("pending", "Pending"),
         ("in_progress", "In Progress"),
@@ -65,6 +65,7 @@ class MaintenanceRequest(models.Model):
         ("medium", "Medium"),
         ("high", "High")
     ), default="high", max_length=20)
+    notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

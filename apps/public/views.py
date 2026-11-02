@@ -1,6 +1,6 @@
 from logging import exception
 
-from django.db import IntegrityError, transaction
+from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render
@@ -14,7 +14,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
-from apps.posts.models import Post, Tag
+from apps.posts.models import Tag
 from apps.posts.views import get_public_posts
 
 # Landing page
@@ -101,11 +101,16 @@ def check_renter_email(request):
     rental = Rental.objects.filter(tenant__email=email).select_related('subproperty').first()
 
     if rental:
-        return JsonResponse({
-            'found': True,
-            'homebase_name': rental.subproperty.homebase.name,
-            'unit_number': rental.subproperty.room_number if rental.subproperty else 'Unassigned'
-        })
+            return JsonResponse({
+                'found': True,
+                'homebase_name': rental.subproperty.homebase.name,
+                'unit_number': rental.subproperty.room_number if rental.subproperty else 'Unassigned',
+                'tenant': {
+                    'first_name': rental.tenant.first_name,
+                    'last_name': rental.tenant.last_name,
+                    'username': rental.tenant.username,
+                }
+            })
 
     return JsonResponse({
         'found': False,

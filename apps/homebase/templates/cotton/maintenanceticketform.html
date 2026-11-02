@@ -32,7 +32,6 @@
                 value="{{ maintenance_form.description.value|default:'' }}" 
                 placeholder="Please describe the issue in detail..."
                 :field="{{ maintenance_form.description }}"
-                required
             />
             {% if maintenance_form.description.errors %}
                 <p class="mt-1 text-xs text-error">{{ maintenance_form.description.errors.0 }}</p>
@@ -59,6 +58,10 @@
 
         <!-- Property/Unit Selection -->
         <div>
+            {% if rentals|length == 1 %}
+                <input type="hidden" name="rental" value="{{ rentals.0.id }}">
+                <p class="text-sm text-gray-600 m-1"><br>Submitting ticket for Unit {{ rentals.0.subproperty.room_number|default:"N/A" }} — {{ rentals.0.subproperty.homebase.name }}</b></p>
+            {% else %}
             <c-ui.select 
                 name="rental" 
                 label="Property / Unit" 
@@ -75,6 +78,7 @@
             </c-ui.select>
             {% if maintenance_form.rental.errors %}
                 <p class="mt-1 text-xs text-error">{{ maintenance_form.rental.errors.0 }}</p>
+            {% endif %}
             {% endif %}
         </div>
 
