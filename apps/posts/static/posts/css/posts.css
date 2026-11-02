@@ -232,7 +232,3 @@ input[type="file"] {
     max-height: 85vh;
     overflow-y: auto;
 }
-
-.post_view::backdrop {
-        background: rgb(0 0 0 / 30%);
-}

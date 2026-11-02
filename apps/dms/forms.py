@@ -9,7 +9,6 @@ class MessageGroupCreationForm(ModelForm):
         model = Message_Group
         fields = [
             'name',
-            'members'
         ]
 
 class MessageCreationForm(ModelForm):

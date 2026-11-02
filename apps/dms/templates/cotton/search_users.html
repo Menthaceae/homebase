@@ -1,9 +1,17 @@
 <dialog
     id="search-users"
+    x-init="    
+        {% if messages %}
+            {% for message in messages %}
+                {%if 'reopen_chat' in message.tags %}
+                    $nextTrick(() => $el.showModal())
+                {% endif %}
+            {% endfor %}
+        {% endif %}"
     x-data="{
         users: [],
         search: '',
-        selectedUser: null,
+        selectedUsers: [],
         loading: false,
 
         async loadUsers() {
@@ -37,6 +45,17 @@
     }"
     class="search-users absolute rounded-xl p-0"
 >
+    <!-- Error messages -->
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'reopen_chat' in message.tags %}
+                <div class="rounded-lg bg-red-100 px-4 py-3 text-sm text-red-700 mb-4">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
     <!-- Search -->
     <div class="border-b border-gray-200 p-4">
         <input
@@ -57,9 +76,13 @@
         <template x-for="user in filteredUsers" :key="user.id">
             <button
                 type="button"
-                @click="selectedUser = user"
+                @click="
+                    selectedUsers.some(selected => selected.id === user.id)
+                        ? selectedUsers = selectedUsers.filter(selected => selected.id !== user.id)
+                        : selectedUsers.push(user)
+                "                
                 class="flex w-full items-center gap-3 rounded-lg p-3 text-left hover:bg-gray-100"
-                :class="{ 'bg-blue-50': selectedUser?.id === user.id }"
+                :class="{'bg-blue-50': selectedUsers.some(selected => selected.id === user.id)}"
             >
                 <div class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700">
                     <!-- Show profile photo if one exists -->
@@ -93,7 +116,7 @@
                 </div>
 
                 <span
-                    x-show="selectedUser?.id === user.id"
+                    x-show="selectedUsers.some(selected => selected.id === user.id)"
                     class="ml-auto text-blue-600"
                 >
                     <i class="ti ti-check"></i>
@@ -111,13 +134,27 @@
 
     <!-- Start conversation -->
     <div class="border-t border-gray-200 p-4">
-        <button
-            type="button"
-            :disabled="!selectedUser"
-            class="w-full rounded-lg bg-blue-600 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
-            @click="console.log('Selected user:', selectedUser)"
-        >
-            Start Chat
-        </button>
+
+        <form action="{% url 'create_chat_group' %}" method="POST">
+            {% csrf_token %}
+
+            <template x-for="user in selectedUsers" :key="user.id">
+                <input
+                    type="hidden"
+                    name="members"
+                    :value="user.id"
+                >
+            </template>
+
+
+            <button
+                type="submit"
+                :disabled="selectedUsers.length === 0"
+                class="w-full rounded-lg bg-blue-600 px-4 py-2 text-white cursor-pointer disabled:opacity-50"
+            >
+                Start Chat
+            </button>
+        </form>
+       
     </div>
 </dialog>

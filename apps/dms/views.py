@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+from django.urls import reverse
 
 from .models import *
 from .forms import *
@@ -30,20 +32,67 @@ def list_all_users(request):
 def add_member(Message_Group, User):
     Message_Group.members.add(User)
 
+@login_required
+def create_chat_group(request):
+    """
+    Create chat group with participant(s)
 
-def create_message_group(request):
-    user = request.user
+    endpoint: chat/create/
+    """    
     if request.method == 'POST':
+        member_ids = request.POST.getlist('members')
+
+        # Validate participants_ids.length > 1
+        if not member_ids:
+            messages.error(
+                    request, 
+                    "Please select at least one participant.",
+                    extra_tags="reopen_chat"
+                    )
+            return redirect('search_users.html')
+
+        # Retrieve participants
+        members = User.objects.filter(
+            id__in=member_ids
+        ).exclude(
+            id=request.user.id
+        )
+
         form = MessageGroupCreationForm(request.POST)
+
         if form.is_valid():
-            group = form.save()
-            group.members.add(user)
-            group.save()
-            return redirect('get_all_message_groups')
+            chat = form.save()
+            chat.members.add(request.user)
+            chat.members.add(*members)
+            chat.save()
+            return redirect('view_all_messages')
     else:
         form = MessageGroupCreationForm()
-    return render(request, 'create-group.html', {'form': form})
+    return render(request, 'view_all_messages', {'form': form})
 
+def view_all_messages(request):
+    """
+    Render page that shows all chat groups fullscreen
+    """
+
+    chats = Message_Group.objects.filter(
+        members=request.user
+    ).order_by('-id')
+
+    chat_id = request.GET.get('chat')
+
+    if chat_id:
+        active_chat = chats.filter(id=chat_id).first()
+    else:
+        active_chat = chats.first()
+
+    context = {
+        'chats': chats,
+        'active_page': 'messages',
+        'active_chat': active_chat,
+    }
+
+    return render(request, 'chat_page.html', context)
 
 def get_all_message_groups(request):
     user = request.user
@@ -56,31 +105,46 @@ def get_all_message_groups(request):
     return render(request, 'dms.html', context)
     
     
+@login_required
 def get_all_messages(request, message_group_id):
+    """
+    Render all messages in a group chat
+    """
+
     user = request.user
-    group = Message_Group.objects.get(id=message_group_id)
-    messages = group.message_set.all()
-    members = group.members.all()
+
+    group = get_object_or_404(
+        Message_Group,
+        id=message_group_id,
+        members=user
+    )
 
     if request.method == 'POST':
         form = MessageCreationForm(request.POST, request.FILES)
+
         if form.is_valid():
             message = form.save(commit=False)
             message.message_group = group
             message.author = user
             message.save()
-            return redirect('/messages/groups/' +str(message_group_id) + '/')
+
+            form = MessageCreationForm()
+
     else:
         form = MessageCreationForm()
-   
+
+    messages = group.messages.select_related('author').all()
+    members = group.members.all()
+
     context = {
         'messages': messages,
         'members': members,
+        'active_chat': group,
         'id': message_group_id,
         'form': form,
     }
 
-    return render(request, 'dm.html', context)
+    return render(request, 'chat_page.html', context)
 
 
 def invite(request, message_group_id):
