@@ -1,11 +1,13 @@
+<!-- Full screen page displaying all chats -->
 <c-layout>
 
     <div 
-        class="flex overflow-hidden bg-white rounded"
-        style="height: 650px"
+        class="flex overflow-hidden w-full fixed bg-white rounded"
+        style="height: calc(100vh - 74px);"
         x-data="{
             chatContent: '',
             loading: false,
+            sending: false,
             search: '',
             selectedChat: '{{ selected_chat.id|default:'' }}',
 
@@ -21,7 +23,9 @@
                 this.loading = true;
 
                 try {
-                    const response = await fetch(url);
+                    const response = await fetch(url, {
+                        credentials: 'same-origin'
+                    });
 
                     if (!response.ok) {
                         throw new Error('Could not load conversation');
@@ -31,11 +35,7 @@
                     this.selectedChat = String(chatId);
 
                     this.$nextTick(() => {
-                        const list = this.$el.querySelector('[data-message-list]');
-
-                        if (list) {
-                            list.scrollTop = list.scrollHeight;
-                        }
+                        this.scrollToBottom();
                     });
 
                 } catch (error) {
@@ -48,10 +48,15 @@
             async sendMessage(event) {
                 const form = event.target;
 
+                if (this.sending) return;
+
+                this.sending = true;
+
                 try {
                     const response = await fetch(form.action, {
                         method: 'POST',
-                        body: new FormData(form)
+                        body: new FormData(form),
+                        credentials: 'same-origin'
                     });
 
                     if (!response.ok) {
@@ -61,16 +66,24 @@
                     this.chatContent = await response.text();
 
                     this.$nextTick(() => {
-                        const list = this.$el.querySelector('[data-message-list]');
-
-                        if (list) {
-                            list.scrollTop = list.scrollHeight;
-                        }
+                        this.scrollToBottom();
                     });
 
                 } catch (error) {
                     console.error(error);
+                } finally {
+                    this.sending = false;
                 }
+            },
+
+            scrollToBottom() {
+                this.$nextTick(() => {
+                    const list = this.$el.querySelector('[data-message-list]');
+
+                    if (list) {
+                        list.scrollTop = list.scrollHeight;
+                    }
+                });
             }
         }"
         @submit.prevent="sendMessage($event)"
@@ -84,17 +97,16 @@
 
                 <h2 class="text-xl font-semibold">Messages</h2>
 
-                <button
+                 <button
                     class="cursor-pointer"
                     type="button"
-                    onclick="const modal = document.getElementById('search-users');
+                    onclick = "const modal = document.getElementById('search-users');
                         modal.showModal();
                         Alpine.$data(modal).loadUsers();"
                 >
-                    <svg class="w-[18px] h-[18px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 5V4a1 1 0 0 0-1-1H8.914a1 1 0 0 0-.707.293L4.293 7.207A1 1 0 0 0 4 7.914V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M9 3v4a1 1 0 0 1-1 1H4m11.383.772 2.745 2.746m1.215-3.906a2.089 2.089 0 0 1 0 2.953l-6.65 6.646L9 17.95l.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0Z"/>
                     </svg>
-
                 </button> 
             </header>
 
@@ -156,9 +168,26 @@
         <!-- RIGHT: Active conversation -->
         <main class="flex min-w-0 flex-1 flex-col">
 
-            <c-chat-content
-                :initial_chat_url="initial_chat_url"
-            />
+            <div
+                x-show="loading"
+                class="p-4 text-sm text-gray-500"
+            >
+                Loading conversation...
+            </div>
+
+            <div
+                x-html="chatContent"
+                class="flex min-h-0 flex-1 flex-col"
+            ></div>
+
+            <div
+                x-show="!loading && !chatContent"
+                class="flex flex-1 items-center justify-center"
+            >
+                <p class="text-gray-500">
+                    Select a conversation to view messages.
+                </p>
+            </div>
 
         </main>
 

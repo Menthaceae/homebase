@@ -50,14 +50,15 @@
 
             </c-ui.button>
             <!-- Messages -->
-            <c-ui.button 
-                type="button" 
-                onclick="document.getElementById('chat-window').showModal()" 
-                class="rounded-full">
+            <c-ui.nav.item  
+                href="{% url 'view_all_messages' %}"
+                class="rounded-full border border-ink-200 dark:bg-ink-400/30 dark:text-ink-300 dark:border-ink-300/20 shadow
+                    cursor-pointer whitespace-nowrap rounded-button text-sm py-2 px-4 font-medium transition text-center focus-ring active:opacity-100
+                    disabled:opacity-75 disabled:cursor-not-allowedrounded-full inactive">
                 <svg class="w-[16px] h-[16px] text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="{% if active_page == messages %}currentColor{% else %}none{% endif %}" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z"/>
                 </svg>
-            </c-ui.button>
+            </c-ui.nav.item>
             <c-ui.dropdown position="bottom">
                 <c-slot name="trigger">
                     <button type="button" class="flex flex-row items-center gap-2 p-2 rounded-md hover:bg-ink-100" aria-label="More options">

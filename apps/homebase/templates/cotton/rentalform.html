@@ -4,6 +4,7 @@
         hx-post="{% url 'manage_homebase' homebase.id %}"
         hx-target="#rentalform"
         hx-swap="outerHTML"
+        hx-disabled-elt="find button[type='submit']"
         id="rentalform"
         >
     {% csrf_token %}

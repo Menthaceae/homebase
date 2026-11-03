@@ -229,9 +229,7 @@
 
 #create-post-modal, 
 #post-to-modal, 
-#create-event-modal,
-#chat-window,
-#search-users {
+#create-event-modal {
     position: fixed;
     top: 50%;
     left: 50%;

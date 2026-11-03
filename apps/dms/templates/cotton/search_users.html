@@ -1,3 +1,9 @@
+{% load static %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'dms/css/dms.css' %}">
+{% endblock %}
+
 <dialog
     id="search-users"
     x-init="    
@@ -20,7 +26,7 @@
             this.loading = true;
 
             try {
-                const response = await fetch('messages/users/');
+                const response = await fetch('users/');
 
                 if (!response.ok) {
                     throw new Error('Failed to load users');
@@ -135,7 +141,7 @@
     <!-- Start conversation -->
     <div class="border-t border-gray-200 p-4">
 
-        <form action="{% url 'create_chat_group' %}" method="POST">
+        <form action="{% url 'create_group_chat' %}" method="POST">
             {% csrf_token %}
 
             <template x-for="user in selectedUsers" :key="user.id">
@@ -158,3 +164,4 @@
        
     </div>
 </dialog>
+

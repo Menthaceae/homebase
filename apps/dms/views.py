@@ -33,9 +33,9 @@ def add_member(Message_Group, User):
     Message_Group.members.add(User)
 
 @login_required
-def create_chat_group(request):
+def create_group_chat(request):
     """
-    Create chat group with member(s)
+    Create group chat with member(s)
 
     endpoint: chat/create/
     """
@@ -62,13 +62,28 @@ def create_chat_group(request):
         form = MessageGroupCreationForm(request.POST)
 
         if form.is_valid():
-            chat = form.save()
+            # Combine current user and selected members
+            all_members = [request.user] + list(members)
+
+            # Generate default chat name
+            chat_name = ", ".join(
+                member.first_name or member.username
+                for member in all_members
+            )
+
+            # Truncate if chat_name exceeds 30 characters
+            if len(chat_name) > 30:
+                chat_name = chat_name[:27] + "..."
+
+            chat = form.save(commit=False)
+            chat.name = chat_name
+            chat.save()
 
             # Add the current user to the group
             chat.members.add(request.user)
 
             # Add the selected members
-            chat.members.add(*members)
+            chat.members.add(*all_members)
 
             return redirect('view_all_messages')
 
@@ -76,11 +91,14 @@ def create_chat_group(request):
         form = MessageGroupCreationForm()
 
     return render(request, 'view_all_messages.html', {'form': form})
+<<<<<<< HEAD
 
+=======
+>>>>>>> 953adcd (Fix chat not loaading)
 
 def view_all_messages(request):
     """
-    Render page that shows all chat groups fullscreen
+    Render active chat's messages
     """
 
     chats = Message_Group.objects.filter(
@@ -100,7 +118,7 @@ def view_all_messages(request):
         'active_chat': active_chat,
     }
 
-    return render(request, 'chat_page.html', context)
+    return render(request, 'chat_groups.html', context)
 
 def get_all_message_groups(request):
     user = request.user
@@ -136,23 +154,22 @@ def get_all_messages(request, message_group_id):
             message.author = user
             message.save()
 
-            form = MessageCreationForm()
-
     else:
         form = MessageCreationForm()
 
-    messages = group.messages.select_related('author').all()
+    chat_messages = group.messages.select_related('author').order_by('timestamp', 'id')
+
     members = group.members.all()
 
     context = {
-        'messages': messages,
+        'messages': chat_messages,
         'members': members,
         'active_chat': group,
         'id': message_group_id,
         'form': form,
     }
 
-    return render(request, 'chat_page.html', context)
+    return render(request, 'cotton/chat_content.html', context)
 
 
 def invite(request, message_group_id):

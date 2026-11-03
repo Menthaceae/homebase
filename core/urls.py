@@ -19,9 +19,6 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from debug_toolbar.toolbar import debug_toolbar_urls
-
-
 urlpatterns = [
     path('', include('apps.public.urls')),
     path('admin/', admin.site.urls),
@@ -31,7 +28,7 @@ urlpatterns = [
     path('events/', include('apps.events.urls')),
     path('messages/', include ('apps.dms.urls'))
     
-] + debug_toolbar_urls()
+] 
 
 if settings.DEBUG:
     urlpatterns += static(
