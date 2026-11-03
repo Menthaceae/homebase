@@ -91,10 +91,6 @@ def create_group_chat(request):
         form = MessageGroupCreationForm()
 
     return render(request, 'view_all_messages.html', {'form': form})
-<<<<<<< HEAD
-
-=======
->>>>>>> 953adcd (Fix chat not loaading)
 
 def view_all_messages(request):
     """
