@@ -76,41 +76,7 @@ def create_chat_group(request):
         form = MessageGroupCreationForm()
 
     return render(request, 'view_all_messages.html', {'form': form})
-    """
-    Create chat group with participant(s)
 
-    endpoint: chat/create/
-    """    
-    if request.method == 'POST':
-        member_ids = request.POST.getlist('members')
-
-        # Validate participants_ids.length > 1
-        if not member_ids:
-            messages.error(
-                    request, 
-                    "Please select at least one participant.",
-                    extra_tags="reopen_chat"
-                    )
-            return redirect('search_users.html')
-
-        # Retrieve participants
-        members = User.objects.filter(
-            id__in=member_ids
-        ).exclude(
-            id=request.user.id
-        )
-
-        form = MessageGroupCreationForm(request.POST)
-
-        if form.is_valid():
-            chat = form.save()
-            chat.members.add(request.user)
-            chat.members.add(*members)
-            chat.save()
-            return redirect('view_all_messages')
-    else:
-        form = MessageGroupCreationForm()
-    return render(request, 'view_all_messages', {'form': form})
 
 def view_all_messages(request):
     """
