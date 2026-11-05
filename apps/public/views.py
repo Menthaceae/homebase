@@ -4,38 +4,56 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render
-from apps.homebase.models import Homebase, Rental, SubProperty
 from django.shortcuts import redirect, render
 from django.contrib.auth import login as django_login
 from django.contrib import messages
-from apps.public.forms import CustomUserCreationForm
 from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
-from apps.posts.models import Tag
-from apps.posts.views import get_public_posts
+from apps.posts.models import *
+from apps.posts.views import *
+from apps.homebase.views import *
+from apps.public.forms import CustomUserCreationForm
+from apps.homebase.models import Homebase, Rental, SubProperty
+
 
 # Landing page
 def home(request):
+    # Check if user is authenticated
     if not request.user.is_authenticated:
         return redirect('onboarding/')
 
-    query = request.GET.get('query')
+    # Initialize homebase variables
+    homebase_posts = Post.objects.none()
+    homebase = get_homebase(request.user)
+    if homebase is not None:
+        users_homebase_id = homebase.id
 
+    # Search
+    query = request.GET.get('query')
     if query is None:
         public_posts = get_public_posts()
+        if homebase is not None:
+            homebase_posts = get_homebase_posts(users_homebase_id)
+        posts = public_posts | homebase_posts
+
+    # No search
     else:
         public_posts_search_title = get_public_posts().filter(title__icontains=query)
         public_posts_search_body = get_public_posts().filter(body__icontains=query)
         public_posts = public_posts_search_title | public_posts_search_body
+        if homebase is not None:
+            homebase_posts_search_title = get_homebase_posts(users_homebase_id).filter(title__icontains=query)
+            homebase_posts_search_body = get_homebase_posts(users_homebase_id).filter(body__icontains=query)
+            homebase_posts = homebase_posts_search_title | homebase_posts_search_body
+        posts = public_posts | homebase_posts
 
-    tags = Tag.objects.all()
     context = {
         "active_page": "home",
-        "public_posts": public_posts,
-        "tags": tags,
+        "public_posts": posts,
+        "tags": Tag.objects.all()
     }
     return render(request, 'public/home.html', context)
 
@@ -202,6 +220,8 @@ def onboarding_renter_submit(request):
         user.first_name = post.get('first_name')
         user.last_name = post.get('last_name')
         user.save()
+
+        
 
         django_login(request, user)
         return redirect('/homebase/dashboard/tenant/')
