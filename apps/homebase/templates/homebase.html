@@ -10,30 +10,35 @@
         <section class="relative isolate overflow-hidden bg-accent text-[#ffffff]">
             {% if homebase.banner %}
             <div
-                class="absolute inset-0 z-10 bg-cover bg-center"
-                style="background-image: url('{{ homebase.banner.url }}');"
-            ></div>
+                class="absolute"
+            >
+                <img class="inset-0 z-10 bg-cover bg-center" href="{{ homebase.banner.url }}">
+
+            </div>
             {% else %}
-            <div class="absolute inset-0 z-10 bg-cover bg-center opacity-30"
-                style="background-image: url('{% static 'images/banner.jpg' %}');"
-            ></div>
+            <div 
+                class="absolute"
+            >
+                <img class="inset-0 z-10 bg-cover bg-center" src="{% static 'images/banner.jpg' %}">
+            
+            </div>
             {% endif %}
-            <div class="absolute inset-0 -z-10 bg-linear-to-r from-accent via-accent/90 to-accent/50"></div>
+            <div class="relative inset-0 -z-10 bg-linear-to-r from-accent via-accent/90 to-accent/50"></div>
 
-            <div class="flex min-h-72 flex-col justify-end p-6 sm:p-10">
-                <div class="mb-5 flex size-12 items-center justify-center rounded-2xl border border-accent-content/20 bg-accent-content/10">
-                    <c-heroicon.home class="size-6" />
+                <div class="flex min-h-72 flex-col justify-end p-6 sm:p-10">
+                    <div class="mb-5 flex size-12 items-center justify-center rounded-2xl border border-accent-content/20 bg-accent-content/10">
+                        <c-heroicon.home class="size-6" />
+                    </div>
+
+                    <h1 class="relative max-w-2xl text-3xl font-bold tracking-tight sm:text-5xl">
+                        Welcome to {{ homebase.name|default:"HomeBase" }}
+                    </h1>
+
+                    <p class="mt-4 max-w-xl text-sm leading-6 opacity-80 sm:text-base">
+                        Your community, connected. Discover events, stay informed,
+                        and build stronger relationships with your neighbors.
+                    </p>
                 </div>
-
-                <h1 class="max-w-2xl text-3xl font-bold tracking-tight sm:text-5xl">
-                    Welcome to {{ homebase.name|default:"HomeBase" }}
-                </h1>
-
-                <p class="mt-4 max-w-xl text-sm leading-6 opacity-80 sm:text-base">
-                    Your community, connected. Discover events, stay informed,
-                    and build stronger relationships with your neighbors.
-                </p>
-
             </div>
         </section>
 

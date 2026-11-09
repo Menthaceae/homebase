@@ -12,7 +12,6 @@ body {
 }
 
 .web-content {
-    margin-top: 20px;
     position: sticky;
     top: 80px;
     align-self: start;
