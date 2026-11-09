@@ -46,11 +46,11 @@
                 <!-- Media -->
                 {% if event.image %}
                 <div class="flex justify-center">
-                    <img src="{{ event.image.url }}" class="w-sm h-full rounded-xl object-fit">
+                    <img src="{{ event.image.url }}" class="w-sm h-full object-fit">
                 </div>
                 {% else %}
                 <div class="flex justify-center items-center rounded-xl bg-gray-100 w-xs h-96">
-                    <p class="text-sm text-black">No event image uploaded.</p>
+                    <p class="text-sm text-black">No event image.</p>
                 </div>
                 {% endif %}
 

@@ -8,7 +8,7 @@
 {% block content %}
 <c-layout>
 
-    <div class="flex flex-row gap-4 items-start">
+    <div class="p-4 flex flex-row gap-4 items-start">
 
         <!-- Left Panel -->
         <div class="flex-0 w-sm gap-y-2">
@@ -62,7 +62,7 @@
                 </select>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-2">
+            <div class="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <c-event :events="event" />
             </div>
         </div>
