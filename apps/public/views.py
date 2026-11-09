@@ -204,7 +204,7 @@ def onboarding_renter_submit(request):
         user.save()
 
         django_login(request, user)
-        return redirect('/homebase/dashboard/tenant/')
+        return redirect('/homebase')
     except Exception as e:
         return JsonResponse({
             "error": str(e).split("DETAIL:")[-1].strip()
