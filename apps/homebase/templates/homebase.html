@@ -9,12 +9,12 @@
         <!-- Hero -->
         <section class="relative isolate overflow-hidden bg-accent text-[#ffffff]">
             {% if homebase.banner %}
-            <div
-                class="absolute"
-            >
-                <img class="inset-0 z-10 bg-cover bg-center" href="{{ homebase.banner.url }}">
+                <img 
+                    class="absolute inset-0 -z-20 h-full w-full object-cover"
+                    src="{{ homebase.banner.url }}"
+                    alt="{{ homebase.name }} banner"
+                >
 
-            </div>
             {% else %}
             <div 
                 class="absolute"
