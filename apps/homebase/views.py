@@ -4,7 +4,7 @@ import json
 from django.db import transaction
 from django.db.models import Q, Count, Sum, Value
 from django.db.models.functions import Coalesce
-from django.http import HttpResponse, request
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
@@ -17,6 +17,11 @@ from apps.users.models import *
 from apps.public.views import *
 from .models import *
 from .forms import *
+
+
+"""
+Begin Homebase authentication logic and stuff
+"""
 
 
 def code_is_valid(code):
@@ -41,16 +46,9 @@ def rents(user, rental):
     return rental.users.contains(user)
 
 
-def get_homebase(user):
-    # If user is a manager
-    if Homebase.objects.filter(managers=user).exists():
-        return Homebase.objects.filter(managers=user).first() 
-
-    # If user is not a manager
-    rental = Rental.objects.filter(tenant = user).select_related('subproperty__homebase').first()
-    if rental is None:
-        return None
-    return rental.subproperty.homebase
+"""
+End Homebase authentication logic and stuff
+"""
 
 
 # GET homebase/<id>/
@@ -92,7 +90,6 @@ def hombaseHome(request):
         "posts": posts
     }
     return render(request, 'homebase.html', context)
-
 
 @login_required
 def manage_homebase(request, homebase_id):

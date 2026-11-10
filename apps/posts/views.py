@@ -8,9 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
 
-from apps import homebase
-from apps.homebase.models import *
-from apps.homebase.views import *
 from .models import Post, Tag
 from .forms import *
 
@@ -65,7 +62,6 @@ def create_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            post.homebase = get_homebase(request.user)
             post.save()
 
             # Save tags
