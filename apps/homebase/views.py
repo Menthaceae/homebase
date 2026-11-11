@@ -14,7 +14,7 @@ from django.http import HttpResponse
 from apps.posts import views as Posts
 from apps.events.models import *
 from apps.users.models import *
-from apps.public.views import *
+from apps.public import views as Public
 from .models import *
 from .forms import *
 
@@ -133,7 +133,7 @@ def manage_homebase(request, homebase_id):
                     rental = rental_form.save(commit=False)
                     rental.subproperty = subproperty
                     if tenant_email is not None and tenant_email != '':
-                        user = invite_user(tenant_email, request)
+                        user = Public.invite_user(tenant_email, request)
                         rental.tenant = user
                     rental.save()
                     subproperty.managed_by.add(request.user)
@@ -142,7 +142,7 @@ def manage_homebase(request, homebase_id):
             if classification == 'owned' and sub_form.is_valid():
                 if owned_email:
                     with transaction.atomic():
-                        user = invite_user(owned_email, request)
+                        user = Public.invite_user(owned_email, request)
                         subproperty = sub_form.save(commit=False)
                         subproperty.homebase = homebase
                         subproperty.save()
@@ -394,7 +394,7 @@ def edit_rental(request, rental_id):
     if request.method == 'POST':
         form = RentalCreationForm(request.POST, instance=rental)
         if tenant_email:
-            user = invite_user(tenant_email, request)
+            user = Public.invite_user(tenant_email, request)
             if rental.tenant != user:
                 rental.tenant = user
                 rental.save()
