@@ -5,6 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/static/images/homebase_green.svg">
+
     {% tailwind_css %}
     <!-- Cotton UI: precompiled components + design tokens.
          Shipped inside the installed package, served by Django's staticfiles app. -->
@@ -16,6 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'posts/css/posts.css' %}">
     <link rel="stylesheet" href="{% static 'events/css/events.css' %}">
+
 
     <!-- Custom CSS -->
     {% block custom_css %}
