@@ -46,25 +46,34 @@ def rents(user, rental):
     return rental.users.contains(user)
 
 
-"""
-End Homebase authentication logic and stuff
-"""
+def get_homebase(user):
+    # If user is a manager
+    if Homebase.objects.filter(managers=user).exists():
+        return Homebase.objects.filter(managers=user).first() 
+
+    # If user is a tenant, return homebase if they are assigned to a rental
+    rental = Rental.objects.filter(tenant = user).select_related('subproperty__homebase').first()
+    return None if rental is None else rental.subproperty.homebase
 
 
 # GET homebase/<id>/
 def home(request, homebase_id):
-    isManager = False
-    current_user = request.user
+    user = request.user
     homebase = Homebase.objects.get(id=homebase_id)
     users = homebase.users.all().count()
     posts = Posts.get_homebase_posts(homebase_id)
+
     managers = homebase.managers.all()
-    if current_user in managers:
-        isManager = True    
+    if manages(user, homebase):
+        isManager = True
+    else:
+        isManager = False
+
     announcements = Announcement.objects.filter(homebase=homebase).order_by('-created_at')[:5]
     events = Event.objects.filter(homebase=homebase).order_by('start_date')[:5]
     occupied = Rental.objects.filter(subproperty__homebase=homebase, occupied=True).count()
     authorized = True
+    
     if (authorized):
         homebase_posts = Posts.get_homebase_posts(homebase_id)
         context = {
