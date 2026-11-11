@@ -14,7 +14,7 @@ from django.http import HttpResponse
 from apps.posts import views as Posts
 from apps.events.models import *
 from apps.users.models import *
-from apps.public.views import *
+from apps.public import views as Public
 from .models import *
 from .forms import *
 
@@ -46,25 +46,34 @@ def rents(user, rental):
     return rental.users.contains(user)
 
 
-"""
-End Homebase authentication logic and stuff
-"""
+def get_homebase(user):
+    # If user is a manager
+    if Homebase.objects.filter(managers=user).exists():
+        return Homebase.objects.filter(managers=user).first() 
+
+    # If user is a tenant, return homebase if they are assigned to a rental
+    rental = Rental.objects.filter(tenant = user).select_related('subproperty__homebase').first()
+    return None if rental is None else rental.subproperty.homebase
 
 
 # GET homebase/<id>/
 def home(request, homebase_id):
-    isManager = False
-    current_user = request.user
+    user = request.user
     homebase = Homebase.objects.get(id=homebase_id)
     users = homebase.users.all().count()
     posts = Posts.get_homebase_posts(homebase_id)
+
     managers = homebase.managers.all()
-    if current_user in managers:
-        isManager = True    
+    if manages(user, homebase):
+        isManager = True
+    else:
+        isManager = False
+
     announcements = Announcement.objects.filter(homebase=homebase).order_by('-created_at')[:5]
     events = Event.objects.filter(homebase=homebase).order_by('start_date')[:5]
     occupied = Rental.objects.filter(subproperty__homebase=homebase, occupied=True).count()
     authorized = True
+    
     if (authorized):
         homebase_posts = Posts.get_homebase_posts(homebase_id)
         context = {
@@ -130,7 +139,7 @@ def manage_homebase(request, homebase_id):
                     rental = rental_form.save(commit=False)
                     rental.subproperty = subproperty
                     if tenant_email is not None and tenant_email != '':
-                        user = invite_user(tenant_email, request)
+                        user = Public.invite_user(tenant_email, request)
                         rental.tenant = user
                     rental.save()
                     subproperty.managed_by.add(request.user)
@@ -139,7 +148,7 @@ def manage_homebase(request, homebase_id):
             if classification == 'owned' and sub_form.is_valid():
                 if owned_email:
                     with transaction.atomic():
-                        user = invite_user(owned_email, request)
+                        user = Public.invite_user(owned_email, request)
                         subproperty = sub_form.save(commit=False)
                         subproperty.homebase = homebase
                         subproperty.save()
@@ -391,7 +400,7 @@ def edit_rental(request, rental_id):
     if request.method == 'POST':
         form = RentalCreationForm(request.POST, instance=rental)
         if tenant_email:
-            user = invite_user(tenant_email, request)
+            user = Public.invite_user(tenant_email, request)
             if rental.tenant != user:
                 rental.tenant = user
                 rental.save()

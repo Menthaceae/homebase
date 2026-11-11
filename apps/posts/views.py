@@ -10,6 +10,7 @@ from django.conf import settings
 
 from .models import Post, Tag
 from .forms import *
+from apps.homebase.views import get_homebase
 
 
 # Getters 
@@ -62,6 +63,7 @@ def create_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
+            post.homebase = get_homebase(request.user)
             post.save()
 
             # Save tags

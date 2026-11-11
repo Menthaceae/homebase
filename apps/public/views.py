@@ -15,7 +15,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
 from apps.posts.models import Tag
-from apps.posts.views import get_public_posts
+from apps.posts.views import get_public_posts, get_homebase_posts
+from apps.homebase.views import get_homebase
 
 # Landing page
 def home(request):
@@ -23,18 +24,30 @@ def home(request):
         return redirect('onboarding/')
 
     query = request.GET.get('query')
+    
+    if get_homebase(request.user) is None:
+        homebase_id = 0
+    else:
+        homebase_id = get_homebase(request.user).id
 
     if query is None:
         public_posts = get_public_posts()
+        homebase_posts = get_homebase_posts(homebase_id)
+        posts = public_posts | homebase_posts
     else:
         public_posts_search_title = get_public_posts().filter(title__icontains=query)
         public_posts_search_body = get_public_posts().filter(body__icontains=query)
         public_posts = public_posts_search_title | public_posts_search_body
+        homebase_posts_search_title = get_homebase_posts(homebase_id).filter(title__icontains=query)
+        homebase_posts_search_body = get_homebase_posts(homebase_id).filter(body__icontains=query)
+        homebase_posts = homebase_posts_search_title | homebase_posts_search_body
+        posts = public_posts | homebase_posts
+
 
     tags = Tag.objects.all()
     context = {
         "active_page": "home",
-        "public_posts": public_posts,
+        "posts": posts,
         "tags": tags,
     }
     return render(request, 'public/home.html', context)
@@ -204,8 +217,12 @@ def onboarding_renter_submit(request):
         user.save()
 
         django_login(request, user)
+<<<<<<< HEAD
         rental = Rental.objects.filter(tenant=user).select_related('subproperty__homebase').first()
         return redirect(f'/homebase/{rental.subproperty.homebase.id}')
+=======
+        return redirect('/homebase/' + str(get_homebase(user).id))
+>>>>>>> 020e387f623f98a64d40bb5785662f63d0c54887
     except Exception as e:
         return JsonResponse({
             "error": str(e).split("DETAIL:")[-1].strip()
