@@ -4,19 +4,20 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render
-from apps.homebase.models import Homebase, Rental, SubProperty
 from django.shortcuts import redirect, render
 from django.contrib.auth import login as django_login
 from django.contrib import messages
-from apps.public.forms import CustomUserCreationForm
 from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 
+from apps.homebase.models import Homebase, Rental, SubProperty
+from apps.public.forms import CustomUserCreationForm
 from apps.posts.models import Tag
 from apps.posts.views import get_public_posts, get_homebase_posts
 from apps.homebase.views import get_homebase
+from apps.users.views import instantiate_profile
 
 # Landing page
 def home(request):
@@ -62,6 +63,7 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            instantiate_profile(user)
             user.save()
             django_login(request, user)
             messages.success(request, "Registration successful.")
@@ -159,6 +161,7 @@ def onboarding_manager_submit(request):
             last_name=post.get('last_name'),
             password=pwd1
         )
+        instantiate_profile(user)
 
         # 3. Create Homebase Complex
         homebase = Homebase.objects.create(
@@ -215,6 +218,7 @@ def onboarding_renter_submit(request):
         user.first_name = post.get('first_name')
         user.last_name = post.get('last_name')
         user.save()
+        instantiate_profile(user)
 
         django_login(request, user)
         return redirect('/homebase/' + str(get_homebase(user).id))

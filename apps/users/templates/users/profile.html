@@ -1,7 +1,6 @@
 {% load static %}
 
 <c-layout>
-
     <div class="p-6 flex flex-row gap-4 items-start">
         <!-- Left Panel -->
         <div class="flex-0 w-sm gap-y-2">
@@ -46,11 +45,11 @@
                 >
                     <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
                         <div class="flex h-24 w-24 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700">
-                            {% if user.photo %}
+                            {% if user.profile.photo %}
                                 <img
-                                    src="{{ user.photo.url }}"
+                                    src="{{ profile.photo.url }}"
                                     alt="Profile photo"
-                                    class="h-24 w-24 rounded-full object-cover"
+                                    class="h-12 w-12 rounded-full object-contain"
                                 >
                             {% else %}
                                 <span style="font-size: 36px;">{{ user.first_name|default:user.username|first|upper }}</span>
@@ -88,8 +87,7 @@
                         
                        <div class="p-4 rounded-xl border border-gray-200 bg-white w-full text-center">
                             <div class="p-6">
-                                <p class="text-lg font-bold">Tell us more about yourself!</p>
-                                <p>Details can be seen by the public and your homebase.</p>
+                                <p class="text-lg font-bold">{{profile.bio}}</p>
                             </div>    
                        </div> 
 

@@ -52,7 +52,7 @@ def get_profile_context(user, form=None):
     Get user profile context
     """
     posts = Post.objects.filter(author=user).order_by('-created_at')
-    profile = Profile.objects.filter(user_id=user.id)
+    profile = Profile.objects.get(user=user)
 
     return {
         'profile': profile,
@@ -70,6 +70,13 @@ def profile(request):
     context = get_profile_context(request.user)
 
     return render(request, 'users/profile.html', context)
+
+def instantiate_profile(user):
+    profile = Profile()
+    profile.user = user
+    profile.phone_number = 0
+    profile.bio = "Edit bio here"
+    profile.save()
 
 @login_required
 def update_profile(request):

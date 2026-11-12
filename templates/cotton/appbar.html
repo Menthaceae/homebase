@@ -5,7 +5,6 @@
 />
 
 <c-ui.navbar>
-
     <div class="navbar">
 
         <!-- Brand -->
@@ -77,11 +76,11 @@
                         
 
                     <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700">
-                            {% if user.photo %}
+                            {% if user.profile.photo %}
                                 <img
-                                    src="{{ user.photo }}"
+                                    src="{{ user.profile.photo.url }}"
                                     alt="Profile photo"
-                                    class="h-16 w-16 rounded-full object-cover"
+                                    class="rounded-full object-cover"
                                 >
                             {% else %}
                                 <span style="font-size: 14px;">{{ user.first_name|default:user.username|first|upper }}</span>
