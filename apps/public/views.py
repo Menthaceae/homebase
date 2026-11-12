@@ -217,12 +217,7 @@ def onboarding_renter_submit(request):
         user.save()
 
         django_login(request, user)
-<<<<<<< HEAD
-        rental = Rental.objects.filter(tenant=user).select_related('subproperty__homebase').first()
-        return redirect(f'/homebase/{rental.subproperty.homebase.id}')
-=======
         return redirect('/homebase/' + str(get_homebase(user).id))
->>>>>>> 020e387f623f98a64d40bb5785662f63d0c54887
     except Exception as e:
         return JsonResponse({
             "error": str(e).split("DETAIL:")[-1].strip()
