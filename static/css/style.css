@@ -11,6 +11,10 @@ body {
     background-color: #F3F0EA;
 }
 
+[x-cloak] {
+    display: none !important;
+}
+
 .web-content {
     position: sticky;
     top: 80px;

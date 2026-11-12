@@ -1,10 +1,8 @@
 {% load static %}
 
-{% block content %}
 <c-layout>
 
-    <div class="flex flex-row gap-4 items-start">
-
+    <div class="p-6 flex flex-row gap-4 items-start">
         <!-- Left Panel -->
         <div class="flex-0 w-sm gap-y-2">
             <!-- Create Post-->
@@ -32,25 +30,32 @@
         </div>
 
         <!-- Right panel -->
-        <div class="flex bg-white rounded border-gray-200 h-full w-full">
+        <div 
+            class="flex h-screen bg-white rounded border-gray-200 w-full"
+        >
 
-            <div class="mx-auto max-w-4xl px-4 py-8">
+            <div 
+                x-data="{ editing: false }"
+                class="mx-auto w-5xl px-4 py-8"
+                style="width: 70%;"
+            >
                 <!-- Profile header -->
-                <section class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                <section
+                    x-show="!editing"
+                    class="rounded-2xl w-full border border-gray-200 bg-white p-6 shadow-sm"
+                >
                     <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
-                        {% if user.photo %}
-                            <img
-                                src="{{ user.photo }}"
-                                alt="Profile photo"
-                                class="h-24 w-24 rounded-full object-cover"
-                            >
-                        {% else %}
-                            <img
-                                src="{% static 'posts/img/default-pfp.png' %}"
-                                alt="Default profile photo"
-                                class="h-24 w-24 rounded-full object-cover"
-                            >
-                        {% endif %}
+                        <div class="flex h-24 w-24 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700">
+                            {% if user.photo %}
+                                <img
+                                    src="{{ user.photo.url }}"
+                                    alt="Profile photo"
+                                    class="h-24 w-24 rounded-full object-cover"
+                                >
+                            {% else %}
+                                <span style="font-size: 36px;">{{ user.first_name|default:user.username|first|upper }}</span>
+                            {% endif %}
+                        </div>
 
                         <div class="min-w-0 flex-1">
                             <h1 class="text-2xl font-bold text-gray-900">
@@ -59,35 +64,53 @@
                             <p class="mt-1 text-sm text-gray-500">
                                 @{{ user.username }}
                             </p>
-                            <p class="mt-3 text-sm text-gray-600">
-                                Tell the community a little about yourself
-                            </p>
                         </div>
 
-                        <a
-                            href="#"
+                        <button
+                            type="button"
+                            @click="editing = true"
                             class="inline-flex items-center justify-center rounded-lg
                                 bg-blue-600 px-4 py-2 text-sm font-medium
-                                text-white hover:bg-blue-700"
+                                text-white hover:bg-blue-700 cursor-pointer"
                         >
                             Edit Profile
-                        </a>
+                        </button>
                     </div>
                 </section>
+                <c-update-profile />
+
+                <!-- Personal Information -->
+                <section 
+                    x-show="!editing"
+                    class="mt-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                    <div class="p-4">
+                        <h1 class="text-lg font-semibold mb-4 uppercase">About me</h1>
+                        
+                       <div class="p-4 rounded-xl border border-gray-200 bg-white w-full text-center">
+                            <div class="p-6">
+                                <p class="text-lg font-bold">Tell us more about yourself!</p>
+                                <p>Details can be seen by the public and your homebase.</p>
+                            </div>    
+                       </div> 
+
+                    </div>
+
+                </section>
+                
 
                 <!-- Profile stats -->
                 <section class="mt-4 grid grid-cols-3 gap-3">
-                    <div class="rounded-xl border bg-white p-4 text-center">
+                    <div class="rounded-xl border border-gray-200 bg-white p-4 text-center">
                         <p class="text-2xl font-bold text-gray-900">#</p>
                         <p class="text-sm text-gray-500">Posts</p>
                     </div>
 
-                    <div class="rounded-xl border bg-white p-4 text-center">
+                    <div class="rounded-xl border border-gray-200 bg-white p-4 text-center">
                         <p class="text-2xl font-bold text-gray-900">#</p>
                         <p class="text-sm text-gray-500">Likes</p>
                     </div>
 
-                    <div class="rounded-xl border bg-white p-4 text-center">
+                    <div class="rounded-xl border border-gray-200 bg-white p-4 text-center">
                         <p class="text-2xl font-bold text-gray-900">{{ event_count }}</p>
                         <p class="text-sm text-gray-500">Events</p>
                     </div>
@@ -101,21 +124,21 @@
 
                     <div class="space-y-4">
                         {% for post in posts %}
-                            <article class="rounded-xl border border-gray-200
-                                            bg-white p-5 shadow-sm">
+                            <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
                                 <h3 class="font-semibold text-gray-900">
                                     {{ post.title }}
                                 </h3>
+
                                 <p class="mt-2 whitespace-pre-line text-sm text-gray-600">
                                     {{ post.body }}
                                 </p>
+
                                 <p class="mt-3 text-xs text-gray-400">
                                     {{ post.created_at }}
                                 </p>
                             </article>
                         {% empty %}
-                            <div class="rounded-xl border border-dashed
-                                        border-gray-300 p-8 text-center">
+                            <div class="rounded-xl border border-dashed border-gray-300 p-8 text-center">
                                 <p class="text-sm text-gray-500">
                                     No posts yet.
                                 </p>
@@ -130,7 +153,6 @@
     </div>
 
 </c-layout>
-{% endblock %}
 
 <!-- Components -->
 <c-post-create :tags="tags"/>

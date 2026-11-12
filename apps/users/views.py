@@ -1,8 +1,14 @@
 from django.db import models
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
+
+from apps.users.forms import UserProfileForm
+from apps.posts.models import Post
 
 from .models import * 
 
@@ -39,9 +45,50 @@ def is_owner(user):
 def is_tenant(user):
     return hasattr(user, 'tenant')
 
+# Profile views
+
+def get_profile_context(user, form=None):
+    """
+    Get user profile context
+    """
+    posts = Post.objects.filter(author=user).order_by('-created_at')
+    profile = Profile.objects.filter(user_id=user.id)
+
+    return {
+        'profile': profile,
+        'form': form or UserProfileForm(),
+        'posts': posts,
+        # 'post_count': posts.count(),
+    }
+
+@login_required
 def profile(request):
     """
     Renders user's profile page
     """
 
-    return render(request, 'users/profile.html')
+    context = get_profile_context(request.user)
+
+    return render(request, 'users/profile.html', context)
+
+@login_required
+def update_profile(request):
+    """
+    Update a user's profile details (profile photo or bio)
+    """
+
+    if request.method == "POST":
+        form = UserProfileForm(
+            request.POST,
+            request.FILES,
+            instance=request.user.profile
+            )
+        
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+        else:
+            context = get_profile_context(request.user, form)
+            return render(request, 'profile.html', context)
+        
+    return redirect('profile')
