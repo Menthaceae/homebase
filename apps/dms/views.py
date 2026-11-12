@@ -85,7 +85,7 @@ def create_group_chat(request):
             # Add the selected members
             chat.members.add(*all_members)
 
-            return redirect('view_all_messages')
+            return redirect(f"{reverse('view_all_messages')}?chat={chat.id}")
 
     else:
         form = MessageGroupCreationForm()
@@ -103,15 +103,22 @@ def view_all_messages(request):
 
     chat_id = request.GET.get('chat')
 
-    if chat_id:
-        active_chat = chats.filter(id=chat_id).first()
-    else:
-        active_chat = chats.first()
+    active_chat = (
+        chats.filter(id=chat_id).first()
+        if chat_id else None
+    )
+    
+    initial_chat_url = (
+        reverse('get_all_messages', args=[active_chat.id])
+        if active_chat else ''
+    )
 
     context = {
         'chats': chats,
         'active_page': 'messages',
         'active_chat': active_chat,
+        'selected_chat': active_chat,
+        'initial_chat_url': initial_chat_url,
     }
 
     return render(request, 'chat_groups.html', context)
