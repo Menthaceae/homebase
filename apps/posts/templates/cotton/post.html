@@ -3,9 +3,20 @@
     <!-- Header -->
     <div class="pl-4 pr-4 pt-4 flex flex-row justify-between items-center gap-2 mb-4">
       <div class="flex flex-row gap-2">
-        <c-ui.avatar name="{{ post.author }}" size="sm" />
-        <div class="grid grid-cols-2">
+        <div class="flex h-11 w-11 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700">
+            {% if post.author.profile.photo %}
+                <img
+                    src="{{ post.author.profile.photo }}"
+                    alt="Profile photo"
+                    class="h-11 w-11 rounded-full object-cover"
+                >
+            {% else %}
+                <span class="text-sm">{{ post.author.first_name|default:post.author.username|first|upper }}</span>
+            {% endif %}
+        </div>
+        <div class="grid grid-cols-1">
           <span class="text-sm font-semibold">{{ post.author.first_name }} {{ post.author.last_name }}</span>
+          <span class="text-sm text-gray-600 font-semibold ">{{ post.created_at }}</span>
         </div>
       </div>
 
