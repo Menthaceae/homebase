@@ -298,3 +298,61 @@ document.querySelectorAll("form").forEach(form => {
         });
     });
 });
+
+/** Extract dominant image color and apply it to the image container */
+document.querySelectorAll('[data-image-color]').forEach(container => {
+    const img = container.querySelector('img');
+
+    function extractColor() {
+        // Create a small canvas to sample the image
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = 32;
+        canvas.height = 32;
+
+        try {
+            ctx.drawImage(img, 0, 0, 32, 32);
+
+            const pixels = ctx.getImageData(
+                0, 0, 32, 32
+            ).data;
+
+            const colors = {};
+
+            // Examine the image pixels
+            for (let i = 0; i < pixels.length; i += 4) {
+                const r = pixels[i];
+                const g = pixels[i + 1];
+                const b = pixels[i + 2];
+
+                // Group similar colours together
+                const color = [
+                    Math.round(r / 32) * 32,
+                    Math.round(g / 32) * 32,
+                    Math.round(b / 32) * 32
+                ].map(value => Math.min(value, 255));
+
+                const key = color.join(',');
+
+                colors[key] = (colors[key] || 0) + 1;
+            }
+
+            // Find the most frequently occurring colour
+            const dominantColor = Object.entries(colors)
+                .sort((a, b) => b[1] - a[1])[0][0];
+
+            container.style.backgroundColor = `rgb(${dominantColor})`;
+
+        } catch (error) {
+            console.error('Could not extract image colour:', error);
+        }
+    }
+
+    // Wait until the image has loaded
+    if (img.complete && img.naturalWidth > 0) {
+        extractColor();
+    } else {
+        img.addEventListener('load', extractColor, { once: true });
+    }
+});

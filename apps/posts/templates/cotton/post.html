@@ -67,7 +67,7 @@
     {% with image_count=post.images.count %}
         {% if image_count == 1 %}
         <!-- Single image: full width -->
-        <div class="relative h-56 overflow-hidden md:h-96 bg-black">
+        <div class="relative h-56 overflow-hidden md:h-96" data-image-color>
             {% for photo in post.images.all %}
                 <img
                     src="{{ photo.image.url }}"
