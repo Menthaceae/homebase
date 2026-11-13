@@ -6,7 +6,7 @@
         <div class="flex h-11 w-11 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700">
             {% if post.author.profile.photo %}
                 <img
-                    src="{{ post.author.profile.photo }}"
+                    src="{{ post.author.profile.photo.url }}"
                     alt="Profile photo"
                     class="h-11 w-11 rounded-full object-cover"
                 >

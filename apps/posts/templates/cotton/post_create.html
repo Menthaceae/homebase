@@ -55,9 +55,9 @@
             <!-- User Profile Information -->
             <div class="flex flex-row gap-2">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700">
-                    {% if user.photo %}
+                    {% if user.profile.photo %}
                         <img
-                            src="{{ user.photo.url }}"
+                            src="{{ user.profile.photo.url }}"
                             alt="Profile photo"
                             class="h-12 w-12 rounded-full object-cover"
                         >

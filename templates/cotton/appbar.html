@@ -75,12 +75,12 @@
                     <button type="button" class="flex flex-row items-center gap-2 p-2 rounded-md hover:bg-ink-100" aria-label="More options">
                         
 
-                    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700">
                             {% if user.profile.photo %}
                                 <img
                                     src="{{ user.profile.photo.url }}"
                                     alt="Profile photo"
-                                    class="rounded-full object-cover"
+                                    class="h-11 w-11 rounded-full object-cover"
                                 >
                             {% else %}
                                 <span style="font-size: 14px;">{{ user.first_name|default:user.username|first|upper }}</span>
