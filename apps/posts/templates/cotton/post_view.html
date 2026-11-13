@@ -89,7 +89,7 @@
                     <div class="flex sm:w-1/2 sm:shrink-0">
                         <div id="default-carousel" class="relative w-full" data-carousel="slide">
                             <!-- Carousel wrapper -->
-                            <div class="relative h-[75vh] max-h-[800px] min-h-[300px] overflow-hidden rounded-xl bg-gray-50">
+                            <div class="relative min-h-[300px] overflow-hidden rounded-xl bg-gray-50">
                                 {% for photo in post.images.all %}
                                 <div class="duration-700 ease-in-out w-64 h-64" data-carousel-item>
                                     <img src="{{ photo.image.url }}" class="absolute block w-full h-full object-contain -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
