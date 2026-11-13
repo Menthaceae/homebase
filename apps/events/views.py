@@ -24,7 +24,7 @@ def view_all(request):
     """
     Returns view all events page
     """
-    events = Event.objects.all().order_by('start_date')
+    events = Event.objects.all().order_by('-start_date')
     tags = Tag.objects.all()
 
     context = {
