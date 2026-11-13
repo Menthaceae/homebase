@@ -1,7 +1,7 @@
 {% for post in posts %}
 <dialog
     id="post-{{ post.id }}"
-    class="post_view m-auto max-h-[90vh] w-[95%] max-w-4xl overflow-y-auto rounded-2xl bg-white p-0 text-gray-800"
+    class="post_view m-auto max-h-[95vh] w-[95vw] max-w-[1400px] overflow-y-auto rounded-2xl bg-white p-0 text-gray-800"
 >
     <div class="flex flex-col w-m-lg w-[95%] max-w-4xl">
 
@@ -87,9 +87,9 @@
                 <!-- Left: Images -->
                 {% if photos %}
                     <div class="flex sm:w-1/2 sm:shrink-0">
-                        <div id="default-carousel" class="relative mt-4 w-full" data-carousel="slide">
+                        <div id="default-carousel" class="relative w-full" data-carousel="slide">
                             <!-- Carousel wrapper -->
-                            <div class="relative h-56 overflow-hidden rounded-base md:h-96">
+                            <div class="relative h-[75vh] max-h-[800px] min-h-[300px] overflow-hidden rounded-xl bg-gray-50">
                                 {% for photo in post.images.all %}
                                 <div class="duration-700 ease-in-out w-64 h-64" data-carousel-item>
                                     <img src="{{ photo.image.url }}" class="absolute block w-full h-full object-contain -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
